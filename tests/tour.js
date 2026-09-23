@@ -89,7 +89,7 @@ async function driveFirstCampaign(page, { shots = false } = {}) {
 
     const out = await page.evaluate(() => {
       const seeded = window.__seedIds;
-      const mine = CAMPAIGNS.filter((c) => c.createdBy === 'Neval Reisoğlu' && c.status === 'Pending approval');
+      const mine = CAMPAIGNS.filter((c) => c.createdBy === DEMO_USERS.me && c.status === 'Pending approval');
       return {
         pending: mine.map((c) => ({ id: c.id, name: c.name, channels: c.channels, lists: c.lists.map((l) => l.id), offers: c.offers })),
         status: window.tourStateFor('first-campaign').status,
