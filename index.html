@@ -791,6 +791,10 @@ body{font-size:14px;line-height:1.43}
 .db-hd .tile .d{font-size:11.5px;color:var(--ink-2);display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap;line-height:1.3}
 .db-hd .tile .d b{font-weight:600}.db-hd .tile .d b.up{color:var(--ok)}.db-hd .tile .d b.dn{color:var(--bad)}
 .db-hd .tile.warn{border-left-color:var(--orange)}
+.db-hd .spark{display:block;width:100%;height:22px;margin:2px 0 3px}
+.db-hd .tile .s{font-size:12px;color:var(--ink);line-height:1.35;margin-bottom:2px}
+.spark polyline{fill:none;stroke:var(--brand-lilac);stroke-width:1.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.spark polygon{fill:var(--green-soft)}
 .db-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;padding:4px 20px 16px}
 .db-p{grid-column:span 4;border:1px solid var(--line);border-radius:8px;background:#fff;display:flex;flex-direction:column;min-width:0;overflow:hidden}
 .db-p.w6{grid-column:span 6}.db-p.w8{grid-column:span 8}.db-p.w12{grid-column:span 12}
@@ -3339,6 +3343,12 @@ function renderPrgDetail(card){
 /* ---------- DASHBOARD — one page, role presets (Executive / Marketer / Ops); panels are cards the user can hide and re-add ---------- */
 let dbRange=30, dbHidden=new Set();
 const DB_PANELS=[['live','Live now'],['att','Needs attention'],['trend','Delivered per day'],['conv','Conversions per day'],['funnel','Funnel & eliminations'],['chan','By channel'],['cat','By category'],['top','Top campaigns'],['jrn','Top journeys'],['cg','Control group uplift']];
+/* demo unit economics behind Revenue and ROI: revenue per conversion and cost per message sent (₴) */
+const UNIT_REV=186, COST_MSG=0.06;
+const compact=n=>Math.round(n).toLocaleString('en',{notation:'compact',maximumFractionDigits:1});
+/* sparkline under a headline number — decorative, the number above it is the value */
+function spark(vals){ if(!vals||vals.length<2) return ''; const mx=Math.max(...vals), mn=Math.min(...vals), rg=mx-mn||1; const line=vals.map((v,i)=>`${Math.round(1000*i/(vals.length-1))/10},${Math.round(10*(22-19*(v-mn)/rg))/10}`).join(' ');
+  return `<svg class="spark" viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,24 ${line} 100,24"/><polyline points="${line}"/></svg>`; }
 function dbPreset(){ return ROLE==='marketer'?'Marketer':ROLE==='admin'?'Ops':'Executive'; }
 function dbRows(){ const saved=rpRange; rpRange=dbRange; const rows=rpRows(); rpRange=saved; return rows.map(r=>{ const h=[...r.c.id].reduce((t,ch)=>t+ch.charCodeAt(0),0); const hasCG=r.c.cg&&r.c.cg!=='No Control Group'; const rate=r.del?r.conv/r.del:0; const cgRate=hasCG?rate*(0.35+(h%5)/20):null; const incr=hasCG?Math.max(0,Math.round(r.conv-cgRate*r.del)):null; const targeted=Math.round(r.sent*(1.18+(h%7)/50)); return Object.assign(r,{hasCG,rate,cgRate,incr,targeted,elim:targeted-r.sent}); }); }
 /* Data freshness belongs in the admin's queue: a stale datamart quietly makes
@@ -3346,12 +3356,20 @@ function dbRows(){ const saved=rpRange; rpRange=dbRange; const rows=rpRows(); rp
 const dmStale=()=>DATAMARTS.filter(d=>dmHealth(d)!=='fresh'&&dmUsage(d.id).segments.length>0);
 function renderDashboard(){ const staleDms=dmStale(); const card=document.getElementById('db-card'); if(!card) return; const rows=dbRows(); const preset=dbPreset(); const exec=preset==='Executive'; const T=k=>rows.reduce((t,r)=>t+(r[k]||0),0); const pct=(a,b)=>b?Math.round(1000*a/b)/10+'%':'—'; const fmt=n=>Number(n).toLocaleString();
   const seedD=(i,k)=>((i*37+k*11)%50)/50; const prev=k=>Math.round(T(k)*(0.86+seedD(k.length,dbRange)*0.3)); const delta=(cur,pv,inv)=>{ if(!pv) return ''; const d=Math.round(1000*(cur-pv)/pv)/10; const up=d>=0; return `<b class="${(up!==!!inv)?'up':'dn'}">${up?'▲':'▼'} ${Math.abs(d)}%</b><span>vs prev. ${dbRange} d</span>`; };
-  const reached=Math.round(T('del')*0.78), conv=T('conv'), incr=rows.filter(r=>r.hasCG).reduce((t,r)=>t+r.incr,0), rev=Math.round(incr*186);
+  const reached=Math.round(T('del')*0.78), conv=T('conv'), incr=rows.filter(r=>r.hasCG).reduce((t,r)=>t+r.incr,0);
   const active=CAMPAIGNS.filter(c=>c.status==='Active'), pending=CAMPAIGNS.filter(c=>c.status==='Pending approval'), drafts=CAMPAIGNS.filter(c=>c.status==='Draft'), jlive=JOURNEYS.filter(j=>j.status==='Active');
   const soon=active.filter(c=>{ const d=(new Date(c.end)-new Date(TODAY))/864e5; return d>=0&&d<=7; });
   const avgRate=rows.length?rows.reduce((t,r)=>t+r.rate,0)/rows.length:0; const under=rows.filter(r=>r.c.status==='Active'&&r.rate<avgRate*0.6).slice(0,3); const highElim=rows.filter(r=>r.elim/Math.max(1,r.targeted)>0.22).slice(0,2);
   const nextSend=active.map(c=>({c,t:planNext(c)})).filter(x=>x.t!=='immediately').sort((a,b)=>a.t.localeCompare(b.t))[0];
   const days=Array.from({length:dbRange===7?7:14},(_,i)=>{ const d=new Date(TODAY); d.setDate(d.getDate()-(dbRange===7?6:13)+i); return d; }); const per=Math.max(1,Math.round(T('del')/(dbRange===7?7:dbRange))); const bars=days.map((d,i)=>Math.round(per*(0.55+((i*37+11)%50)/50))); const cbars=days.map((d,i)=>Math.round(bars[i]*(0.02+((i*13+5)%20)/400)));
+  /* Headline strip: business outcome only (decision D1). Revenue and ROI are demo figures derived from the
+     conversions — a BSS feed would supply them in the product, hence the note on both tiles. */
+  const ran=rows.length, ranActive=rows.filter(r=>r.c.status==='Active').length, prevRan=Math.max(1,Math.round(ran*(0.86+seedD(3,dbRange)*0.3)));
+  const campDays=days.map(d=>{ const s=d.toISOString().slice(0,10); return rows.filter(r=>r.c.start.slice(0,10)<=s&&(!r.c.end||r.c.end.slice(0,10)>=s)).length; });
+  const revenue=conv*UNIT_REV, incrShare=conv?incr/conv:0, cost=T('sent')*COST_MSG, roi=cost?incr*UNIT_REV/cost:0, net=incr*UNIT_REV-cost;
+  const prevRoi=(()=>{ const pc=prev('conv'), pcost=prev('sent')*COST_MSG; return pcost?pc*incrShare*UNIT_REV/pcost:0; })();
+  const demoNote='<span style="font-weight:400;text-transform:none;letter-spacing:0">· BSS feed, demo</span>';
+  const tile=(l,v,sub,d,sp,title)=>`<div class="tile"${title?` title="${esc(title)}"`:''}><div class="l">${l}</div><div class="v">${v}</div>${spark(sp)}${sub?`<div class="s">${sub}</div>`:''}<div class="d">${d}</div></div>`;
   const cols=(vals,hiLast)=>`<div class="cols" style="height:96px">${vals.map((v,i)=>`<b class="${hiLast&&i===vals.length-1?'hi':''}" style="height:${Math.round(100*v/Math.max(1,...vals))}%" title="${days[i].toISOString().slice(0,10)}: ${fmt(v)}">${i%Math.ceil(vals.length/7)===0||i===vals.length-1?`<span>${days[i].toISOString().slice(5,10)}</span>`:''}${i===vals.length-1?`<em>${fmt(v)}</em>`:''}</b>`).join('')}</div><div style="height:14px"></div>`;
   const byKey=(fn,val)=>{ const m={}; rows.forEach(r=>{ const k=fn(r); if(!k) return; m[k]=m[k]||{del:0,conv:0,sent:0,n:0}; const x=m[k]; const share=val?val(r):1; x.del+=Math.round(r.del*share); x.conv+=Math.round(r.conv*share); x.sent+=Math.round(r.sent*share); x.n++; }); return Object.entries(m).sort((a,b)=>b[1].del-a[1].del); };
   const chanRows=[]; PLAN_CHANNELS.forEach(([k,n])=>{ const rs=rows.filter(r=>(r.c.channels||[]).includes(k)); if(!rs.length) return; const del=rs.reduce((t,r)=>t+Math.round(r.del/r.c.channels.length),0), cv=rs.reduce((t,r)=>t+Math.round(r.conv/r.c.channels.length),0); chanRows.push([n,{del,conv:cv,kind:CH_KIND[k]}]); }); chanRows.sort((a,b)=>b[1].del-a[1].del);
@@ -3364,15 +3382,15 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
       <p>${exec?'Executive view: business outcome first, then what is live, then where to look. ':preset==='Marketer'?'Marketer view: your campaigns, what is waiting on you, how they perform. ':'Ops view: what is running, what failed, what is scheduled next. '}Every number opens the list behind it. Panels can be hidden and re-added; the layout is saved per user (concept).</p></div>
     <div class="toolrow" style="padding-top:0;gap:8px"><div class="chipbar"><span style="color:var(--ink-3);font-size:11px">PERIOD</span>${[7,30,90].map(n=>`<button class="fchip ${dbRange===n?'on':''}" data-db="${n}">Last ${n} days</button>`).join('')}</div><div class="grow"></div><button class="btn sm outline" id="db-add">+ Add panel</button><button class="btn sm outline" disabled title="Concept — describe the panel you want">Ask the agent</button><button class="btn sm outline" disabled title="Concept">Save layout</button><button class="btn sm outline" disabled title="Concept">Export</button></div>
     <div class="db-hd">
-      <div class="tile"><div class="l">Customers reached</div><div class="v">${fmt(reached)}</div><div class="d">${delta(reached,Math.round(prev('del')*0.78))}</div></div>
-      <div class="tile"><div class="l">Delivered</div><div class="v">${fmt(T('del'))}</div><div class="d">${delta(T('del'),prev('del'))}</div></div>
-      <div class="tile"><div class="l">Opened</div><div class="v">${pct(T('opened'),T('del'))}</div><div class="d"><span>${fmt(T('opened'))} · </span>${delta(T('opened')/Math.max(1,T('del')),prev('opened')/Math.max(1,prev('del')))}</div></div>
-      <div class="tile"><div class="l">Clicked</div><div class="v">${pct(T('clicked'),T('opened'))}</div><div class="d"><span>${fmt(T('clicked'))} of opened · </span>${delta(T('clicked')/Math.max(1,T('opened')),prev('clicked')/Math.max(1,prev('opened')))}</div></div>
-      <div class="tile"><div class="l">Conversions</div><div class="v">${fmt(conv)}</div><div class="d">${delta(conv,prev('conv'))}</div></div>
-      <div class="tile"><div class="l">Conversion rate</div><div class="v">${pct(conv,T('del'))}</div><div class="d">${delta(conv/Math.max(1,T('del')),prev('conv')/Math.max(1,prev('del')))}</div></div>
-      ${exec?`<div class="tile"><div class="l">Incremental (vs control group)</div><div class="v">${fmt(incr)}</div><div class="d"><span>${pct(incr,conv)} of conversions attributable to the campaigns</span></div></div>
-      <div class="tile"><div class="l">Incremental revenue <span style="font-weight:400;text-transform:none;letter-spacing:0">· BSS feed, demo</span></div><div class="v">₴ ${fmt(rev)}</div><div class="d">${delta(rev,Math.round(rev*0.91))}</div></div>`
-      :`<div class="tile warn"><div class="l">Waiting on you</div><div class="v">${preset==='Marketer'?drafts.length:pending.length}</div><div class="d"><span>${preset==='Marketer'?'draft campaigns not yet submitted':'campaigns waiting for approval'}</span></div></div>
+      ${exec?`${tile('Campaigns',ran,`${ranActive} active · ${ran-ranActive} ended`,delta(ran,prevRan),campDays)}
+      ${tile('Conversions',fmt(conv),`${pct(conv,T('del'))} rate`,delta(conv,prev('conv')),cbars)}
+      ${tile(`Revenue ${demoNote}`,`₴ ${compact(revenue)}`,'attributed to campaigns',delta(revenue,prev('conv')*UNIT_REV),cbars.map(v=>v*UNIT_REV))}
+      ${tile(`ROI ${demoNote}`,`${roi.toFixed(1)}x`,`${net<0?'−':'+'}₴ ${compact(Math.abs(net))} net contribution`,delta(roi,prevRoi),days.map((d,i)=>bars[i]?cbars[i]*incrShare*UNIT_REV/(bars[i]*COST_MSG):0),'ROI = incremental revenue ÷ sending cost')}
+      ${tile('Incremental',fmt(incr),`vs control group · ${pct(incr,conv)} of total`,delta(incr,Math.round(incr*prev('conv')/Math.max(1,conv))),cbars.map(v=>v*incrShare))}`
+      :`${tile('Customers reached',fmt(reached),'',delta(reached,Math.round(prev('del')*0.78)),bars.map(v=>v*0.78))}
+      ${tile('Conversions',fmt(conv),'',delta(conv,prev('conv')),cbars)}
+      ${tile('Conversion rate',pct(conv,T('del')),'',delta(conv/Math.max(1,T('del')),prev('conv')/Math.max(1,prev('del'))),cbars.map((v,i)=>v/Math.max(1,bars[i])))}
+      <div class="tile warn"><div class="l">Waiting on you</div><div class="v">${preset==='Marketer'?drafts.length:pending.length}</div><div class="d"><span>${preset==='Marketer'?'draft campaigns not yet submitted':'campaigns waiting for approval'}</span></div></div>
       <div class="tile"><div class="l">Live</div><div class="v">${active.length} <span style="font-size:13px;color:var(--ink-2)">+ ${jlive.length} journeys</span></div><div class="d"><span>active campaigns and journeys</span></div></div>`}
     </div>
     <div class="db-grid">
@@ -4120,7 +4138,7 @@ const TOURS={
     title:'Start with the period', body:'Every number and every "vs previous" delta on this page is read through this window. Change it first, then read.',
     advance:'next'},
    {id:'kpi', view:'dashboard', target:'#db-card .db-hd', placement:'bottom',
-    title:'The headline numbers', body:'Delivered, opened and clicked describe the send. <b>Conversions</b> and <b>incremental</b> describe the business: incremental is conversions above what the control group did anyway.',
+    title:'The headline numbers', body:'Only business outcomes live up here: campaigns run, <b>conversions</b>, revenue, ROI and <b>incremental</b> — conversions above what the control group did anyway. Delivered, opened and clicked are per campaign, in <b>Campaign performance</b> below.',
     advance:'next'},
    {id:'live', view:'dashboard', target:'.db-p[data-p="live"]', placement:'right',
     title:'Live now', body:'What is running this minute — active campaigns, journeys, and how many customers are in them. Click a counter to open what it counts.',
