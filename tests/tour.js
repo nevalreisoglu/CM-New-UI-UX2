@@ -18,7 +18,7 @@ const { chromium } = require('@playwright/test');
 
 const URL = 'file://' + path.resolve(__dirname, '..', 'index.html');
 const SHOTS = path.join(__dirname, 'shots');
-const SHOT_STEPS = { 1: '01-welcome', 6: '06-channels', 9: '09-segments', 12: '12-content', 15: '15-approval' };
+const SHOT_STEPS = { 1: '01-welcome', 5: '05-create', 7: '07-channels', 10: '10-segments', 13: '13-content', 16: '16-approval' };
 
 const errors = [];
 const check = (ok, what) => { console.log(`${ok ? '  ok  ' : '  FAIL'}  ${what}`); if (!ok) errors.push(what); };
@@ -85,7 +85,7 @@ async function driveFirstCampaign(page, { shots = false } = {}) {
   {
     const page = await newPage(browser);
     const seen = await driveFirstCampaign(page, { shots: true });
-    check(seen === 16, `walked all 16 steps (reached ${seen})`);
+    check(seen === 17, `walked all 17 steps (reached ${seen})`);
 
     const out = await page.evaluate(() => {
       const seeded = window.__seedIds;
@@ -127,6 +127,10 @@ async function driveFirstCampaign(page, { shots = false } = {}) {
     await page.fill('#camp-card input[data-k="name"]', 'Typed by hand');
     await page.waitForFunction(() => +document.querySelector('.tc-n').textContent.split('/')[0] === 5, null, { timeout: 5000 }).catch(() => {});
     check(await page.evaluate(() => +document.querySelector('.tc-n').textContent.split('/')[0]) === 5, 'typing the name advances to step 5');
+    await page.click('#cc-start');
+    await page.waitForFunction(() => +document.querySelector('.tc-n').textContent.split('/')[0] === 6, null, { timeout: 5000 }).catch(() => {});
+    check(await page.evaluate(() => +document.querySelector('.tc-n').textContent.split('/')[0]) === 6, 'Start building advances to step 6, in the editor');
+    check(await page.evaluate(() => !!document.querySelector('#camp-card .stepper')), 'the editor shows the stepper after Start building');
     await page.close();
   }
 

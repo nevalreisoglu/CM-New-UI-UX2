@@ -3,11 +3,56 @@ const { test, expect } = require('./fixtures');
 
 const STEPS = ['Info', 'Targeting', 'Offer', 'Channel & content', 'Communication rules', 'Schedule', 'Approval', 'Summary'];
 
+/** + New campaign opens the creation screen; its skip link goes straight to an empty form. */
 async function openNewCampaign(app) {
   await app.locator('.nav button[data-view="campaigns"]').click();
   await app.locator('#camp-new').click();
+  await app.locator('#cc-skip').click();
   await expect(app.locator('#camp-card .stepper')).toBeVisible();
 }
+
+test.describe('campaign creation screen', () => {
+  test('+ New campaign opens a centred creation screen without the stepper', async ({ app }) => {
+    await app.locator('.nav button[data-view="campaigns"]').click();
+    await app.locator('#camp-new').click();
+    await expect(app.locator('#camp-card h2')).toHaveText('Create your campaign');
+    await expect(app.locator('#camp-card .stepper')).toHaveCount(0);
+    await expect(app.locator('#cc-name')).toBeFocused();
+    await expect(app.locator('#camp-card [data-obj]')).toHaveCount(5);
+    await expect(app.locator('#camp-card [data-reach]')).toHaveCount(2);
+    await expect(app.locator('#camp-card [data-cctpl]')).toHaveCount(3);
+    const w = await app.locator('#camp-card .cc').evaluate((el) => el.getBoundingClientRect().width);
+    expect(w).toBeLessThanOrEqual(720);
+  });
+
+  test('Start building needs a name, then lands on Info with the choices applied', async ({ app }) => {
+    await app.locator('.nav button[data-view="campaigns"]').click();
+    await app.locator('#camp-new').click();
+    await app.locator('#cc-start').click();
+    await expect(app.locator('#toast div').first()).toContainText('Name is required');
+    await expect(app.locator('#camp-card .stepper')).toHaveCount(0);
+
+    await app.locator('#cc-name').fill('Win-back by app card');
+    await app.locator('#camp-card [data-obj="Winback"]').click();
+    await app.locator('#camp-card [data-reach="pull"]').click();
+    await app.locator('#cc-start').click();
+
+    await expect(app.locator('#camp-card .stepper button.on')).toContainText('Info');
+    await expect(app.locator('#camp-card input[data-k="name"]')).toHaveValue('Win-back by app card');
+    await expect(app.locator('#camp-card select[data-k="category"]')).toHaveValue('Win-back');
+    await expect(app.locator('#camp-card .chgrp')).toHaveClass(/pull-on/);
+  });
+
+  test('a template opens a copy of a recent campaign', async ({ app }) => {
+    await app.locator('.nav button[data-view="campaigns"]').click();
+    await app.locator('#camp-new').click();
+    const first = app.locator('#camp-card [data-cctpl]').first();
+    const name = (await first.locator('b').textContent()).trim();
+    await first.click();
+    await expect(app.locator('#camp-card .stepper')).toBeVisible();
+    await expect(app.locator('#camp-card input[data-k="name"]')).toHaveValue(name + ' (copy)');
+  });
+});
 
 test.describe('campaign wizard', () => {
   test('the list filters by the search box', async ({ app }) => {

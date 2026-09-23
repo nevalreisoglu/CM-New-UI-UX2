@@ -33,6 +33,7 @@ test.describe('branding', () => {
 
     await app.locator('.nav button[data-view="campaigns"]').click();
     await app.locator('#camp-new').click();
+    await app.locator('#cc-skip').click(); // past the creation screen, straight to the Info step
     const brand = app.locator('#camp-card select[data-k="label"]');
     await expect(brand).toBeVisible();
     await expect(brand.locator('option', { hasText: 'ETIYA' })).toHaveCount(1);

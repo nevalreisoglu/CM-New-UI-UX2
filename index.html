@@ -834,6 +834,27 @@ body{font-size:14px;line-height:1.43}
 .dbd-h .dbd-x{font-size:16px;line-height:1;padding:4px 10px}
 .dbd{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px}
 @media (max-width:1100px){.dbd{grid-template-columns:minmax(0,1fr)}}
+.cc-top{padding:14px 20px 0}
+.cc{max-width:720px;margin:0 auto;padding:20px 20px 40px;display:flex;flex-direction:column;gap:28px}
+.cc-hd{text-align:center}.cc-hd h2{margin:0;font-size:28px;line-height:36px;font-weight:500;color:var(--green-ink)}.cc-hd p{margin:6px 0 0;color:var(--ink-2);font-size:14px}
+.cc-name label{font-size:13px}.cc-name input{height:52px;font-size:18px;padding:0 14px}
+.cc-l{font-size:16px;line-height:24px;font-weight:500;color:var(--green-ink);margin-bottom:10px}.cc-l small{font-size:12.5px;font-weight:400;color:var(--ink-3)}
+.cc-sec>small{display:block;margin-top:8px;color:var(--ink-3);font-size:12px}
+.cc-obj{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.cc-reach{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cc-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:12px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;font:inherit;color:var(--ink);min-width:0}
+.cc-card:hover{border-color:var(--brand-lilac)}
+.cc-card svg{width:22px;height:22px;stroke:var(--brand-lilac);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:4px}
+.cc-card b{font-size:13.5px;font-weight:600;color:var(--green-ink)}.cc-card span{font-size:12px;line-height:16px;color:var(--ink-2)}
+.cc-card.on{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc);background:var(--acc-soft)}.cc-card.on svg{stroke:var(--acc)}
+.cc-go{display:flex;flex-direction:column;align-items:center;gap:10px}.cc-go .btn{min-width:220px;height:44px;font-size:15px}
+.cc-skip{border:0;background:none;color:var(--ink-2);font:inherit;font-size:12.5px;text-decoration:underline;cursor:pointer}
+.cc-tpl{border-top:1px solid var(--line-2);padding-top:22px;margin-top:12px}
+.cc-tpls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cc-t{display:flex;flex-direction:column;gap:3px;text-align:left;padding:10px 12px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface-2);cursor:pointer;font:inherit;min-width:0}
+.cc-t:hover{border-color:var(--line);background:#fff}
+.cc-t b{font-size:13px;font-weight:500;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.cc-t span{font-size:11.5px;color:var(--ink-3)}.cc-t em{font-style:normal;font-size:12px;color:var(--cta-hover);font-weight:500;margin-top:2px}
+@media (max-width:900px){.cc-obj{grid-template-columns:repeat(3,minmax(0,1fr))}.cc-tpls{grid-template-columns:1fr}}
 .db-add{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:0 20px 8px;font-size:12px;color:var(--ink-2)}
 .jb{grid-template-columns:138px 1fr}
 .palette button{font-size:12px;padding:7px 8px}
@@ -2743,6 +2764,45 @@ const campFilter={q:'',type:'All',status:'All',category:'',label:'',datamart:'',
 const campUsedBy=id=>JOURNEYS.filter(j=>j.nodes.some(n=>n.type==='delivery'&&String(n.cfg.campaign).startsWith(id+' '))).map(j=>j.id);
 const chanIcon={sms:'SMS',email:'Email',push:'Push',tm:'TM',wsc:'WSC',whatsapp:'WA',chatbot:'Bot',order:'Order'};
 function campBlank(){ const nid=String(Math.max(...CAMPAIGNS.map(c=>parseInt(c.id)||0))+1); return {id:nid,name:'',type:'Offer',status:'Draft',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:'Neval Reisoğlu',updatedBy:'',created:TODAY,updated:TODAY,start:TODAY+'T00:00',end:'2026-09-30T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:1,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[],offers:[],channels:['sms'],contents:[],plans:[],eventDriven:false,promo:{code:'',kind:'Single code',valid:''},rules:null,sched:null,rulesSet:false,schedSet:false,sortCol:'',sortDir:'',approver:'',approvalNote:'',approvals:[]}; }
+function campCopy(id){ const src=CAMPAIGNS.find(x=>x.id===id); campOpen(null); Object.assign(campDraft,JSON.parse(JSON.stringify({type:src.type,label:src.label,category:src.category,sub:src.sub,cg:src.cg,presend:src.presend,program:src.program,objective:src.objective,desc:src.desc,lists:src.lists,strategy:src.strategy,offers:src.offers,channels:src.channels,contents:src.contents,plans:src.plans.map(p=>Object.assign({},p,{status:'Draft'})),eventDriven:src.eventDriven,promo:src.promo,rules:src.rules,sched:src.sched,rulesSet:src.rulesSet,schedSet:src.schedSet,priority:src.priority})),{name:src.name+' (copy)'}); renderCampaigns(); toast('Campaign copied',`Settings of ${src.id} copied into a new draft — rename and adjust.`); }
+/* New campaign starts on a centred creation screen (decision C9): name, objective, push or pull, one CTA.
+   The stepper appears only once the draft exists. campOpen(null) still goes straight to the form. */
+let ccObj='', ccReach='push';
+const CC_OBJ=[
+  ['Acquisition','Win new customers or new lines','<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M18 8v6M15 11h6"/>',null],
+  ['Upsell / Cross-sell','Grow what existing customers buy','<path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/>',{category:'Upsell',sub:'Data add-on'}],
+  ['Retention','Keep customers who might leave','<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',{category:'Retention',sub:'Package renewal'}],
+  ['Winback','Bring back customers who left','<path d="M4 5v5h5"/><path d="M5.6 15a7 7 0 1 0 1.3-7.6L4 10"/>',{category:'Win-back',sub:'Discount'}],
+  ['Informational','Tell customers something, no offer','<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.01"/>',{type:'Info'}]];
+const CC_REACH=[
+  ['push','We send it','SMS, e-mail, push or a call — it goes out on a schedule.','<path d="M4 12l16-8-6 16-3-7z"/>','sms'],
+  ['pull','The customer sees it when they come','In the app, on self-care or in the chatbot — nothing is sent.','<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 17h2"/>','inapp']];
+function campCreate(){ campMode='create'; campSel=null; campStep=0; campDraft=campBlank(); campSavedAt=''; ccObj=''; ccReach='push'; renderCampaigns(); }
+function renderCampCreate(card){ const c=campDraft; const ic=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+  const recent=[...CAMPAIGNS].sort((a,b)=>(b.updated||'').localeCompare(a.updated||'')).slice(0,3);
+  card.innerHTML=`<div class="cc-top"><button class="btn sm outline" id="camp-back">‹ Campaign list</button></div>
+  <div class="cc">
+    <div class="cc-hd"><h2>Create your campaign</h2><p>Give it a name and a goal, choose how it reaches people — the details come next.</p></div>
+    <div class="fld cc-name"><label for="cc-name" class="req">Campaign name</label><input id="cc-name" data-k="name" maxlength="100" value="${esc(c.name)}" placeholder="e.g. Package renewal — SMS offer" autocomplete="off"></div>
+    <div class="cc-sec"><div class="cc-l">What is it for?</div><div class="cc-obj">${CC_OBJ.map(([k,d,svg])=>`<button type="button" class="cc-card ${ccObj===k?'on':''}" data-obj="${k}" aria-pressed="${ccObj===k}">${ic(svg)}<b>${k}</b><span>${d}</span></button>`).join('')}</div></div>
+    <div class="cc-sec"><div class="cc-l">How will it reach people?</div><div class="cc-reach">${CC_REACH.map(([k,t,d,svg])=>`<button type="button" class="cc-card ${ccReach===k?'on':''}" data-reach="${k}" aria-pressed="${ccReach===k}">${ic(svg)}<b>${t}</b><span>${d}</span></button>`).join('')}</div>
+      <small>A campaign is either push or pull. You pick the exact channels in the next step.</small></div>
+    <div class="cc-go"><button class="btn primary" id="cc-start">Start building</button><button class="cc-skip" id="cc-skip">Skip — go straight to the form</button></div>
+    <div class="cc-tpl"><div class="cc-l">Start from a template <small>— a copy of a recent campaign</small></div>
+      <div class="cc-tpls">${recent.map(x=>`<button type="button" class="cc-t" data-cctpl="${x.id}"><b>${esc(x.name)}</b><span>${x.id} · ${esc(x.category)} · ${(x.channels||[]).map(chName).join(', ')||'no channel'}</span><em>Use a copy ›</em></button>`).join('')}</div></div>
+  </div>`;
+  const nm=card.querySelector('#cc-name'); nm.oninput=()=>{ c.name=nm.value; }; nm.onkeydown=e=>{ if(e.key==='Enter') card.querySelector('#cc-start').click(); };
+  if(document.activeElement===document.body||!card.contains(document.activeElement)) setTimeout(()=>{ if(campMode==='create'&&document.body.contains(nm)&&!document.querySelector('.tour-card')) nm.focus(); },0);
+  const rer=()=>{ renderCampCreate(card); const i=card.querySelector('#cc-name'); if(i) i.blur(); };
+  card.querySelectorAll('[data-obj]').forEach(b=>b.onclick=()=>{ ccObj=ccObj===b.dataset.obj?'':b.dataset.obj; rer(); });
+  card.querySelectorAll('[data-reach]').forEach(b=>b.onclick=()=>{ ccReach=b.dataset.reach; rer(); });
+  card.querySelector('#camp-back').onclick=()=>{ campMode='list'; renderCampaigns(); };
+  card.querySelector('#cc-skip').onclick=()=>campOpen(null);
+  card.querySelectorAll('[data-cctpl]').forEach(b=>b.onclick=()=>campCopy(b.dataset.cctpl));
+  card.querySelector('#cc-start').onclick=()=>{ if(!c.name.trim()){ toast('Name is required','Give the campaign a name your team will recognise.','bad'); nm.focus(); return; }
+    const o=CC_OBJ.find(x=>x[0]===ccObj); if(o&&o[3]) Object.assign(c,o[3]); c.channels=[CC_REACH.find(x=>x[0]===ccReach)[4]]; syncPlans(c);
+    campMode='detail'; campStep=0; renderCampaigns(); };
+}
 function campOpen(id){ campMode='detail'; campSel=id; campStep=0; campDraft=id?JSON.parse(JSON.stringify(CAMPAIGNS.find(c=>c.id===id))):campBlank(); campSavedAt=''; renderCampaigns(); }
 let campSavedAt='', tgQ='', tgGrp='';
 /* readiness layer — "where am I, what is missing". Never blocks: parts can be done in any order, by different people, on different days. */
@@ -2767,6 +2827,7 @@ function readyHtml(c,compact){ const r=campReady(c); const pct=Math.round(100*r.
 function renderCampaigns(){
   const card=document.getElementById('camp-card'); if(!card) return;
   if(campMode==='list'){ if(curView==='campaigns') setCrumb(); renderCampList(card); return; }
+  if(campMode==='create'){ if(curView==='campaigns') setCrumb('New campaign'); renderCampCreate(card); return; }
   if(curView==='campaigns') setCrumb(campSel?`Campaign ${campSel}`:'New campaign');
   renderCampDetail(card);
 }
@@ -2890,10 +2951,10 @@ function renderCampList(card){
   card.querySelectorAll('.fchip').forEach(b=>b.onclick=()=>{ campFilter[b.dataset.f]=b.dataset.v; campPage=1; renderCampList(card); });
   card.querySelectorAll('.adv [data-f]').forEach(el=>el.onchange=()=>{ campFilter[el.dataset.f]=el.value; campPage=1; renderCampList(card); });
   card.querySelector('#camp-adv').onclick=()=>{ campAdv=!campAdv; renderCampList(card); };
-  card.querySelector('#camp-new').onclick=()=>campOpen(null);
+  card.querySelector('#camp-new').onclick=()=>campCreate();
   card.querySelectorAll('#camp-table tr.row').forEach(tr=>tr.onclick=e=>{ if(e.target.tagName==='BUTTON') return; campOpen(tr.dataset.id); });
   card.querySelectorAll('#camp-table [data-open]').forEach(b=>b.onclick=()=>campOpen(b.dataset.open));
-  card.querySelectorAll('#camp-table [data-dup]').forEach(b=>b.onclick=()=>{ const src=CAMPAIGNS.find(x=>x.id===b.dataset.dup); campOpen(null); Object.assign(campDraft,JSON.parse(JSON.stringify({type:src.type,label:src.label,category:src.category,sub:src.sub,cg:src.cg,presend:src.presend,program:src.program,objective:src.objective,desc:src.desc,lists:src.lists,strategy:src.strategy,offers:src.offers,channels:src.channels,contents:src.contents,plans:src.plans.map(p=>Object.assign({},p,{status:'Draft'})),eventDriven:src.eventDriven,promo:src.promo,rules:src.rules,sched:src.sched,rulesSet:src.rulesSet,schedSet:src.schedSet,priority:src.priority})),{name:src.name+' (copy)'}); renderCampaigns(); toast('Campaign copied',`Settings of ${src.id} copied into a new draft — rename and adjust.`); });
+  card.querySelectorAll('#camp-table [data-dup]').forEach(b=>b.onclick=()=>campCopy(b.dataset.dup));
   card.querySelectorAll('.pager button').forEach(b=>b.onclick=()=>{ campPage=+b.dataset.p; renderCampList(card); });
 }
 function renderCampDetail(card){
@@ -4038,7 +4099,7 @@ function markSeen(v){ const rs=roleState(); if(!rs.seen[v]){ rs.seen[v]=true; to
 
 /* ---- definitions --------------------------------------------------------- */
 const campCard=()=>document.getElementById('camp-card');
-function tourRerenderCamp(){ const c=campCard(); if(c&&campMode==='detail') renderCampDetail(c); }
+function tourRerenderCamp(){ const c=campCard(); if(c&&campMode==='detail') renderCampDetail(c); else if(c&&campMode==='create') renderCampCreate(c); }
 function tourCampStep(n){ if(campMode!=='detail') return; campStep=n; tourRerenderCamp(); }
 const SAMPLE_TEXT='Hi {{FIRST_NAME}}, your {{PLAN}} ends on {{PACKAGE_EXPIRY_DATE}}. Renew today and get +10% data.';
 const renewalOffer=()=>(OFFERS.find(o=>/renew|top-up|bonus/i.test(o.name))||OFFERS[0]).id;
@@ -4057,12 +4118,16 @@ const TOURS={
     sample:()=>showView('campaigns')},
    {id:'new', view:'campaigns', target:'#camp-new', placement:'left',
     title:'Start a new campaign', body:'This opens an empty draft. Nothing is saved until you say so, and nothing is sent until an approver activates it.',
-    advance:{until:()=>campMode==='detail'},
-    sample:()=>{ const b=document.getElementById('camp-new'); if(b) b.click(); else campOpen(null); }},
-   {id:'name', view:'campaigns', before:()=>{ if(campMode!=='detail') campOpen(null); }, target:'#camp-card input[data-k="name"]', placement:'bottom',
+    advance:{until:()=>campMode==='create'||campMode==='detail'},
+    sample:()=>{ const b=document.getElementById('camp-new'); if(b) b.click(); else campCreate(); }},
+   {id:'name', view:'campaigns', before:()=>{ if(campMode!=='create'&&campMode!=='detail') campCreate(); }, target:'#camp-card input[data-k="name"]', placement:'bottom',
     title:'Name it', body:'Something your team will recognise in lists and reports — what it is, for whom, and when.',
-    advance:{until:()=>campMode==='detail'&&campDraft&&campDraft.name.trim().length>=3},
+    advance:{until:()=>campDraft&&campDraft.name.trim().length>=3},
     sample:()=>{ campDraft.name='Package renewal — SMS offer (my first)'; tourRerenderCamp(); }},
+   {id:'start', view:'campaigns', before:()=>{ if(campMode!=='create'&&campMode!=='detail') campCreate(); }, target:'#cc-start, #camp-card .stepper', placement:'top',
+    title:'Pick a goal, then start building', body:'The goal and <b>push or pull</b> set sensible defaults — a <b>Retention</b> goal files it under Retention, <b>We send it</b> starts it on SMS. Everything stays editable. <b>Start building</b> opens the editor with its steps.',
+    advance:{until:()=>campMode==='detail'},
+    sample:()=>{ ccObj=ccObj||'Retention'; const b=document.getElementById('cc-start'); if(b) b.click(); }},
    {id:'type', view:'campaigns', before:()=>tourCampStep(0), target:'#camp-card select[data-k="type"]', placement:'bottom',
     title:'Offer or Info?', body:'An <b>Offer</b> campaign gives something — a discount, a bonus, a package. An <b>Info</b> campaign only tells people something, so it skips the Offer step entirely. Ours is an Offer.',
     advance:'next'},
