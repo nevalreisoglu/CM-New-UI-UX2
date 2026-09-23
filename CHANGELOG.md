@@ -2,6 +2,16 @@
 
 Version numbers follow the published artifact versions.
 
+## v45 — 23 Sept 2026
+**Review round 4 (Toplantı 4).** Six changes, one commit each.
+- **Dashboard headline strip — business outcome only.** Executive: Campaigns (active · ended), Conversions (rate), Revenue, ROI (net contribution) and Incremental (vs control group, share of total), each with a sparkline of the period and the vs-previous delta. Revenue and ROI are demo figures derived from the conversions and say *BSS feed, demo*. Marketer and Ops come down to five tiles; no preset shows Delivered, Opened or Clicked totals.
+- **Campaign performance** replaces Top campaigns: every campaign in the period with Status, Targeted, Delivered, Opened, Clicked, Conversions, Conv. rate and Revenue, sortable. A row opens that campaign's funnel, eliminations, channel split and control-group uplift inside the panel; × returns to the table.
+- **Live now** reads at a glance: a status bar, dot and icon per counter, with a word for what the colour means. Numbers stay dark; amber and red appear only above zero.
+- **Create your campaign**: + New campaign opens a centred creation screen (name, objective cards, push or pull, Start building, a template strip of the three most recent campaigns, and a skip link). The stepper appears once the draft exists. The first-campaign tour gains a step for it (17 steps).
+- **Marketing-toned copy**: a heading per editor step (*Tell us about your campaign* … *Ready to launch*) and warmer empty states. Stepper labels, field labels and `CAMP_STEPS` are unchanged.
+- **Demo data without real names**: one `DEMO_USERS` constant of fictional users; sample customers with masked ids, `+90 5XX` numbers and `@example.com` addresses.
+- Tests: three creation-screen specs, a step-heading spec and `demo-data.spec.js`; the brand audit now also measures the creation screen, the empty campaign list and the dashboard's campaign detail (8,958 text nodes, all AA).
+
 ## Unreleased — 22 Sept 2026
 - **User manual in the prototype**: a button in the top right opens `docs/user-manual.md`, rendered in a dialog with a contents list. The markdown is embedded in `index.html`, so a downloaded single file carries its manual with no server and no network. `tools/embed-manual.js` re-embeds it after an edit and the test suite fails if the two drift apart.
 - `docs/`: product description, user manual, and the meeting notes (Turkish) behind each iteration.

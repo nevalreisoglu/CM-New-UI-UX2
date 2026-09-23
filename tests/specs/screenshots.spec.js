@@ -11,9 +11,16 @@ const SHOTS = [
   ['dashboard', 'admin', async (app) => app.locator('.nav button[data-view="dashboard"]').click()],
   ['programs', 'admin', async (app) => app.locator('.nav button[data-view="programs"]').click()],
   ['campaign-list', 'admin', async (app) => app.locator('.nav button[data-view="campaigns"]').click()],
+  ['campaign-create', 'marketer', async (app) => {
+    await app.locator('.nav button[data-view="campaigns"]').click();
+    await app.locator('#camp-new').click();
+  }],
   ['campaign-info-step', 'admin', async (app) => {
     await app.locator('.nav button[data-view="campaigns"]').click();
     await app.locator('#camp-new').click();
+    await app.locator('#cc-name').fill('Package renewal — SMS offer');
+    await app.locator('#camp-card [data-obj="Retention"]').click();
+    await app.locator('#cc-start').click();
   }],
   ['journey-builder', 'admin', async (app) => app.locator('.nav button[data-view="journeys"]').click()],
   ['journey-monitor', 'admin', async (app) => app.locator('.nav button[data-view="monitor"]').click()],
@@ -25,6 +32,10 @@ const SHOTS = [
   ['reports', 'admin', async (app) => app.locator('.nav button[data-view="reports"]').click()],
   ['parameters', 'admin', async (app) => app.locator('.nav button[data-view="parameters"]').click()],
   ['dashboard-cmo', 'cmo', async (app) => app.locator('.nav button[data-view="dashboard"]').click()],
+  ['dashboard-campaign-detail', 'cmo', async (app) => {
+    await app.locator('.nav button[data-view="dashboard"]').click();
+    await app.locator('#db-card [data-dbc]').first().click();
+  }],
   ['user-manual', 'marketer', async (app) => app.locator('#btn-manual').click()],
 ];
 

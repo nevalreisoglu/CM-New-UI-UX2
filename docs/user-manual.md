@@ -98,7 +98,7 @@ leave the tour (it asks first).
 
 | Tour | Role | What it covers |
 | --- | --- | --- |
-| Create your first campaign | Marketer | Sixteen steps: name, type, channels, targeting, offer, content, rules, schedule, and submitting for approval. Ends with a real campaign in the approver's queue. |
+| Create your first campaign | Marketer | Seventeen steps: name, goal, type, channels, targeting, offer, content, rules, schedule, and submitting for approval. Ends with a real campaign in the approver's queue. |
 | Create a segment | Marketer | The workbench: name, group, DataMart, filters, the live audience insight, exclusion lists, save. |
 | Review and approve a campaign | Approver | From "Needs attention" to the approval step and the decision. |
 | Read the dashboard | Everyone | Period, headline KPIs, Live now, Needs attention, funnel and eliminations, control-group uplift. |
@@ -122,17 +122,48 @@ building is gone.
 
 ## Dashboard
 
-The page the prototype opens on. Eight headline KPIs across the top, then:
+The page the prototype opens on. Pick the **period** first (last 7, 30 or 90
+days); every number and every "vs prev." delta reads through it.
 
-- **Live counters** — click one to jump to what it counts.
-- **Needs attention** — campaigns waiting for approval, journeys with failures,
-  segments that have gone stale. Click a row to open it.
-- **Trend, funnel & eliminations** — where audiences are lost.
-- **Channel and category breakdowns**, **top campaigns and journeys**, and
-  **control-group uplift**.
+**The headline strip** shows business outcomes only. As an executive you see
+five tiles:
 
-Panels can be dismissed with the × in their header, and the preset follows the
-role.
+| Tile | Big number | Line under it |
+| --- | --- | --- |
+| Campaigns | campaigns that ran in the period | how many are active and how many ended |
+| Conversions | conversions | the conversion rate |
+| Revenue | revenue, in ₴ | "attributed to campaigns" |
+| ROI | e.g. `4.7x` | the net contribution |
+| Incremental | conversions the control group says would not have happened | share of all conversions |
+
+Each tile has a small sparkline of the period, day by day, and the change
+against the previous period. Revenue and ROI say **BSS feed, demo**: in the
+prototype they are calculated from the conversions, not read from billing.
+Marketers and admins see Customers reached, Conversions, Conversion rate,
+**Waiting on you** and **Live** instead.
+
+Delivered, opened and clicked are not in the strip — summed over every campaign
+they say nothing. They are per campaign, in **Campaign performance**.
+
+**Campaign performance** lists every campaign in the period: status, targeted,
+delivered, opened, clicked, conversions, conversion rate and revenue. Click a
+column header to sort. **Click a campaign** to see its detail in the same
+panel — its funnel, what the communication rules removed, its channels, and its
+control-group uplift if it has a control group. **×** takes you back to the
+table; **Open campaign ›** opens it in the editor.
+
+**Live now** shows what is running this minute. Each counter has a coloured
+bar, dot and icon, and a word saying what the colour means: *running* and
+*live* (turquoise), *delivered* (green), *scheduled* (grey), *pending* (amber —
+campaigns waiting for approval), *failed* (red) or *none* (green, when nothing
+failed). Click a counter to open what it counts.
+
+Also on the page: **Needs attention** (click a row to open it), deliveries and
+conversions per day, funnel and eliminations, by channel, by category, top
+journeys and, for executives, control-group uplift.
+
+Hide a panel with the × in its header; hidden panels reappear as buttons at
+the bottom. The preset follows the role.
 
 ---
 
@@ -154,8 +185,27 @@ A program is the business initiative campaigns and journeys belong to.
 
 ## Building a campaign
 
-**Campaign** in the menu → **+** for a new one, or **Open** / **Continue** on a
+**Campaign** in the menu → **+ New campaign**, or **Open** / **Continue** on a
 row. **Copy** on a row clones its settings into a new draft.
+
+### Create your campaign
+
+**+ New campaign** opens a short creation screen before the editor:
+
+1. **Campaign name** — the cursor is already there. Required.
+2. **What is it for?** — pick one objective card: Acquisition, Upsell /
+   Cross-sell, Retention, Winback or Informational. Optional; it files the
+   campaign under the matching category, and Informational makes it an Info
+   campaign.
+3. **How will it reach people?** — **We send it** (push: SMS, e-mail, push,
+   telemarketing) or **The customer sees it when they come** (pull: in-app,
+   self-care, chatbot). You pick the exact channels in the Info step.
+4. **Start building** — creates the draft and opens the editor on **Info**,
+   with the steps across the top.
+
+Below that, **Start from a template** opens a copy of one of your three most
+recent campaigns, and **Skip — go straight to the form** opens an empty editor.
+Everything chosen here can be changed in Info.
 
 The list has a search box, status chips, and **More filters** for type,
 category, program, brand and dates.
@@ -172,6 +222,11 @@ parts get done by different people on different days.
 
 A step that does not apply stays visible but greyed: an Info campaign shows the
 **Offer** step marked `–`, because it has nothing to offer.
+
+Each step opens with a heading that says what it is for — *Tell us about your
+campaign*, *Who will you reach?*, *What will you offer?*, *How will you reach
+them?*, *Set the ground rules*, *When will it go out?*, *Send it for approval*,
+*Ready to launch*.
 
 #### 1 · Info
 
@@ -431,7 +486,8 @@ would. **Export sample (CSV)** always writes the masked values.
 
 - **Nothing is saved.** Reloading starts over from the sample data.
 - **Nothing is sent.** Test sends and CSV exports raise a toast instead.
-- The sample data is 30 customers, 16 campaigns and 3 journeys.
+- The sample data is 30 customers, 16 campaigns and 3 journeys. Every name,
+  number and address in it is made up.
 - **Esc** closes any dialog: the manual, the report, new journey, the journey
   list and the segment assistant.
 - The prototype opens on the **Dashboard**.

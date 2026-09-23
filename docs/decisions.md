@@ -77,3 +77,17 @@ Status: **Settled** = do not reopen without an explicit ask · **Open** = still 
 | X2 | Guided tours + a Getting started surface, Insider-style, starting from the first campaign. | Designed, to be implemented. | Open |
 | X3 | The ECM **Datamart** module is designed and scoped. | To be implemented. | Open |
 | X4 | **DVH is out of scope** for now. | The product has not been seen by the team yet. | Open |
+
+## Review round 4 — implementation (23 Sept 2026, v45)
+
+Decisions taken while building the Toplantı 4 changes (D1–D4, C9, C10), with the review on 23 Sept 2026 as the source.
+
+| # | Decision | Why | Status |
+|---|---|---|---|
+| D7 | **Revenue and ROI are demo figures, labelled as such.** Revenue = conversions × ₴186; ROI = incremental revenue ÷ sending cost (₴0.06 per message sent); the ROI tile's second line is the net contribution. Both tiles carry *BSS feed, demo*. | The prototype has no billing feed. A stated formula keeps the numbers honest and consistent with the incremental figure, and the note stops them being read as live. | Settled |
+| D8 | The **Marketer and Ops strips** are Customers reached · Conversions · Conversion rate · Waiting on you · Live. Delivered goes too, not only Opened and Clicked. | D1/D2 apply to every preset: a summed Delivered is the same noise as a summed Opened. Five tiles, like the Executive strip. | Settled |
+| D9 | **Top campaigns becomes Campaign performance**, full width: every campaign in the period, sortable, Opened and Clicked shown as rates of delivered. A row opens the campaign's funnel, eliminations, channel split and uplift **in the same panel**; × returns to the table. | D2 moves the operational metrics here, so the table must hold them all. Opening in place keeps the reader on the dashboard; the editor is one click away. By category and Top journeys become half-width so the grid has no holes. | Settled |
+| D10 | **Live now: colour only when there is something to say.** Approval is amber only above zero; failed deliveries are red above zero and green "none" at zero. Every colour comes with a word; numbers stay dark. | D4, without turning a zero into an alarm. Colour alone fails colour-blind readers. | Settled |
+| C11 | **Creation-screen choices only pre-fill.** Upsell / Cross-sell → category Upsell; Retention → Retention; Winback → Win-back; Informational → type Info; Acquisition has no matching category and leaves it to Info. Push starts on SMS, pull on In-App. The name is required before Start building. | C9 asks for a focused first step, not a second form: everything stays editable in Info, and the editor, the steps and the readiness rules are untouched. `campOpen(null)` (the skip link) still opens the form directly. | Settled |
+| C12 | **One heading per step** above the step's content (*Tell us about your campaign* … *Ready to launch*); `CAMP_STEPS` and the stepper labels are unchanged. Empty states say what to do next; field and button labels are not reworded. | C10, while keeping navigation short and field labels precise. | Settled |
+| X5 | **Demo data names no real person.** Users come from one `DEMO_USERS` constant of fictional names; the signed-in user is Ayşe Demir in every role view. Sample customers have masked ids (`CUS-****nnnn`), `+90 5XX XXX nn nn` numbers and `@example.com` addresses, mapped consistently across datamarts so joins still work. The "Marketer · Felix" persona stays. `tests/specs/demo-data.spec.js` guards it. | The prototype is shown to customers. | Settled |

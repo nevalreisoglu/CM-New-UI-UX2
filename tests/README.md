@@ -28,10 +28,11 @@ version that matches.
 | `branding.spec.js` | The brand reads ETIYA everywhere; the old "ETYA" spelling cannot come back. |
 | `navigation.spec.js` | Every menu entry opens its page, the breadcrumb follows, the menu collapses to an icon rail. |
 | `roles.spec.js` | Role views: the marketer never sees Parameters, the executive never sees the build pages, the admin sees everything, and switching role moves off a page the new role may not see. |
-| `campaign.spec.js` | The eight-step wizard: list search, the Offer step disabled for Info campaigns, name required before leaving Info, and the readiness panel counting without blocking. |
+| `campaign.spec.js` | The *Create your campaign* screen (centred, no stepper, name required, choices applied, template copy), then the eight-step editor: list search, the Offer step disabled for Info campaigns, a heading per step, name required before leaving Info, and the readiness panel counting without blocking. |
 | `segments.spec.js` | The segment workbench: definition beside live audience insight, Search counting the audience, and the assistant living in a dialog rather than the form. |
 | `journey.spec.js` | The builder canvas and palette, and the v41 simulation strips in both Journey Builder and Journey Monitor — marked demo-only, never styled as primary actions, sharing one clock. |
 | `manual.spec.js` | The **User manual** button in the top bar: the dialog opens, closes three ways, renders the markdown as headings/lists/tables, the contents list jumps, and the embedded copy still matches `docs/user-manual.md`. |
+| `demo-data.spec.js` | No real person is named in the file; every e-mail address is on example.com; sample customers have masked ids and +90 5XX numbers; the top-bar user comes from `DEMO_USERS`. |
 | `screenshots.spec.js` | Writes reference screenshots of the main screens to `screenshots/`. |
 
 ## Screenshots

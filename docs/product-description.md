@@ -67,6 +67,21 @@ Approval · Summary`
 
 Two rules shape the whole flow:
 
+**A new campaign starts on a creation screen, not in the editor.** **+ New
+campaign** opens *Create your campaign*: one centred column with the name, a
+row of objective cards (Acquisition, Upsell / Cross-sell, Retention, Winback,
+Informational) and the push-or-pull choice as two cards (*We send it* / *The
+customer sees it when they come*). **Start building** creates the draft and
+opens the editor on Info with the stepper. The choices only pre-fill: Upsell,
+Retention and Winback set the category, Informational makes it an Info
+campaign, Acquisition leaves the category to Info; push starts on SMS, pull on
+In-App, and the exact channels are picked in Info. Underneath, *Start from a
+template* offers a copy of one of the three most recent campaigns, and *Skip —
+go straight to the form* opens an empty editor for people who know what they
+want. Each step of the editor then opens with a heading in the marketer's voice
+(*Tell us about your campaign*, *Who will you reach?* … *Ready to launch*); the
+stepper labels stay short.
+
 **Steps are not a wizard you must finish in order.** You can jump to any step.
 The **readiness panel** on the right lists the seven things that make a campaign
 complete, ticks what is done, and links to whatever is not. It never blocks
@@ -160,10 +175,36 @@ Both carry a **simulation strip** (see §9).
 
 ## 8. Dashboard, Program and Reports
 
-- **Dashboard** — the page the prototype opens on: eight headline KPIs, live counters, a "needs attention" list
-  that links straight to the thing that needs attention, trend, funnel and
-  eliminations, channel and category breakdowns, top campaigns and journeys, and
-  control-group uplift. Presets per role, and panels can be dismissed.
+- **Dashboard** — the page the prototype opens on. Presets per role, and
+  panels can be hidden and re-added from a fixed set; there is no panel builder.
+  - **Headline strip — business outcome only.** The Executive preset shows five
+    tiles: **Campaigns** run in the period (active · ended), **Conversions**
+    (with the conversion rate), **Revenue** attributed to campaigns, **ROI**
+    (with the net contribution) and **Incremental** conversions measured against
+    the control group (with their share of all conversions). Each tile has a
+    sparkline of the period's daily series and a delta against the previous
+    period. Revenue and ROI are marked *BSS feed, demo*: in the prototype they
+    are derived from the conversions (₴186 per conversion; ROI = incremental
+    revenue ÷ sending cost at ₴0.06 per message). The Marketer and Ops presets
+    show Customers reached, Conversions, Conversion rate, Waiting on you and
+    Live. No preset puts Delivered, Opened or Clicked totals in the strip: summed
+    across campaigns they are noise.
+  - **Campaign performance** — every campaign in the period with Status,
+    Targeted, Delivered, Opened, Clicked (rates of delivered), Conversions,
+    Conversion rate and Revenue, sortable by any column. Clicking a campaign
+    opens its detail in the same panel: its funnel from Targeted to Converted,
+    what the communication rules removed, its split by channel, and its
+    control-group uplift when it has a control group. × returns to the table;
+    **Open campaign ›** goes to the editor.
+  - **Live now** — six counters, each with a status colour on a left bar, a dot
+    and an icon, and a word saying what the colour means: running and live
+    (turquoise), delivered today (green), next scheduled send (grey), waiting for
+    approval (amber above zero), failed deliveries (red above zero, green
+    "none" at zero). The numbers stay dark. Click a counter to open what it
+    counts.
+  - **Needs attention**, delivered and conversions per day, funnel and
+    eliminations, by channel, by category, top journeys and control-group uplift
+    (Executive).
 - **Program** — list, overview, a Gantt timeline of members, a members picker,
   and settings: goal, contact cap, summary report.
 - **Reports** — campaign and journey results, with CSV export (disabled in the
@@ -207,7 +248,7 @@ them more than a slideshow:
   eight steps and honours their rules — on an Info campaign the Offer step is
   skipped, exactly as the editor skips it.
 
-Five tours ship: *Create your first campaign* (the important one — sixteen
+Five tours ship: *Create your first campaign* (the important one — seventeen
 steps ending with a real campaign submitted for approval), *Create a segment*,
 *Review and approve a campaign*, *Read the dashboard*, and *Admin setup*.
 
@@ -284,7 +325,10 @@ Buttons inside the strip are deliberately not styled as primary actions. The
 prototype runs three simulated days at load so the monitor is not empty.
 
 Also demo-only: 30 customers, 16 campaigns, 3 journeys of fixed sample data;
-CSV export and test sends raise a toast instead of doing anything.
+CSV export and test sends raise a toast instead of doing anything. The data names
+no real person: users come from one fictional list (the signed-in user is Ayşe
+Demir in every role view), and sample customers have masked ids
+(`CUS-****7919`), `+90 5XX XXX nn nn` numbers and `@example.com` addresses.
 
 ---
 
