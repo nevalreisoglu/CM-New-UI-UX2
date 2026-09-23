@@ -858,6 +858,73 @@ body{font-size:14px;line-height:1.43}
 .cc-t b{font-size:13px;font-weight:500;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.cc-t span{font-size:11.5px;color:var(--ink-3)}.cc-t em{font-style:normal;font-size:12px;color:var(--cta-hover);font-weight:500;margin-top:2px}
 @media (max-width:900px){.cc-obj{grid-template-columns:repeat(3,minmax(0,1fr))}.cc-tpls{grid-template-columns:1fr}}
 .db-add{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:0 20px 8px;font-size:12px;color:var(--ink-2)}
+/* Operation analysis — scope bar, tabs, grid with column chooser, advanced filter and side panel */
+.ops-scope{padding-top:0;gap:8px}
+.ops-scope select{font-size:12.5px}
+.ops-lbl{color:var(--ink-3);font-size:11px}
+.ops-reset{border:0;background:none;color:var(--cta-hover);font-weight:600;font-size:12.5px;padding:4px 2px;text-decoration:underline}
+.ops-camp .pop{padding:8px}
+.ops-camplist{max-height:280px;overflow:auto;margin-top:6px;display:flex;flex-direction:column}
+.ops-camplist button{border:0;background:none;text-align:left;padding:6px 8px;border-radius:5px;font-size:12.5px;color:var(--ink)}
+.ops-camplist button:hover{background:var(--surface-2)}
+.ops-camplist button.on{background:var(--sec-soft);color:var(--sec-ink);font-weight:600}
+.ops-tabs{margin:0 20px 10px}
+.ops-hd{padding-bottom:10px}
+.db-hd .tile.bad{border-left-color:var(--bad)}
+.db-hd .tile.bad .v{color:var(--bad)}
+.db-hd .tile.ok{border-left-color:var(--ok)}
+.db-hd .tile .v{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ops-body{display:block}
+.db-hd .tile .v.txt{font-size:16px;line-height:28px}
+.ops-gt{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:0 20px 8px}
+.ops-gt .btn.ops-on{border-color:var(--orange);background:var(--orange-soft);color:var(--orange-ink)}
+.ops-cond{display:inline-flex;align-items:center;gap:4px;background:var(--acc-soft);color:var(--cta-hover);border-radius:999px;padding:2px 4px 2px 10px;font-size:11.5px;font-weight:600}
+.ops-cond button{border:0;background:none;color:inherit;font-size:13px;line-height:1;padding:0 4px;cursor:pointer}
+.ops-join{font-size:11px;font-weight:700;color:var(--ink-2)}
+.ops-swl{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2)}
+.ops-cols{width:290px;max-height:420px;overflow:auto}
+.ops-poph{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding:2px 4px 6px}
+.ops-colrow{display:flex;align-items:center;gap:4px;padding:2px 4px}
+.ops-colrow .ck{flex:1;font-size:12.5px}
+.dm-menu .pop .ops-colrow button{width:26px;padding:2px 0;text-align:center;border:1px solid var(--line);background:#fff}
+.ops-adv{margin:0 20px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.ops-advh{display:flex;flex-direction:column;gap:2px;font-size:12.5px}
+.ops-advh small{color:var(--ink-2)}
+.ops-advrow{display:grid;grid-template-columns:70px 70px minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.3fr) auto;gap:6px;align-items:center}
+.ops-advrow select,.ops-advrow input:not([type=checkbox]){background:#fff;border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-size:12.5px;min-width:0}
+.ops-where{font-size:12px;color:var(--ink-2);font-weight:600}
+.ops-advf{display:flex;gap:6px;align-items:center}
+.ops-advf .grow{flex:1}
+.ops-gw{overflow:auto;max-height:calc(100vh - 240px);min-height:320px;margin:0 20px;border:1px solid var(--line);border-radius:6px;background:#fff}
+.ops-tbl thead th{position:sticky;top:0;z-index:2;padding:0;background:var(--surface-2)}
+.ops-tbl thead th .th-sort{border:0;background:none;font:inherit;color:inherit;padding:9px 16px 9px 12px;width:100%;text-align:inherit;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ops-tbl thead th .th-sort:hover{text-decoration:underline}
+.ops-tbl thead th.num .th-sort{text-align:right}
+.ops-tbl th{position:relative}
+.ops-tbl .rz{position:absolute;top:0;right:0;bottom:0;width:7px;cursor:col-resize;border-right:2px solid transparent}
+.ops-tbl .rz:hover{border-right-color:var(--cta-bright)}
+.ops-tbl td{white-space:nowrap}
+.ops-tbl.fixed{table-layout:fixed}
+.ops-tbl.fixed td{overflow:hidden;text-overflow:ellipsis}
+.ops-tbl td.ops-empty{white-space:normal;padding:36px 24px;color:var(--ink-2)}
+.ops-pager{align-items:center;font-size:12px;color:var(--ink-2);gap:10px}
+.ops-pager button[disabled]{opacity:.45;cursor:default}
+.ops-rules{margin:0 20px 12px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;background:#fff}
+.ops-rh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;margin-bottom:4px}
+.ops-rh small{color:var(--ink-2)}
+.ops-rule{display:grid;grid-template-columns:170px 1fr 120px;gap:10px;align-items:center;border:1px solid transparent;background:none;border-radius:6px;padding:4px 6px;font-size:12.5px;text-align:left;color:var(--ink)}
+.ops-rule:hover{background:var(--surface-2)}
+.ops-rule.on{border-color:var(--orange);background:var(--orange-soft)}
+.ops-rule .tr{height:14px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+.ops-rule .tr i{display:block;height:100%;background:var(--orange);border-radius:0 3px 3px 0}
+.ops-rule .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.ops-rule .n b{color:var(--ink)}
+.ops-sub{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:0 20px 10px}
+.ops-sub small{color:var(--ink-2);font-size:12px}
+.ops-kv{grid-template-columns:140px 1fr;font-size:12.5px}
+.ops-kv dd{word-break:break-word}
+.rp-ops{display:flex;align-items:center;gap:8px;margin:0 20px 10px;padding:8px 12px;border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:6px;background:#fff;font-size:12.5px;color:var(--ink-2)}
+.rp-ops b{color:var(--ink)}
 .jb{grid-template-columns:138px 1fr}
 .palette button{font-size:12px;padding:7px 8px}
 .palette .pt{font-size:13.5px}
@@ -908,6 +975,7 @@ body{font-size:14px;line-height:1.43}
     <button data-view="segmentation" data-roles="marketer admin" data-grp="aud"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 4a3 3 0 0 1 0 6M21 20a6 6 0 0 0-5-6"/></svg><span class="nl">Segments</span></button>
     <div class="grp" data-grp="ops">Operate</div>
     <button data-view="reports" data-roles="marketer approver admin cmo" data-grp="ops"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l4-6 4 3 4-5"/></svg><span class="nl">Reports</span></button>
+    <button data-view="opsan" data-roles="marketer approver admin" data-grp="ops"><svg viewBox="0 0 24 24"><path d="M4 6h12M4 11h7M4 16h5"/><circle cx="15.5" cy="14.5" r="3.5"/><path d="M18 17l3 3"/></svg><span class="nl">Operation analysis</span></button>
     <button data-view="monitor" data-roles="marketer approver admin cmo" data-grp="ops"><svg viewBox="0 0 24 24"><path d="M3 20h18M6 17V9M11 17V5M16 17v-7M21 17v-4"/></svg><span class="nl">Journey Monitor</span></button>
     <button data-view="api" data-roles="admin" data-grp="ops"><svg viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg><span class="nl">Decision API</span></button>
     <div class="grp" data-grp="admin">Administration</div>
@@ -1168,6 +1236,7 @@ body{font-size:14px;line-height:1.43}
 
     <!-- REPORTS (concept: flexible dashboard, role based) -->
     <section class="view" id="view-reports"><div class="card" id="rp-card" style="display:flex;flex-direction:column;overflow:auto;flex:1;min-height:0"></div></section>
+    <section class="view" id="view-opsan"><div class="card" id="ops-card" style="display:flex;flex-direction:column;overflow:auto;flex:1;min-height:0;padding-bottom:12px"></div><div class="dm-drawer" id="ops-drawer" hidden></div></section>
 
     <!-- PARAMETERS (admin only) -->
     <section class="view" id="view-parameters">
@@ -2705,7 +2774,7 @@ function showView(v){ curView=v; document.querySelectorAll('.view').forEach(s=>s
      time the builder is shown rather than at boot. Later visits keep the pan
      and zoom the user left behind. */
   if(v==='journeys'&&!jFitted){ jFitted=true; fitView(); setTimeout(fitView,200); } }
-function render(){ renderCanvas(); renderNodePanel(); renderOffers(); renderPolicies(); renderMonitor(); renderApi(); renderSegmentation(); renderCampaigns(); renderContent(); renderParameters(); renderReports(); renderDashboard(); renderPrograms(); renderDatamart(); renderStart(); }
+function render(){ renderCanvas(); renderNodePanel(); renderOffers(); renderPolicies(); renderMonitor(); renderApi(); renderSegmentation(); renderCampaigns(); renderContent(); renderParameters(); renderReports(); renderDashboard(); renderPrograms(); renderDatamart(); renderStart(); renderOpsan(); }
 
 document.querySelectorAll('.nav button[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 
@@ -3011,7 +3080,7 @@ function renderCampList(card){
     </div>`:''}
     <div class="padx" style="overflow:auto">
     <table class="tbl" id="camp-table"><thead><tr><th>Name</th><th>ID</th><th>Type</th><th>Status</th><th>Readiness</th><th>Target</th><th>Channels</th><th>Period</th><th>Journeys</th><th>Updated</th><th>Actions</th></tr></thead>
-    <tbody>${page.map(c=>{ const a=campAudience(c); const u=campUsedBy(c.id); return `<tr class="row" data-id="${c.id}"><td><span class="lnk">${esc(c.name)}</span>${CAMP_CFG.multiBrand?`<span class="lbl-chip">${esc(c.label)}</span>`:''}<br><span style="color:var(--ink-3);font-size:11px">${esc(c.category)} › ${esc(c.sub)}${c.program&&c.program!=='— none'?' · <span class="chip" style="font-size:10.5px;padding:0 5px">'+esc(c.program)+'</span>':''}</span></td><td class="mono">${c.id}</td><td><span class="typechip ${c.type}">${c.type}</span></td><td><span class="pill ${CAMP_STATUS_CLS[c.status]||''}">${c.status}</span></td><td>${readyHtml(c,true)}</td><td class="num">${a.count===null?'<span class="chip">event-driven</span>':a.count+' <span style="color:var(--ink-3)">cust.</span>'}</td><td>${(c.channels||[]).map(ch=>`<span class="chip">${(PLAN_CHANNELS.find(x=>x[0]===ch)||[ch,ch])[1]}</span>`).join(' ')||'—'}</td><td class="num" style="white-space:nowrap">${c.start.slice(0,10)}<br><span style="color:var(--ink-3)">→ ${c.end.slice(0,10)}</span></td><td>${u.map(j=>`<span class="chip">${j}</span>`).join(' ')||'—'}</td><td class="num">${c.updated}<br><span style="color:var(--ink-3)">${esc(c.createdBy)}</span></td><td><span class="act"><button class="btn sm outline" data-open="${c.id}">${c.status==='Draft'?'Continue':'Open'}</button><button class="btn sm outline" data-dup="${c.id}">Copy</button></span></td></tr>`; }).join('')||'<tr><td colspan="11" class="empty">No campaigns match that. Clear the filters, or start a new one — it takes about two minutes.<div style="margin-top:10px;display:flex;gap:8px;justify-content:center"><button class="btn sm outline" id="camp-clear">Clear filters</button><button class="btn sm primary" id="camp-new2">+ New campaign</button></div></td></tr>'}</tbody></table></div>
+    <tbody>${page.map(c=>{ const a=campAudience(c); const u=campUsedBy(c.id); return `<tr class="row" data-id="${c.id}"><td><span class="lnk">${esc(c.name)}</span>${CAMP_CFG.multiBrand?`<span class="lbl-chip">${esc(c.label)}</span>`:''}<br><span style="color:var(--ink-3);font-size:11px">${esc(c.category)} › ${esc(c.sub)}${c.program&&c.program!=='— none'?' · <span class="chip" style="font-size:10.5px;padding:0 5px">'+esc(c.program)+'</span>':''}</span></td><td class="mono">${c.id}</td><td><span class="typechip ${c.type}">${c.type}</span></td><td><span class="pill ${CAMP_STATUS_CLS[c.status]||''}">${c.status}</span></td><td>${readyHtml(c,true)}</td><td class="num">${a.count===null?'<span class="chip">event-driven</span>':a.count+' <span style="color:var(--ink-3)">cust.</span>'}</td><td>${(c.channels||[]).map(ch=>`<span class="chip">${(PLAN_CHANNELS.find(x=>x[0]===ch)||[ch,ch])[1]}</span>`).join(' ')||'—'}</td><td class="num" style="white-space:nowrap">${c.start.slice(0,10)}<br><span style="color:var(--ink-3)">→ ${c.end.slice(0,10)}</span></td><td>${u.map(j=>`<span class="chip">${j}</span>`).join(' ')||'—'}</td><td class="num">${c.updated}<br><span style="color:var(--ink-3)">${esc(c.createdBy)}</span></td><td><span class="act"><button class="btn sm outline" data-open="${c.id}">${c.status==='Draft'?'Continue':'Open'}</button><button class="btn sm outline" data-dup="${c.id}">Copy</button>${c.status!=='Draft'&&c.status!=='Pending approval'?`<button class="btn sm outline" data-results="${c.id}" title="Deliveries, eliminations, promotions and survey responses of this campaign">Results</button>`:''}</span></td></tr>`; }).join('')||'<tr><td colspan="11" class="empty">No campaigns match that. Clear the filters, or start a new one — it takes about two minutes.<div style="margin-top:10px;display:flex;gap:8px;justify-content:center"><button class="btn sm outline" id="camp-clear">Clear filters</button><button class="btn sm primary" id="camp-new2">+ New campaign</button></div></td></tr>'}</tbody></table></div>
     <div class="pager">${Array.from({length:pages},(_,i)=>`<button class="${i+1===campPage?'on':''}" data-p="${i+1}">${i+1}</button>`).join('')}</div>`;
   card.querySelector('#camp-q').oninput=e=>{ campFilter.q=e.target.value; campPage=1; const v=e.target.value; renderCampList(card); const i=card.querySelector('#camp-q'); i.focus(); i.setSelectionRange(v.length,v.length); };
   card.querySelectorAll('.fchip').forEach(b=>b.onclick=()=>{ campFilter[b.dataset.f]=b.dataset.v; campPage=1; renderCampList(card); });
@@ -3023,6 +3092,7 @@ function renderCampList(card){
   card.querySelectorAll('#camp-table tr.row').forEach(tr=>tr.onclick=e=>{ if(e.target.tagName==='BUTTON') return; campOpen(tr.dataset.id); });
   card.querySelectorAll('#camp-table [data-open]').forEach(b=>b.onclick=()=>campOpen(b.dataset.open));
   card.querySelectorAll('#camp-table [data-dup]').forEach(b=>b.onclick=()=>campCopy(b.dataset.dup));
+  card.querySelectorAll('#camp-table [data-results]').forEach(b=>b.onclick=()=>opsOpenFor(b.dataset.results));
   card.querySelectorAll('.pager button').forEach(b=>b.onclick=()=>{ campPage=+b.dataset.p; renderCampList(card); });
 }
 function renderCampDetail(card){
@@ -3104,12 +3174,13 @@ function renderCampDetail(card){
   const rd=campReady(c);
   const finalBtn=ROLE==='approver'?(c.status==='Pending approval'?'Approve & activate':c.status==='Active'?'Save & re-activate':'Activate'):ROLE==='marketer'?(c.status==='Pending approval'?'Waiting for approval':c.status==='Active'?'Submit change for approval':'Submit for approval'):(c.status==='Active'?'Save & re-activate':'Activate'); const finalDis=ROLE==='cmo'||(ROLE==='marketer'&&c.status==='Pending approval');
   const cur=steps.find(x=>x.i===campStep); const visible=steps.filter(x=>!x.skip); const pos=visible.findIndex(x=>x.i===campStep);
-  card.innerHTML=`<div class="card-h"><button class="btn sm outline" id="camp-back">‹ Campaign list</button><h2 style="font-size:16px">${campSel?`Campaign ${c.id}`:'New campaign'}</h2>${statusPill(c.status)}<span class="typechip ${c.type}">${c.type}</span>${campSavedAt?`<span class="savebar">✓ Saved ${campSavedAt}</span>`:''}<div class="grow"></div><span style="color:var(--ink-3);font-size:11.5px">Created by ${esc(c.createdBy)} · ${c.created}</span></div>
+  card.innerHTML=`<div class="card-h"><button class="btn sm outline" id="camp-back">‹ Campaign list</button><h2 style="font-size:16px">${campSel?`Campaign ${c.id}`:'New campaign'}</h2>${statusPill(c.status)}<span class="typechip ${c.type}">${c.type}</span>${campSavedAt?`<span class="savebar">✓ Saved ${campSavedAt}</span>`:''}<div class="grow"></div><span style="color:var(--ink-3);font-size:11.5px">Created by ${esc(c.createdBy)} · ${c.created}</span>${campSel?`<button class="btn sm outline" id="camp-results" title="Operation analysis for this campaign: deliveries, eliminations, promotions, survey responses">Results</button>`:''}</div>
     <div class="stepper">${steps.map(st=>`<button class="${st.i===campStep?'on':st.i<campStep&&!st.skip?'done':''}" data-step="${st.i}" ${st.skip?'disabled title="Info campaign — no offer" style="opacity:.45"':''}><i>${st.skip?'–':st.i<campStep?'✓':visible.findIndex(x=>x.i===st.i)+1}</i>${st.s}</button>`).join('')}<span style="flex:1"></span><span style="font-size:11.5px;color:var(--ink-3);align-self:center">Step ${pos+1} of ${visible.length} · readiness ${rd.done}/${rd.total}</span></div>
     <div style="flex:1;overflow:auto;display:grid;grid-template-columns:1fr 250px;gap:0 12px;padding-right:20px"><div style="min-width:0"><h1 class="step-h">${CAMP_STEP_H[campStep]}</h1>${body}</div><div style="padding-top:14px">${readyHtml(c)}</div></div>
     <div class="toolrow" style="border-top:1px solid var(--line-2);justify-content:flex-end;padding:12px 20px"><button class="btn dark" id="camp-prev" ${pos===0?'disabled':''}>Back</button><button class="btn grey" id="camp-save">Save</button><button class="btn outline" id="camp-saveclose">Save &amp; close</button>${campStep===6?`<button class="btn primary" id="camp-activate" ${finalDis?'disabled':''}>${finalBtn}</button>`:''}${pos<visible.length-1?`<button class="btn ${campStep===6?'outline':'primary'}" id="camp-next">${campStep===6?'Summary ›':'Next'}</button>`:''}</div>`;
   const g=id=>card.querySelector('#'+id);
   g('camp-back').onclick=()=>{ campMode='list'; renderCampaigns(); };
+  if(g('camp-results')) g('camp-results').onclick=()=>opsOpenFor(c.id);
   card.querySelectorAll('.stepper button:not([disabled])').forEach(b=>b.onclick=()=>{ campStep=+b.dataset.step; renderCampDetail(card); });
   card.querySelectorAll('#camp-ready li').forEach(li=>li.onclick=()=>{ const st=+li.dataset.step; campStep=(st===2&&c.type!=='Offer')?3:st; renderCampDetail(card); });
   if(g('camp-prev')) g('camp-prev').onclick=()=>{ campStep=visible[pos-1].i; renderCampDetail(card); };
@@ -3395,6 +3466,7 @@ function rpRows(){ return CAMPAIGNS.filter(c=>c.status!=='Draft'&&c.status!=='Pe
 function renderReports(){ const card=document.getElementById('rp-card'); if(!card) return; const rows=rpRows(); const T=k=>rows.reduce((t,r)=>t+r[k],0); const pct=(a,b)=>b?Math.round(1000*a/b)/10+'%':'—'; const exec=ROLE!=='marketer'; const days=Array.from({length:7},(_,i)=>{ const d=new Date(TODAY); d.setDate(d.getDate()-6+i); return d; }); const per=Math.max(1,Math.round(T('del')/7)); const bars=days.map((d,i)=>Math.round(per*(0.55+((i*37+11)%50)/50)));
   card.innerHTML=`<div class="card-h"><h2>Reports</h2><span class="pill">concept</span><div class="grow"></div><span class="pill ${exec?'acc':''}">${exec?'executive view':'marketer view'}</span>
     <p>${exec?'Executive view: totals, trend and every campaign. ':'Marketer view: totals and your campaigns; the executive dashboard shows more. '}Concept for the flexible dashboard — panels the user composes, a report export, and the DVH analytics product as reference (totals delivered, last-7-days, live counters).</p></div>
+    ${ROLE!=='cmo'?`<div class="rp-ops"><span><b>Reports is the aggregated, chart-led view.</b> For the row-level records behind these numbers — each delivery execution, eliminated customer, promotion code and survey response — open Operation analysis.</span><div style="flex:1"></div><button class="btn sm outline" id="rp-toops" style="white-space:nowrap">Operation analysis ›</button></div>`:''}
     <div class="toolrow" style="gap:8px;padding-top:0"><div class="chipbar"><span style="color:var(--ink-3);font-size:11px">PERIOD</span>${[7,30,90].map(n=>`<button class="fchip ${rpRange===n?'on':''}" data-rp="${n}">Last ${n} days</button>`).join('')}</div><div class="grow"></div><button class="btn sm outline" disabled title="Concept — the user composes panels">+ Add panel</button><button class="btn sm outline" disabled title="Concept — ask for a report in plain language">Ask the agent</button><button class="btn sm outline" disabled title="Concept">Export</button></div>
     <div class="stats"><div class="stat"><div class="l">Delivered</div><div class="v">${T('del').toLocaleString()}</div><div class="s">${pct(T('del'),T('sent'))} of ${T('sent').toLocaleString()} sent</div></div><div class="stat"><div class="l">Opened</div><div class="v">${T('opened').toLocaleString()}</div><div class="s">${pct(T('opened'),T('del'))} open rate</div></div><div class="stat"><div class="l">Clicked</div><div class="v">${T('clicked').toLocaleString()}</div><div class="s">${pct(T('clicked'),T('opened'))} of opened</div></div>${exec?`<div class="stat"><div class="l">Converted</div><div class="v">${T('conv').toLocaleString()}</div><div class="s">${pct(T('conv'),T('del'))} of delivered</div></div><div class="stat"><div class="l">Active campaigns</div><div class="v">${CAMPAIGNS.filter(c=>c.status==='Active').length}</div><div class="s">${CAMPAIGNS.filter(c=>c.status==='Pending approval').length} waiting for approval · ${JOURNEYS.filter(j=>j.status==='Active').length} journeys live</div></div>`:`<div class="stat"><div class="l">Waiting for approval</div><div class="v">${CAMPAIGNS.filter(c=>c.status==='Pending approval').length}</div><div class="s">your campaigns in the approver's queue</div></div>`}</div>
     <div style="display:grid;grid-template-columns:${exec?'1fr 1fr':'1fr'};padding:0 20px 8px;gap:12px">
@@ -3406,6 +3478,7 @@ function renderReports(){ const card=document.getElementById('rp-card'); if(!car
     <div class="note" style="margin-top:10px">Numbers here are demo values derived from the campaigns' audiences. In the product they come from the Event DataMart (sent, delivered, opened, clicked, converted) — the same data journeys use for their feedback steps.</div></div>`;
   card.querySelectorAll('[data-rp]').forEach(b=>b.onclick=()=>{ rpRange=+b.dataset.rp; renderReports(); });
   card.querySelectorAll('[data-rpopen]').forEach(b=>b.onclick=()=>{ showView('campaigns'); campOpen(b.dataset.rpopen); });
+  const tops=card.querySelector('#rp-toops'); if(tops) tops.onclick=()=>{ opsDrawer=null; showView('opsan'); };
 }
 /* ---------- PROGRAMS ---------- */
 let prgMode='list', prgSel=null, prgTab='overview', prgDraft=null, prgPickQ='';
@@ -3486,6 +3559,8 @@ let dbRange=30, dbHidden=new Set(), dbSort={k:'conv',dir:-1}, dbCamp=null;
 const DB_PANELS=[['live','Live now'],['att','Needs attention'],['trend','Delivered per day'],['conv','Conversions per day'],['funnel','Funnel & eliminations'],['chan','By channel'],['cat','By category'],['top','Campaign performance'],['jrn','Top journeys'],['cg','Control group uplift']];
 /* demo unit economics behind Revenue and ROI: revenue per conversion and cost per message sent (₴) */
 const UNIT_REV=186, COST_MSG=0.06;
+/* why customers are removed before a send, with their demo shares — one set, read by the dashboard funnel and Operation analysis so the two screens agree */
+const ELIM_REASONS=[['Consent / opt-out',0.34],['Channel cooldown',0.27],['Exclusion lists',0.2],['Type overlap',0.12],['Pre-sent period',0.07]];
 const compact=n=>Math.round(n).toLocaleString('en',{notation:'compact',maximumFractionDigits:1});
 /* sparkline under a headline number — decorative, the number above it is the value */
 function spark(vals){ if(!vals||vals.length<2) return ''; const mx=Math.max(...vals), mn=Math.min(...vals), rg=mx-mn||1; const line=vals.map((v,i)=>`${Math.round(1000*i/(vals.length-1))/10},${Math.round(10*(22-19*(v-mn)/rg))/10}`).join(' ');
@@ -3536,7 +3611,7 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
       <div class="sec" style="padding-top:8px">Control group uplift</div>
       ${r.hasCG?`<table class="tbl"><tbody><tr><td>Control group</td><td class="num">${esc(c.cg)}</td></tr><tr><td>Campaign conversion rate</td><td class="num">${pct(r.rate,1)}</td></tr><tr><td>Control conversion rate</td><td class="num">${pct(r.cgRate,1)}</td></tr><tr><td>Uplift</td><td class="num"><b>${r.cgRate?'×'+(Math.round(10*r.rate/r.cgRate)/10):'—'}</b></td></tr><tr><td>Incremental conversions</td><td class="num"><b>${fmt(r.incr)}</b></td></tr></tbody></table>`
         :`<p class="empty" style="margin:0;padding:6px 0;text-align:left">This campaign has no control group, so there is nothing to measure uplift against. Keep one on the next run to see what it actually added.</p>`}</div></div>`; };
-  const fun=[['Targeted',T('targeted')],['Eligible after rules',T('sent')],['Delivered',T('del')],['Opened',T('opened')],['Clicked',T('clicked')],['Converted',conv]]; const elim=T('elim'); const reasons=[['Consent / opt-out',0.34],['Channel cooldown',0.27],['Exclusion lists',0.2],['Type overlap',0.12],['Pre-sent period',0.07]];
+  const fun=[['Targeted',T('targeted')],['Eligible after rules',T('sent')],['Delivered',T('del')],['Opened',T('opened')],['Clicked',T('clicked')],['Converted',conv]]; const elim=T('elim'); const reasons=ELIM_REASONS;
   /* Live now: status colour lives in the dot, the bar and the icon, always with a word saying what it means; the number stays dark */
   const failed=Math.round(T('sent')*0.012);
   const LIVE_IC={run:'<path d="M8 5.5v13l10.5-6.5z"/>',jrn:'<circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><path d="M8 6h2.5a3.5 3.5 0 0 1 3.5 3.5V12M8 18h2.5a3.5 3.5 0 0 0 3.5-3.5V12h2"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4.5l3 2"/>',wait:'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4h5v3h-5zM9.5 12h5M9.5 16h3"/>',fail:'<path d="M12 4l9 16H3z"/><path d="M12 10v4.5M12 17.5v.01"/>'};
@@ -3598,6 +3673,340 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
   card.querySelectorAll('[data-godm]').forEach(el=>el.onclick=()=>{ showView('datamart'); dmOpen(el.dataset.godm,'load'); });
   card.querySelectorAll('[data-go]').forEach(el=>el.onclick=()=>{ const [v,arg]=el.dataset.go.split(':'); if(v==='campaigns'){ showView('campaigns'); if(arg&&CAMPAIGNS.some(c=>c.id===arg)) campOpen(arg); else if(arg){ campFilter.status=arg; campMode='list'; campPage=1; renderCampaigns(); } } else showView(v); });
 }
+/* ---------- OPERATION ANALYSIS ----------
+   The row-level, operational view: every delivery execution, every eliminated customer, every
+   promotion code and every survey response, under one scope bar. It replaces the current product's
+   five report screens (Delivery / Elimination / Promotion / Active Promotions / Survey Result) with
+   one screen and four tabs. The grid keeps their power — column choice, NOT/AND/OR conditions,
+   export — and adds a layer of context above it: a period, a campaign, totals, empty states and a
+   way back to the campaign. Reports stays the aggregated, chart-led view. */
+const dAdd=(iso,n)=>{ const d=new Date(iso+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); };
+const dDiff=(a,b)=>Math.round((new Date(b+'T00:00:00Z')-new Date(a+'T00:00:00Z'))/864e5);
+/* a seeded generator, so the demo rows are the same on every load */
+function seedRng(seed){ let a=seed>>>0; return ()=>{ a=(a+0x6D2B79F5)|0; let t=Math.imul(a^(a>>>15),1|a); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296; }; }
+/* split an integer total over weighted cells; the parts always add back up to the total */
+function alloc(total,weights){ const W=weights.reduce((t,w)=>t+w,0)||1; let cum=0, prev=0; return weights.map(w=>{ cum+=w; const cur=Math.round(total*cum/W); const v=cur-prev; prev=cur; return v; }); }
+const cgShare=cg=>{ const m=String(cg).match(/(\d+)%/); return m?+m[1]/100:/Exact/.test(cg)?0.06:/Uploaded/.test(cg)?0.04:0; };
+const maskEmail=e=>{ const [u,d]=String(e||'').split('@'); return d?u.charAt(0)+'•••@'+d:'•••'; };
+const maskPhone=p=>String(p||'').replace(/^(\+\d+\s\d)\S*\s\S+/,'$1•• •••');
+const campHash=id=>[...String(id)].reduce((t,ch)=>t+ch.charCodeAt(0),0);
+/* promotion codes on the demo Offer campaigns that print one: [campaign code, days a unique code stays valid] */
+const PROMO_SEED={'433':['RENEW10',14],'3310':['TOPUP10',21],'2003':['5GFREE',30],'2410':['DATA5GB',14],'2612':['WINBACK20',21]};
+Object.entries(PROMO_SEED).forEach(([id,[code]])=>{ const c=CAMPAIGNS.find(x=>x.id===id); if(c) c.promo={code,kind:'Unique per customer',valid:c.end.slice(0,10)}; });
+const ELIM_DESC={
+  'Consent / opt-out':(c,ch)=>`No ${chName(ch)} marketing consent, or opted out`,
+  'Channel cooldown':(c,ch)=>`Contacted on ${chName(ch)} within the ${RULE_DEFAULTS.cooldown[ch]||'1 day'} cooldown`,
+  'Exclusion lists':(c,ch,ml)=>`On exclusion list ${ml}`,
+  'Type overlap':c=>`Already in a higher-priority ${c.category} campaign (Campaign Type overlap)`,
+  'Pre-sent period':c=>`Received this campaign within its ${c.presend} pre-sent period`};
+
+/* One dated history of the last 90 days, built once. Each campaign's 90-day totals are the
+   dashboard's (dbRows at 90 days), spread over executions on the days its period overlaps the window,
+   so the 90-day view agrees with the dashboard and shorter periods are slices of the same history. */
+let OPS_DATA=null;
+function opsData(){ if(OPS_DATA) return OPS_DATA;
+  const rnd=seedRng(4821), pick=a=>a[Math.floor(rnd()*a.length)], from=dAdd(TODAY,-89);
+  const saved=dbRange; dbRange=90; const rows=dbRows(); dbRange=saved;
+  const execs=[], elims=[], promos=[]; let exN=70400, elN=1, prN=1;
+  rows.forEach(r=>{ const c=r.c, s=c.start.slice(0,10), e=(c.end||TODAY).slice(0,10), a=s>from?s:from, b=e<TODAY?e:TODAY; if(a>b) return;
+    const span=dDiff(a,b)+1, runs=Math.max(1,Math.min(span,c.sched&&c.sched.trigger==='Run now'?1:24)), h=campHash(c.id);
+    const chs=(c.channels||[]).length?c.channels:['sms'], wch=chs.map((k,i)=>1+((h+i*7)%5)/4);
+    const cells=[]; for(let k=0;k<runs;k++) chs.forEach((ch,i)=>cells.push({k,ch,w:wch[i]}));
+    const W=cells.map(x=>x.w), T=alloc(r.targeted,W), S=alloc(r.sent,W), D=alloc(r.del,W), CG=alloc(Math.round(r.targeted*cgShare(c.cg)),W), F=alloc(Math.round(r.sent*0.012),W);
+    const incl=(c.lists||[]).filter(l=>l.mode==='Include').map(l=>MLS.find(m=>m.id===l.id)).filter(Boolean);
+    const exclC=(c.lists||[]).filter(l=>l.mode==='Exclude').map(l=>MLS.find(m=>m.id===l.id)).filter(Boolean);
+    const pr=PROMO_SEED[c.id];
+    cells.forEach((x,i)=>{ const date=dAdd(a,runs===1?span-1:Math.round(x.k*(span-1)/(runs-1))), time=(c.sched&&c.sched.time)||'10:00';
+      const del=D[i], sent=S[i], failed=Math.min(F[i],Math.max(0,sent-del)), plan=(c.plans||[]).find(p=>p.ch===x.ch);
+      const ex={_id:'EX-'+(exN++),ex:'EX-'+(exN-1),c,ch:x.ch,date,time,targeted:T[i],sent,del,elim:T[i]-sent,cg:CG[i],failed,
+        type:c.sched&&c.sched.trigger==='Run now'?'Run now':'Scheduled · '+((c.sched&&c.sched.type)||'Daily'),
+        dst:date===TODAY&&c.status==='Active'?'Running':failed>0?'Partly failed':'Completed',
+        comm:`COM-${c.id}-${String(x.k+1).padStart(2,'0')}`, dp:plan?plan.id:`DP-${c.id}-${x.ch.toUpperCase()}`, dm:c.datamart==='Event DataMart'?'DM-2':'DM-1'};
+      execs.push(ex); ex._ml={incl:incl[0],excl:exclC[0]};
+      /* one promotion code per eligible customer; the ones that did not deliver are cancelled */
+      if(pr) for(let j=0;j<sent;j++){ const cu=pick(CUSTOMERS), ok=j<del; const until=[dAdd(date,pr[1]),c.promo.valid||e].sort()[0];
+        const red=ok&&rnd()<0.2; const redAt=red?[dAdd(date,1+Math.floor(rnd()*Math.max(1,dDiff(date,until)))),TODAY].sort()[0]:'';
+        const st=!ok?'Cancelled':red?'Redeemed':until<TODAY?'Expired':'Active';
+        const code=pr[0].replace(/\d+$/,'').slice(0,4)+'-'+Math.floor(rnd()*36**4).toString(36).toUpperCase().padStart(4,'0');
+        promos.push({_id:'PR-'+(prN++),ex,c,ch:x.ch,date,time,cust:cu,pcode:pr[0],code,result:ok?'Delivered':'Not delivered',until,st,redAt,op:'OP-'+(880000+prN)}); } });
+  });
+  /* eliminated customers: the whole history is split over the dashboard funnel's reasons and shares,
+     interleaved so that every campaign and every slice of the period carries a representative mix */
+  const E=execs.reduce((t,x)=>t+x.elim,0), cnt=alloc(E,ELIM_REASONS.map(q=>q[1])), seq=[];
+  ELIM_REASONS.forEach(([l],ri)=>{ for(let j=0;j<cnt[ri];j++) seq.push([(j+0.5)/cnt[ri],l]); }); seq.sort((a,b)=>a[0]-b[0]);
+  let sp=0; execs.forEach(ex=>{ for(let j=0;j<ex.elim;j++){ const rule=seq[sp++][1], cu=pick(CUSTOMERS);
+    const glob=MLS.filter(m=>m.excl&&m.status==='Active'&&exclApplies(m,[ex.ch]));
+    const ml=rule==='Exclusion lists'?(ex._ml.excl||glob[0]||ex._ml.incl):ex._ml.incl, mlName=ml?mlLabel(ml):'— (event only)';
+    elims.push({_id:'EL-'+(elN++),ex,c:ex.c,ch:ex.ch,date:ex.date,cust:cu,rule,desc:ELIM_DESC[rule](ex.c,ex.ch,mlName),ml:mlName}); } });
+  OPS_DATA={execs,elims,promos}; return OPS_DATA;
+}
+
+let opsTab='del', opsRange=30, opsDrawer=null, opsElimRule='', opsActiveOnly=false, opsReveal=false;
+const opsScope={camp:'',ch:'',st:''};
+let opsPop='', opsCampQ='', opsAdvDraft=null, opsViewName='';
+const opsViews=[];
+const OPS_TABS=[['del','Deliveries'],['elim','Eliminations'],['promo','Promotions'],['srv','Surveys']];
+const opsSince=()=>dAdd(TODAY,-(opsRange-1));
+const opsIn=(c,ch,date)=>date>=opsSince()&&date<=TODAY&&(!opsScope.camp||c.id===opsScope.camp)&&(!opsScope.ch||ch===opsScope.ch)&&(!opsScope.st||c.status===opsScope.st);
+const DST_CLS={Running:'acc','Partly failed':'bad',Completed:'ok'};
+const PST_CLS={Active:'acc',Redeemed:'ok',Expired:'',Cancelled:'bad'};
+const campCell=c=>`<span class="lnk">${esc(c.name)}</span> <small style="color:var(--ink-3)">${c.id}</small>`;
+const custCell=cu=>`<span class="mono">${esc(cu.cid)}</span>`;
+const opsRcpt=p=>{ const raw=p.ch==='email'?p.cust.row.EMAIL:p.cust.row.MSISDN; return opsReveal&&ROLE==='admin'?raw:(p.ch==='email'?maskEmail(raw):maskPhone(raw)); };
+
+/* the columns of each grid. tech: a technical id, hidden until asked for. hide: available, off by default */
+const OPS_COLS={
+  del:[
+    {k:'camp',l:'Campaign',v:r=>r.c.name,h:r=>campCell(r.c)},
+    {k:'cst',l:'Status',v:r=>r.c.status,h:r=>statusPill(r.c.status)},
+    {k:'ch',l:'Channel',v:r=>chName(r.ch)},
+    {k:'type',l:'Delivery type',v:r=>r.type},
+    {k:'date',l:'Execution date',v:r=>r.date+' '+r.time},
+    {k:'targeted',l:'Targeted',num:1,v:r=>r.targeted},
+    {k:'sent',l:'Sent',num:1,hide:1,v:r=>r.sent},
+    {k:'del',l:'Delivered',num:1,v:r=>r.del},
+    {k:'elim',l:'Eliminated',num:1,v:r=>r.elim},
+    {k:'cg',l:'Control group',num:1,v:r=>r.cg},
+    {k:'failed',l:'Failed',num:1,hide:1,v:r=>r.failed},
+    {k:'dst',l:'Delivery status',v:r=>r.dst,h:r=>`<span class="pill ${DST_CLS[r.dst]||''}">${r.dst}</span>`},
+    {k:'cid',l:'Campaign ID',tech:1,v:r=>r.c.id},
+    {k:'comm',l:'Communication ID',tech:1,v:r=>r.comm},
+    {k:'dp',l:'Delivery ID',tech:1,v:r=>r.dp},
+    {k:'ex',l:'Execution ID',tech:1,v:r=>r.ex},
+    {k:'dm',l:'Main DM ID',tech:1,v:r=>r.dm}],
+  elim:[
+    {k:'camp',l:'Campaign',v:r=>r.c.name,h:r=>campCell(r.c)},
+    {k:'cust',l:'Customer',v:r=>r.cust.cid,h:r=>custCell(r.cust)},
+    {k:'rule',l:'Rule',v:r=>r.rule,h:r=>`<span class="pill warn">${esc(r.rule)}</span>`},
+    {k:'desc',l:'Rule description',hide:1,v:r=>r.desc},
+    {k:'ch',l:'Channel',v:r=>chName(r.ch)},
+    {k:'date',l:'Execution date',v:r=>r.date},
+    {k:'ml',l:'Marketing list',v:r=>r.ml},
+    {k:'cid',l:'Campaign ID',tech:1,v:r=>r.c.id},
+    {k:'comm',l:'Communication ID',tech:1,v:r=>r.ex.comm},
+    {k:'dp',l:'Delivery ID',tech:1,v:r=>r.ex.dp},
+    {k:'ex',l:'Execution ID',tech:1,v:r=>r.ex.ex},
+    {k:'dm',l:'Main DM ID',tech:1,v:r=>r.ex.dm}],
+  promo:[
+    {k:'camp',l:'Campaign',v:r=>r.c.name,h:r=>campCell(r.c)},
+    {k:'ch',l:'Channel',v:r=>chName(r.ch)},
+    {k:'pcode',l:'Promotion code',v:r=>r.pcode,h:r=>`<span class="mono">${esc(r.pcode)}</span>`},
+    {k:'code',l:'Promo code',v:r=>r.code,h:r=>`<span class="mono">${esc(r.code)}</span>`},
+    {k:'cust',l:'Customer',v:r=>r.cust.cid,h:r=>custCell(r.cust)},
+    {k:'rcpt',l:'Recipient info',v:r=>opsRcpt(r),h:r=>`<span class="mono">${esc(opsRcpt(r))}</span>`},
+    {k:'result',l:'Result',v:r=>r.result},
+    {k:'sent',l:'Sent',v:r=>r.date+' '+r.time},
+    {k:'until',l:'Active until',v:r=>r.until},
+    {k:'pst',l:'Status',v:r=>r.st,h:r=>`<span class="pill ${PST_CLS[r.st]||''}">${r.st}</span>`},
+    {k:'cid',l:'Campaign ID',tech:1,v:r=>r.c.id},
+    {k:'dm',l:'Main DM ID',tech:1,v:r=>r.ex.dm},
+    {k:'op',l:'Operation ID',tech:1,v:r=>r.op},
+    {k:'dp',l:'Delivery ID',tech:1,v:r=>r.ex.dp},
+    {k:'ex',l:'Execution ID',tech:1,v:r=>r.ex.ex},
+    {k:'chid',l:'Channel ID',tech:1,v:r=>r.ch.toUpperCase()}]};
+const OPS_ADV_OPS=['contains','equals','greater than','less than','is empty'];
+const opsGs={};
+function opsGrid(tab){ const cols=OPS_COLS[tab]; if(!opsGs[tab]) opsGs[tab]={order:cols.map(x=>x.k),vis:new Set(cols.filter(x=>!x.tech&&!x.hide).map(x=>x.k)),sort:null,w:null,page:1,adv:[]}; return opsGs[tab]; }
+const opsTechOn=tab=>OPS_COLS[tab].filter(x=>x.tech).every(x=>opsGrid(tab).vis.has(x.k));
+function opsCond(r,cd,cols){ const col=cols.find(x=>x.k===cd.col); if(!col) return true; const v=col.v(r), s=String(v??'').toLowerCase(), q=String(cd.val||'').toLowerCase().trim(); let ok;
+  switch(cd.op){ case 'equals': ok=s===q; break; case 'greater than': ok=+v>+q; break; case 'less than': ok=+v<+q; break; case 'is empty': ok=s===''||s==='—'; break; default: ok=s.includes(q); }
+  return cd.not?!ok:ok; }
+/* NOT binds to its own condition; AND / OR combine left to right, as the current product's filter strip does */
+function opsApplyAdv(rows,tab){ const g=opsGrid(tab), cols=OPS_COLS[tab]; if(!g.adv.length) return rows; return rows.filter(r=>g.adv.reduce((acc,cd,i)=>i===0?opsCond(r,cd,cols):cd.join==='OR'?(acc||opsCond(r,cd,cols)):(acc&&opsCond(r,cd,cols)),true)); }
+function opsSorted(rows,tab){ const g=opsGrid(tab); if(!g.sort) return rows; const col=OPS_COLS[tab].find(x=>x.k===g.sort.k); if(!col) return rows; return [...rows].sort((a,b)=>{ const x=col.v(a), y=col.v(b); return (col.num?(x-y):String(x).localeCompare(String(y)))*g.sort.dir; }); }
+const opsCondText=(cd,cols)=>`${cd.not?'NOT ':''}${esc((cols.find(x=>x.k===cd.col)||{}).l||cd.col)} ${cd.op}${cd.op==='is empty'?'':` “${esc(cd.val)}”`}`;
+
+/* the rows each tab shows: the scope bar first, then the tab's own switches, then the advanced filter */
+function opsRows(tab){ const D=opsData();
+  if(tab==='del') return D.execs.filter(x=>opsIn(x.c,x.ch,x.date));
+  if(tab==='elim') return D.elims.filter(x=>opsIn(x.c,x.ch,x.date));
+  if(tab==='promo') return D.promos.filter(x=>opsIn(x.c,x.ch,x.date));
+  return []; }
+
+function opsGridHtml(tab,rows,empty){ const g=opsGrid(tab), cols=OPS_COLS[tab]; const shown=g.order.map(k=>cols.find(x=>x.k===k)).filter(x=>x&&g.vis.has(x.k));
+  const per=50, pages=Math.max(1,Math.ceil(rows.length/per)); if(g.page>pages) g.page=pages; const page=rows.slice((g.page-1)*per,g.page*per);
+  const fixed=!!g.w;
+  return `<div class="ops-gt">
+      <button class="btn sm outline ${g.adv.length?'ops-on':''}" id="ops-advbtn" aria-expanded="${opsPop==='adv'}">Advanced filter${g.adv.length?` · ${g.adv.length}`:''}</button>
+      ${g.adv.map((cd,i)=>`${i?`<span class="ops-join">${cd.join}</span>`:''}<span class="ops-cond">${opsCondText(cd,cols)}<button data-rmcond="${i}" title="Remove this condition" aria-label="Remove condition">×</button></span>`).join('')}
+      <span class="kpi"><b>${rows.length.toLocaleString()}</b> rows</span>
+      <div class="grow"></div>
+      <span class="ops-swl">Show technical IDs <button class="sw ${opsTechOn(tab)?'on':''}" id="ops-tech" aria-pressed="${opsTechOn(tab)}" title="Communication, delivery, execution and datamart ids"></button></span>
+      <div class="dm-menu"><button class="btn sm outline" id="ops-colsbtn" aria-expanded="${opsPop==='cols'}">Columns</button>
+        <div class="pop ops-cols" ${opsPop==='cols'?'':'hidden'}><div class="ops-poph">Show, hide and order columns</div>${g.order.map((k,i)=>{ const col=cols.find(x=>x.k===k); return `<div class="ops-colrow"><label class="ck"><input type="checkbox" data-colvis="${k}" ${g.vis.has(k)?'checked':''}> ${esc(col.l)}${col.tech?' <span class="chip">id</span>':''}</label><button data-colmv="${k}" data-d="-1" ${i?'':'disabled'} title="Move up" aria-label="Move ${esc(col.l)} up">↑</button><button data-colmv="${k}" data-d="1" ${i<g.order.length-1?'':'disabled'} title="Move down" aria-label="Move ${esc(col.l)} down">↓</button></div>`; }).join('')}
+          <div class="ops-poph" style="border-top:1px solid var(--line-2);margin-top:4px;padding-top:6px"><button class="btn sm outline" id="ops-colreset">Default columns</button></div></div></div>
+      <button class="btn sm outline" id="ops-csv" ${rows.length?'':'disabled'}>Export CSV</button>
+      <button class="btn sm outline" disabled title="Concept — Excel export comes with the reporting service in the product">Export Excel</button>
+    </div>
+    ${opsPop==='adv'?opsAdvHtml(tab):''}
+    <div class="ops-gw"><table class="tbl ops-tbl ${fixed?'fixed':''}" id="ops-grid">${fixed?`<colgroup>${shown.map(x=>`<col style="width:${g.w[x.k]||140}px">`).join('')}</colgroup>`:''}
+      <thead><tr>${shown.map(x=>`<th class="${x.num?'num':''}" data-colk="${x.k}" aria-sort="${g.sort&&g.sort.k===x.k?(g.sort.dir>0?'ascending':'descending'):'none'}"><button class="th-sort" data-sort="${x.k}" title="Sort by ${esc(x.l)}">${esc(x.l)}${g.sort&&g.sort.k===x.k?(g.sort.dir>0?' ▲':' ▼'):''}</button><span class="rz" data-rz="${x.k}" title="Drag to resize"></span></th>`).join('')}</tr></thead>
+      <tbody>${page.map(r=>`<tr class="row ${opsDrawer&&opsDrawer.id===r._id?'sel':''}" data-oid="${r._id}">${shown.map(x=>`<td class="${x.num?'num':''}">${x.h?x.h(r):esc(x.num?Number(x.v(r)).toLocaleString():x.v(r))}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${shown.length||1}" class="empty ops-empty">${empty}</td></tr>`}</tbody></table></div>
+    ${pages>1?`<div class="pager ops-pager"><button data-pg="${g.page-1}" ${g.page>1?'':'disabled'} aria-label="Previous page">‹</button><span>Page ${g.page} of ${pages} · rows ${((g.page-1)*per+1).toLocaleString()}–${Math.min(rows.length,g.page*per).toLocaleString()}</span><button data-pg="${g.page+1}" ${g.page<pages?'':'disabled'} aria-label="Next page">›</button></div>`:''}`;
+}
+function opsAdvHtml(tab){ const cols=OPS_COLS[tab], d=opsAdvDraft||[];
+  return `<div class="ops-adv" id="ops-adv"><div class="ops-advh"><b>Advanced filter</b><small>Conditions on any column, technical ids included. NOT applies to one condition; AND / OR join them left to right.</small></div>
+    ${d.map((cd,i)=>`<div class="ops-advrow">${i?`<select data-adv="${i}" data-f="join" aria-label="Join"><option ${cd.join==='AND'?'selected':''}>AND</option><option ${cd.join==='OR'?'selected':''}>OR</option></select>`:'<span class="ops-where">Where</span>'}
+      <label class="ck"><input type="checkbox" data-adv="${i}" data-f="not" ${cd.not?'checked':''}> NOT</label>
+      <select data-adv="${i}" data-f="col" aria-label="Column">${cols.map(x=>`<option value="${x.k}" ${cd.col===x.k?'selected':''}>${esc(x.l)}</option>`).join('')}</select>
+      <select data-adv="${i}" data-f="op" aria-label="Operator">${OPS_ADV_OPS.map(o=>`<option ${cd.op===o?'selected':''}>${o}</option>`).join('')}</select>
+      <input data-adv="${i}" data-f="val" value="${esc(cd.val||'')}" placeholder="value" aria-label="Value" ${cd.op==='is empty'?'disabled':''}>
+      <button class="btn sm outline" data-advrm="${i}" aria-label="Remove condition">×</button></div>`).join('')||'<div class="ops-where" style="padding:4px 0">No conditions yet.</div>'}
+    <div class="ops-advf"><button class="btn sm outline" id="ops-advadd">+ Add condition</button><div class="grow"></div><button class="btn sm outline" id="ops-advclear">Clear all</button><button class="btn sm outline" id="ops-advcancel">Cancel</button><button class="btn sm primary" id="ops-advapply">Apply</button></div></div>`; }
+
+function opsBindGrid(card,tab,rows){ const g=opsGrid(tab), cols=OPS_COLS[tab], q=s=>card.querySelector(s), rer=()=>renderOpsan();
+  q('#ops-advbtn').onclick=()=>{ if(opsPop==='adv'){ opsPop=''; } else { opsPop='adv'; opsAdvDraft=JSON.parse(JSON.stringify(g.adv)); if(!opsAdvDraft.length) opsAdvDraft.push({join:'AND',not:false,col:cols[0].k,op:'contains',val:''}); } rer(); };
+  card.querySelectorAll('[data-rmcond]').forEach(b=>b.onclick=()=>{ g.adv.splice(+b.dataset.rmcond,1); g.page=1; rer(); });
+  if(q('#ops-adv')){
+    card.querySelectorAll('[data-adv]').forEach(el=>{ const h=()=>{ const cd=opsAdvDraft[+el.dataset.adv]; cd[el.dataset.f]=el.type==='checkbox'?el.checked:el.value; if(el.dataset.f==='op') rer(); }; el.onchange=h; if(el.tagName==='INPUT'&&el.type!=='checkbox') el.oninput=()=>{ opsAdvDraft[+el.dataset.adv].val=el.value; }; });
+    card.querySelectorAll('[data-advrm]').forEach(b=>b.onclick=()=>{ opsAdvDraft.splice(+b.dataset.advrm,1); rer(); });
+    q('#ops-advadd').onclick=()=>{ opsAdvDraft.push({join:'AND',not:false,col:cols[0].k,op:'contains',val:''}); rer(); };
+    q('#ops-advclear').onclick=()=>{ opsAdvDraft=[]; g.adv=[]; g.page=1; opsPop=''; rer(); };
+    q('#ops-advcancel').onclick=()=>{ opsPop=''; rer(); };
+    q('#ops-advapply').onclick=()=>{ g.adv=opsAdvDraft.filter(cd=>cd.op==='is empty'||String(cd.val||'').trim()!==''); g.page=1; opsPop=''; rer(); };
+    card.querySelectorAll('#ops-adv input[data-f="val"]').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') q('#ops-advapply').click(); }));
+  }
+  q('#ops-tech').onclick=()=>{ const on=!opsTechOn(tab); cols.filter(x=>x.tech).forEach(x=>on?g.vis.add(x.k):g.vis.delete(x.k)); g.w=null; rer(); };
+  q('#ops-colsbtn').onclick=e=>{ e.stopPropagation(); opsPop=opsPop==='cols'?'':'cols'; rer(); };
+  const pop=q('.ops-cols'); if(pop) pop.onclick=e=>e.stopPropagation();
+  card.querySelectorAll('[data-colvis]').forEach(el=>el.onchange=()=>{ const k=el.dataset.colvis; if(el.checked) g.vis.add(k); else if(g.vis.size>1) g.vis.delete(k); g.w=null; rer(); });
+  card.querySelectorAll('[data-colmv]').forEach(b=>b.onclick=()=>{ const i=g.order.indexOf(b.dataset.colmv), j=i+(+b.dataset.d); if(j<0||j>=g.order.length) return; [g.order[i],g.order[j]]=[g.order[j],g.order[i]]; g.w=null; rer(); });
+  if(q('#ops-colreset')) q('#ops-colreset').onclick=()=>{ delete opsGs[tab]; opsGrid(tab); rer(); };
+  q('#ops-csv').onclick=()=>{ const shown=g.order.map(k=>cols.find(x=>x.k===k)).filter(x=>g.vis.has(x.k)); dmDownloadCsv(`operation-analysis-${tab}-${opsRange}d.csv`,[shown.map(x=>x.l),...rows.map(r=>shown.map(x=>x.v(r)))]); toast('Export CSV',`${rows.length.toLocaleString()} rows · ${shown.length} columns, as filtered and sorted on screen.${tab==='promo'&&!(opsReveal&&ROLE==='admin')?' Recipient details stay masked.':''}`); };
+  card.querySelectorAll('#ops-grid [data-sort]').forEach(b=>b.onclick=()=>{ const k=b.dataset.sort; const col=cols.find(x=>x.k===k); g.sort=g.sort&&g.sort.k===k?(g.sort.dir>0?{k,dir:-1}:null):{k,dir:col.num?-1:1}; g.page=1; rer(); });
+  /* resizing freezes the current widths, then the grid switches to a fixed layout */
+  card.querySelectorAll('#ops-grid [data-rz]').forEach(h=>h.onmousedown=e=>{ e.preventDefault(); e.stopPropagation(); const tbl=card.querySelector('#ops-grid'); const ths=[...tbl.querySelectorAll('thead th')];
+    if(!g.w){ g.w={}; ths.forEach(th=>g.w[th.dataset.colk]=Math.round(th.getBoundingClientRect().width)); }
+    const k=h.dataset.rz, x0=e.clientX, w0=g.w[k]; let colgroup=tbl.querySelector('colgroup');
+    if(!colgroup){ colgroup=document.createElement('colgroup'); ths.forEach(th=>{ const cl=document.createElement('col'); cl.style.width=g.w[th.dataset.colk]+'px'; colgroup.appendChild(cl); }); tbl.prepend(colgroup); tbl.classList.add('fixed'); }
+    const idx=ths.findIndex(th=>th.dataset.colk===k), colEl=colgroup.children[idx];
+    const mv=ev=>{ g.w[k]=Math.max(60,w0+ev.clientX-x0); colEl.style.width=g.w[k]+'px'; };
+    const up=()=>{ window.removeEventListener('mousemove',mv); window.removeEventListener('mouseup',up); };
+    window.addEventListener('mousemove',mv); window.addEventListener('mouseup',up); });
+  card.querySelectorAll('#ops-grid tr[data-oid]').forEach(tr=>tr.onclick=()=>{ opsDrawer={tab,id:tr.dataset.oid}; rer(); });
+  card.querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{ g.page=+b.dataset.pg; rer(); card.querySelector('.ops-gw').scrollTop=0; });
+  const empt=card.querySelector('[data-opswiden]'); if(empt) empt.onclick=()=>{ opsRange=90; renderOpsan(); };
+  const clr=card.querySelector('[data-opsclear]'); if(clr) clr.onclick=()=>{ opsResetScope(); renderOpsan(); };
+}
+function opsResetScope(){ opsRange=30; Object.assign(opsScope,{camp:'',ch:'',st:''}); opsElimRule=''; opsActiveOnly=false; Object.values(opsGs).forEach(g=>{ g.adv=[]; g.page=1; }); }
+/* an empty grid says what would appear and what to change */
+function opsEmpty(what){ const narrowed=opsScope.camp||opsScope.ch||opsScope.st||opsElimRule||opsActiveOnly||Object.values(opsGs).some(g=>g.adv.length);
+  return `${what} ${opsRange<90?'Widen the period':''}${opsRange<90&&narrowed?' or ':''}${narrowed?'clear the filters':''}${opsRange<90||narrowed?'.':''}<div style="margin-top:10px;display:flex;gap:8px;justify-content:center">${opsRange<90?'<button class="btn sm outline" data-opswiden>Show the last 90 days</button>':''}${narrowed?'<button class="btn sm outline" data-opsclear>Clear filters</button>':''}</div>`; }
+
+/* Entry point from a campaign ("Results"): Operation analysis, pre-filtered, on Deliveries.
+   The period widens to the shortest one that holds the campaign's executions. */
+function opsOpenFor(cid){ opsResetScope(); opsScope.camp=cid; opsTab='del'; opsDrawer=null; opsPop='';
+  const ex=opsData().execs.filter(x=>x.c.id===cid); const last=ex.map(x=>x.date).sort().pop();
+  opsRange=!last?30:dDiff(last,TODAY)<7?7:dDiff(last,TODAY)<30?30:90; showView('opsan'); }
+
+const opsTile=(l,v,sub,cls,title)=>`<div class="tile ${cls||''}"${title?` title="${esc(title)}"`:''}><div class="l">${l}</div><div class="v ${/^[\d.,%₴—\s]+$/.test(String(v))?'':'txt'}">${v}</div>${sub?`<div class="s">${sub}</div>`:''}</div>`;
+function opsCampLabel(){ const c=opsScope.camp&&CAMPAIGNS.find(x=>x.id===opsScope.camp); return c?`${c.id} · ${c.name}`:'All campaigns'; }
+
+function renderOpsan(){ const card=document.getElementById('ops-card'); if(!card||curView!=='opsan') return;
+  const D=opsData(), fmt=n=>Number(n).toLocaleString(), pct=(a,b)=>b?Math.round(1000*a/b)/10+'%':'—';
+  setCrumb(OPS_TABS.find(t=>t[0]===opsTab)[1]);
+  const inCh=[...new Set(D.execs.map(x=>x.ch))], inSt=[...new Set(D.execs.map(x=>x.c.status))];
+  const campList=CAMPAIGNS.filter(c=>!opsCampQ||(c.id+' '+c.name).toLowerCase().includes(opsCampQ.toLowerCase()));
+  let tiles='', body='', rows=[];
+  if(opsTab==='del'){ rows=opsSorted(opsApplyAdv(opsRows('del'),'del'),'del'); const T=k=>rows.reduce((t,r)=>t+r[k],0);
+    tiles=opsTile('Targeted',fmt(T('targeted')),`${rows.length} executions`)+opsTile('Delivered',fmt(T('del')),`${pct(T('del'),T('sent'))} of ${fmt(T('sent'))} sent`)
+      +opsTile('Eliminated',fmt(T('elim')),`${pct(T('elim'),T('targeted'))} of targeted`)+opsTile('Control group',fmt(T('cg')),'held out, not sent')
+      +opsTile('Failed',fmt(T('failed')),T('failed')?`${pct(T('failed'),T('sent'))} of sent · ${rows.filter(r=>r.failed).length} executions`:'none',T('failed')?'bad':'ok');
+    body=opsGridHtml('del',rows,opsEmpty(opsScope.camp&&!D.execs.some(x=>x.c.id===opsScope.camp)?'This campaign has not delivered yet — its executions will appear here after the first send.':'No deliveries in this period.')); }
+  else if(opsTab==='elim'){ const scoped=opsRows('elim'); const byRule=ELIM_REASONS.map(([l])=>[l,scoped.filter(r=>r.rule===l).length]); const tot=scoped.length;
+    rows=opsSorted(opsApplyAdv(opsElimRule?scoped.filter(r=>r.rule===opsElimRule):scoped,'elim'),'elim');
+    const targeted=opsRows('del').reduce((t,r)=>t+r.targeted,0), top=[...byRule].sort((a,b)=>b[1]-a[1])[0];
+    tiles=opsTile('Eliminated',fmt(tot),'customers removed by rules')+opsTile('Most-triggered rule',tot?esc(top[0]):'—',tot?`${fmt(top[1])} · ${pct(top[1],tot)}`:'','','')
+      +opsTile('Campaigns affected',new Set(scoped.map(r=>r.c.id)).size,'with at least one elimination')+opsTile('Share of targeted',pct(tot,targeted),`of ${fmt(targeted)} targeted`);
+    body=`<div class="ops-rules"><div class="ops-rh"><b>Eliminations by rule</b><small>Click a rule to filter the grid. Same rules and shares as the dashboard's Funnel &amp; eliminations panel.</small>${opsElimRule?`<button class="btn sm outline" id="ops-ruleclr" style="margin-left:auto">Show all rules</button>`:''}</div>
+      ${byRule.map(([l,n])=>`<button class="ops-rule ${opsElimRule===l?'on':''}" data-rule="${esc(l)}" aria-pressed="${opsElimRule===l}"><span class="lb">${esc(l)}</span><span class="tr"><i style="width:${Math.round(100*n/Math.max(1,...byRule.map(x=>x[1])))}%"></i></span><span class="n"><b>${fmt(n)}</b> · ${pct(n,tot)}</span></button>`).join('')}</div>`
+      +opsGridHtml('elim',rows,opsEmpty('No eliminations in this scope — every targeted customer was eligible, or nothing ran.')); }
+  else if(opsTab==='promo'){ const scoped=opsRows('promo'); rows=opsSorted(opsApplyAdv(opsActiveOnly?scoped.filter(r=>r.st==='Active'):scoped,'promo'),'promo');
+    const sent=scoped.filter(r=>r.result==='Delivered').length, red=scoped.filter(r=>r.st==='Redeemed').length, exp7=scoped.filter(r=>r.st==='Active'&&r.until<=dAdd(TODAY,7)).length;
+    tiles=opsTile('Codes issued',fmt(scoped.length),`${new Set(scoped.map(r=>r.c.id)).size} campaigns with a promo code`)+opsTile('Sent',fmt(sent),`${pct(sent,scoped.length)} delivered`)+opsTile('Redeemed',fmt(red),'validated by BSS')
+      +opsTile('Redemption rate',pct(red,sent),'of codes sent')+opsTile('Expiring within 7 days',fmt(exp7),'still active, not redeemed',exp7?'warn':'');
+    body=`<div class="ops-sub"><span class="ops-swl">Active only <button class="sw ${opsActiveOnly?'on':''}" id="ops-active" aria-pressed="${opsActiveOnly}" title="Codes still valid and not redeemed — the current product's Active Promotions screen"></button></span>
+      ${ROLE==='admin'?`<span class="ops-swl">Show recipient details <button class="sw ${opsReveal?'on':''}" id="ops-reveal" aria-pressed="${opsReveal}" title="Admin only — unmasks e-mail and phone"></button></span>`:''}
+      <small>${opsReveal&&ROLE==='admin'?'Recipient details are shown unmasked — admin view.':'Recipient e-mail and phone are masked'+(ROLE==='admin'?'.':'; an admin can reveal them.')}</small></div>`
+      +opsGridHtml('promo',rows,opsEmpty(opsActiveOnly?'No active promotion codes in this scope — every code was redeemed, expired or cancelled.':'No promotion codes in this scope. Only campaigns with a promo code issue them.')); }
+  else { body=renderOpsSurveys(); }
+
+  card.innerHTML=`<div class="card-h"><h2>Operation analysis</h2><span class="pill">as of ${TODAY}</span><div class="grow"></div><button class="btn sm outline" id="ops-toreports" style="white-space:nowrap">Reports ›</button>
+      <p><b>Operation analysis is the row-level, operational view</b> — every delivery execution, eliminated customer, promotion code and survey response, with the ids behind them. For aggregated, chart-led results, open <b>Reports</b>.</p></div>
+    <div class="toolrow ops-scope">
+      <div class="chipbar"><span class="ops-lbl">PERIOD</span>${[7,30,90].map(n=>`<button class="fchip ${opsRange===n?'on':''}" data-opr="${n}">Last ${n} days</button>`).join('')}</div>
+      <div class="dm-menu ops-camp"><button class="btn sm outline" id="ops-campbtn" aria-expanded="${opsPop==='camp'}" title="Campaign">${esc(opsCampLabel())} ▾</button>
+        <div class="pop" ${opsPop==='camp'?'':'hidden'} style="left:0;right:auto;width:320px"><div class="search-in" style="min-width:0;max-width:none"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="ops-campq" placeholder="Search campaigns" value="${esc(opsCampQ)}" aria-label="Search campaigns"></div>
+          <div class="ops-camplist"><button data-camp="" class="${opsScope.camp?'':'on'}">All campaigns</button>${campList.map(c=>`<button data-camp="${c.id}" class="${opsScope.camp===c.id?'on':''}"><span class="mono">${c.id}</span> ${esc(c.name)}</button>`).join('')||'<div class="empty" style="padding:10px">No campaign matches.</div>'}</div></div></div>
+      <select id="ops-ch" aria-label="Channel"><option value="">All channels</option>${inCh.map(k=>`<option value="${k}" ${opsScope.ch===k?'selected':''}>${chName(k)}</option>`).join('')}</select>
+      <select id="ops-st" aria-label="Campaign status"><option value="">All campaign statuses</option>${inSt.map(s=>`<option ${opsScope.st===s?'selected':''}>${s}</option>`).join('')}</select>
+      <button class="ops-reset" id="ops-reset">Reset</button>
+      <div class="grow"></div>
+      <select id="ops-views" aria-label="Saved views"><option value="">Saved views${opsViews.length?` (${opsViews.length})`:''}</option>${opsViews.map((v,i)=>`<option value="${i}">${esc(v.name)}</option>`).join('')}</select>
+      <div class="dm-menu"><button class="btn sm outline" id="ops-savebtn" aria-expanded="${opsPop==='save'}">Save view</button>
+        <div class="pop" ${opsPop==='save'?'':'hidden'} style="width:290px;padding:10px"><div class="fld"><label for="ops-viewname">Name this view</label><input id="ops-viewname" value="${esc(opsViewName)}" placeholder="e.g. Renewal SMS — last 7 days"></div>
+          <small style="color:var(--ink-3);display:block;margin:6px 0 8px">Keeps the scope, the tab, the columns and the filters. In the product it is saved for you; this prototype keeps it until the page reloads.</small>
+          <div style="display:flex;gap:6px;justify-content:flex-end"><button class="btn sm outline" id="ops-savecancel">Cancel</button><button class="btn sm primary" id="ops-savego">Save</button></div></div></div>
+    </div>
+    <div class="tabs ops-tabs" role="tablist">${OPS_TABS.map(([k,l])=>`<button role="tab" class="${opsTab===k?'on':''}" data-opt="${k}" aria-selected="${opsTab===k}">${l}</button>`).join('')}</div>
+    ${tiles?`<div class="db-hd ops-hd">${tiles}</div>`:''}
+    <div class="ops-body">${body}</div>`;
+
+  const q=s=>card.querySelector(s);
+  card.querySelectorAll('[data-opr]').forEach(b=>b.onclick=()=>{ opsRange=+b.dataset.opr; Object.values(opsGs).forEach(g=>g.page=1); renderOpsan(); });
+  card.querySelectorAll('[data-opt]').forEach(b=>b.onclick=()=>{ opsTab=b.dataset.opt; opsPop=''; opsDrawer=null; renderOpsan(); });
+  q('#ops-campbtn').onclick=e=>{ e.stopPropagation(); opsPop=opsPop==='camp'?'':'camp'; renderOpsan(); if(opsPop==='camp') q('#ops-campq')&&card.querySelector('#ops-campq').focus(); };
+  const cp=card.querySelector('.ops-camp .pop'); if(cp) cp.onclick=e=>e.stopPropagation();
+  const cq=q('#ops-campq'); if(cq) cq.oninput=()=>{ opsCampQ=cq.value; const v=cq.value; renderOpsan(); const i=card.querySelector('#ops-campq'); i.focus(); i.setSelectionRange(v.length,v.length); };
+  card.querySelectorAll('[data-camp]').forEach(b=>b.onclick=()=>{ opsScope.camp=b.dataset.camp; opsCampQ=''; opsPop=''; Object.values(opsGs).forEach(g=>g.page=1); renderOpsan(); });
+  q('#ops-ch').onchange=e=>{ opsScope.ch=e.target.value; Object.values(opsGs).forEach(g=>g.page=1); renderOpsan(); };
+  q('#ops-st').onchange=e=>{ opsScope.st=e.target.value; Object.values(opsGs).forEach(g=>g.page=1); renderOpsan(); };
+  q('#ops-reset').onclick=()=>{ opsResetScope(); opsPop=''; renderOpsan(); };
+  q('#ops-toreports').onclick=()=>showView('reports');
+  q('#ops-views').onchange=e=>{ const v=opsViews[+e.target.value]; if(!v) return; opsRange=v.range; Object.assign(opsScope,v.scope); opsTab=v.tab; opsActiveOnly=v.activeOnly; opsElimRule=v.rule; Object.keys(v.grids).forEach(t=>{ const s=v.grids[t]; opsGs[t]={order:[...s.order],vis:new Set(s.vis),sort:s.sort,w:null,page:1,adv:JSON.parse(JSON.stringify(s.adv))}; }); opsDrawer=null; renderOpsan(); toast('View applied',v.name); };
+  q('#ops-savebtn').onclick=e=>{ e.stopPropagation(); opsPop=opsPop==='save'?'':'save'; if(opsPop==='save') opsViewName=''; renderOpsan(); const i=card.querySelector('#ops-viewname'); if(i) i.focus(); };
+  const sp=card.querySelector('#ops-savebtn+.pop'); if(sp) sp.onclick=e=>e.stopPropagation();
+  if(q('#ops-viewname')){ q('#ops-viewname').oninput=e=>{ opsViewName=e.target.value; }; q('#ops-viewname').onkeydown=e=>{ if(e.key==='Enter') q('#ops-savego').click(); };
+    q('#ops-savecancel').onclick=()=>{ opsPop=''; renderOpsan(); };
+    q('#ops-savego').onclick=()=>{ const name=opsViewName.trim(); if(!name){ toast('Name the view','Give the view a name you will recognise in the list.','bad'); return; }
+      const grids={}; Object.keys(opsGs).forEach(t=>{ const g=opsGs[t]; grids[t]={order:[...g.order],vis:[...g.vis],sort:g.sort,adv:JSON.parse(JSON.stringify(g.adv))}; });
+      const i=opsViews.findIndex(v=>v.name===name), v={name,range:opsRange,scope:Object.assign({},opsScope),tab:opsTab,activeOnly:opsActiveOnly,rule:opsElimRule,grids};
+      if(i>=0) opsViews[i]=v; else opsViews.push(v); opsPop=''; renderOpsan(); toast('View saved',`${name} — pick it from Saved views.`); }; }
+  if(q('#ops-ruleclr')) q('#ops-ruleclr').onclick=()=>{ opsElimRule=''; opsGrid('elim').page=1; renderOpsan(); };
+  card.querySelectorAll('[data-rule]').forEach(b=>b.onclick=()=>{ opsElimRule=opsElimRule===b.dataset.rule?'':b.dataset.rule; opsGrid('elim').page=1; renderOpsan(); });
+  if(q('#ops-active')) q('#ops-active').onclick=()=>{ opsActiveOnly=!opsActiveOnly; opsGrid('promo').page=1; renderOpsan(); };
+  if(q('#ops-reveal')) q('#ops-reveal').onclick=()=>{ opsReveal=!opsReveal; renderOpsan(); };
+  if(opsTab==='srv') bindOpsSurveys(card); else opsBindGrid(card,opsTab,rows);
+  renderOpsDrawer(rows);
+}
+/* clicks outside an open popover close it */
+document.addEventListener('click',e=>{ if(curView==='opsan'&&(opsPop==='cols'||opsPop==='camp'||opsPop==='save')&&!e.target.closest('.dm-menu')){ opsPop=''; renderOpsan(); } });
+
+function renderOpsDrawer(rows){ const dr=document.getElementById('ops-drawer'); if(!dr) return;
+  const r=opsDrawer&&opsDrawer.tab===opsTab&&(rows||[]).find(x=>x._id===opsDrawer.id);
+  if(!r){ dr.hidden=true; dr.innerHTML=''; return; }
+  const fields=opsTab==='srv'?srvDrawerFields(r):OPS_COLS[opsTab].map(x=>[x.l,x.v(r),x.tech]);
+  const extra=opsTab==='del'?[['Sent',r.sent],['Failed',r.failed]]:opsTab==='promo'?[['Redeemed on',r.redAt||'—'],['Execution date',r.date]]:[];
+  const title=opsTab==='del'?`Execution ${r.ex}`:opsTab==='elim'?`Eliminated · ${r.cust.cid}`:opsTab==='promo'?`Promo code ${r.code}`:`Response ${r._id}`;
+  dr.innerHTML=`<div class="dh"><div style="flex:1;min-width:0"><h4>${esc(title)}</h4><span class="mono">${esc(r.c.id)} · ${esc(r.c.name)}</span></div><button class="btn sm outline" id="ops-dclose" aria-label="Close the side panel" title="Close (Esc)">×</button></div>
+    <div class="db">${opsTab==='srv'?srvDrawerAnswers(r):''}
+      <div><div class="sec">Every field</div><dl class="kv ops-kv">${fields.concat(extra.filter(e=>!fields.some(f=>f[0]===e[0]))).map(([l,v,tech])=>`<dt>${esc(l)}${tech?' <span class="chip">id</span>':''}</dt><dd>${esc(typeof v==='number'?v.toLocaleString():v===''||v==null?'—':v)}</dd>`).join('')}</dl></div>
+      ${opsTab==='promo'&&!(opsReveal&&ROLE==='admin')?'<div class="note">Recipient info is masked. An admin can reveal it with Show recipient details.</div>':''}
+    </div>
+    <div class="df"><button class="btn sm primary" data-go="campaigns:${r.c.id}">Open campaign ›</button><button class="btn sm outline" id="ops-odel" title="Opens the campaign's Channel &amp; content step, where this delivery is defined">Open delivery</button><button class="btn sm outline" id="ops-ocust" title="Concept — customer 360 is outside this prototype">Open customer</button></div>`;
+  dr.hidden=false;
+  dr.querySelector('#ops-dclose').onclick=()=>{ opsDrawer=null; renderOpsan(); };
+  dr.querySelector('[data-go]').onclick=()=>{ opsDrawer=null; dr.hidden=true; showView('campaigns'); campOpen(r.c.id); };
+  dr.querySelector('#ops-odel').onclick=()=>{ opsDrawer=null; dr.hidden=true; showView('campaigns'); campOpen(r.c.id); campStep=3; renderCampaigns(); };
+  dr.querySelector('#ops-ocust').onclick=()=>toast('Open customer',`${r.cust?r.cust.cid:'The customer'} — the customer 360 view is outside this prototype. In the product this opens the customer's contact history.`,'warn');
+}
+window.addEventListener('keydown',e=>{ if(e.key==='Escape'&&curView==='opsan'){ if(opsPop){ opsPop=''; renderOpsan(); } else if(opsDrawer){ opsDrawer=null; renderOpsan(); } } });
+
+/* the Surveys tab is filled by the Surveys module */
+function renderOpsSurveys(){ return `<div class="empty ops-empty">Survey results arrive with the Surveys module.</div>`; }
+function bindOpsSurveys(){}
+function srvDrawerFields(){ return []; }
+function srvDrawerAnswers(){ return ''; }
 /* static form labels (segment editor) get their tooltips once */
 const STATIC_TIPS={'Name':'Short and searchable — shown in Targeting, journeys and reports.','Description':'Optional. Shown in the segment list so colleagues know what the segment is for.','Segment Group':'Groups are defined by the admin in Parameters; they keep the segment list organised and filterable.','DataMart':'Main = customer master data. Event = delivery feedback (sent, opened, clicked). Add a second DataMart to join them on the reference column.','Customer key column':'The column in the uploaded file that identifies the customer; matched to CUSTOMER_ID or MSISDN.','SQL on the selected DataMart':'For power users. The query must return the customer key; it is validated before saving.','Exclude these customers from deliveries on':'Channel-scoped exclusion: applied at delivery time only on the selected channels; empty = every channel.'};
 function applyStaticTips(){ document.querySelectorAll('#view-segmentation label').forEach(l=>{ const t=(l.childNodes[0]&&l.childNodes[0].textContent||'').trim(); if(STATIC_TIPS[t]&&!l.querySelector('.tip')) l.insertAdjacentHTML('beforeend',tip(STATIC_TIPS[t])); }); }

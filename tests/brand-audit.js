@@ -16,7 +16,7 @@ const SHOTS = path.join(__dirname, 'shots');
 const AA = 4.5, AA_LARGE = 3.0;
 
 const VIEWS = ['dashboard', 'start', 'programs', 'campaigns', 'journeys', 'monitor', 'offers', 'policies',
-  'segmentation', 'reports', 'datamart', 'content', 'parameters', 'about', 'api'];
+  'segmentation', 'reports', 'opsan', 'datamart', 'content', 'parameters', 'about', 'api'];
 
 const probe = () => {
   const lum = (rgb) => {
@@ -52,6 +52,12 @@ const probe = () => {
     if (parseFloat(cs.fontSize) < 1) return;   // collapsed rail hides captions with font-size:0
     const box = el.getBoundingClientRect();
     if (box.width < 1 || box.height < 1) return;
+    /* text scrolled out of a scrolling container (the menu once it is taller
+       than the window) is not on screen, so it has no background to measure */
+    for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) {
+      const o = getComputedStyle(a).overflowY;
+      if ((o === 'auto' || o === 'scroll' || o === 'hidden') && !overlaps(box, a.getBoundingClientRect())) return;
+    }
     const fg = parse(cs.color);
     if (fg[3] !== undefined && fg[3] < 0.6) return;
     const r = ratio(fg.slice(0, 3), bgOf(el));
@@ -110,6 +116,10 @@ const probe = () => {
     ['segment-workbench', async () => { await page.click('.nav button[data-view="segmentation"]'); await page.click('#seg-new'); await page.click('#seg-search'); }],
     ['program-detail', async () => { await page.click('.nav button[data-view="programs"]'); await page.click('#prg-card tbody tr', { timeout: 5000 }); }],
     ['datamart-columns', async () => { await page.click('.nav button[data-view="datamart"]'); await page.click('#dm-card tr[data-dm="DM-1"] [data-open]'); await page.click('[data-dmtab="columns"]'); }],
+    ['ops-eliminations', async () => { await page.click('.nav button[data-view="opsan"]'); await page.click('[data-opt="elim"]'); await page.click('.ops-rule[data-rule="Channel cooldown"]'); }],
+    ['ops-promotions-panel', async () => { await page.click('[data-opt="promo"]'); await page.click('#ops-active'); await page.click('#ops-grid tbody tr[data-oid]'); await page.waitForTimeout(250); }],
+    ['ops-advanced-filter', async () => { await page.keyboard.press('Escape'); await page.click('[data-opt="del"]'); await page.click('#ops-advbtn'); await page.click('#ops-colsbtn'); }],
+    ['ops-empty', async () => { await page.keyboard.press('Escape'); await page.evaluate(() => { opsScope.camp = '436'; renderOpsan(); }); }],
     ['journey-report', async () => { await page.click('.nav button[data-view="journeys"]'); await page.click('#btn-report', { timeout: 5000 }); }],
   ];
   for (const [name, go] of deep) {
