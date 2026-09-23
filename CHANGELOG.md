@@ -2,6 +2,18 @@
 
 Version numbers follow the published artifact versions.
 
+## v46 — 23 Sept 2026
+**Operation analysis and Surveys.** Two modules of the current product brought into the redesign, one commit each.
+- **Operation analysis** (Operate, after Reports): one screen instead of the five report grids (Delivery, Elimination, Promotion, Active Promotions, Survey Result). A scope bar — period, searchable campaign picker, channel, campaign status, Reset — filters all four tabs and survives tab switching; each tab has a summary strip on the dashboard's tile markup.
+  - **Deliveries**: one row per execution; technical ids hidden until *Show technical IDs* or the column chooser. **Eliminations**: a breakdown by rule that shares `ELIM_REASONS` with the dashboard funnel; a bar filters the grid. **Promotions**: *Active only* replaces the Active Promotions screen; recipient details masked unless an admin reveals them.
+  - One grid for every tab: column chooser with reorder, sort, resizable columns, sticky header, the NOT/AND/OR builder behind *Advanced filter* with a chip per condition, CSV export of what is on screen, Excel as a disabled concept, in-memory saved views, 50-row pages, a side panel with every field and links to the campaign, and an empty state per tab.
+  - **Results** on the campaign list and the editor header opens it pre-filtered to that campaign. Reports and Operation analysis each say which is the aggregated and which the row-level view.
+- **Surveys** (Audience & content, after Segments): a narrow native module instead of LimeSurvey. List, and a workbench editor with definition, up to ten questions of six types (NPS, CSAT, Rating, Single, Multiple, Free text), per-option scores, one branching rule per question, a second language, and a customer preview on mobile or Web Self Care.
+  - **Attach survey** on every campaign channel card and on the journey Delivery step: `{{SURVEY_LINK}}` for SMS, e-mail and push; rendered in the card for In-App, Web Self Care and Chatbot.
+  - **Results** in Operation analysis › Surveys: responses, response rate, average score, completion, an NPS panel with the split and the trend, one chart per question, the latest free-text answers, and the response grid with the full answer set.
+- Demo data: a seeded 90-day execution history from the campaigns' 90-day totals; eliminated customers over the dashboard's reasons; promotion codes on five Offer campaigns; an NPS after the renewal offer and a three-question CSAT after service messages, with 287 generated responses; nothing names a real person.
+- Tests: `tests/ops.js` and `tests/srv.js` walk the two modules; navigation and screenshot specs cover them; the brand audit adds both views and seven deep states, skips text scrolled out of a scrolling container and measures text on gradient surfaces (8,053 text nodes, all AA).
+
 ## v45 — 23 Sept 2026
 **Review round 4 (Toplantı 4).** Six changes, one commit each.
 - **Dashboard headline strip — business outcome only.** Executive: Campaigns (active · ended), Conversions (rate), Revenue, ROI (net contribution) and Incremental (vs control group, share of total), each with a sparkline of the period and the vs-previous delta. Revenue and ROI are demo figures derived from the conversions and say *BSS feed, demo*. Marketer and Ops come down to five tiles; no preset shows Delivered, Opened or Clicked totals.

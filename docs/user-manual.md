@@ -22,8 +22,8 @@ tooltips, so nothing becomes unidentifiable.
 
 | Role | Sees |
 | --- | --- |
-| Marketer | Dashboard, Program, Campaign, Journey Builder, Offers, Policies, Segments, Reports, Journey Monitor |
-| Approver | The same, minus audience and content authoring, plus the approve/activate actions |
+| Marketer | Dashboard, Program, Campaign, Journey Builder, Offers, Policies, Segments, Surveys, Reports, Operation analysis, Journey Monitor |
+| Approver | The same, minus audience, survey and content authoring, plus the approve/activate actions |
 | Admin | Everything, including Datamart, Parameters, Templates, Release & licences |
 | CMO / Executive | Dashboard, Program, Reports |
 
@@ -323,6 +323,56 @@ channel; segment **groups** are set up in Parameters.
 
 ---
 
+## Surveys
+
+**Surveys** in the menu (Audience & content). Short feedback surveys — NPS,
+CSAT and a few questions — that go out as content inside a campaign or journey
+message. There is no survey campaign: you attach a survey to a channel.
+
+### Create a survey
+
+1. **+ New survey**.
+2. On the left, give it a **Name** (required), a description, a **Status**
+   (*Draft* sends nothing; *Active* goes out with the message it is attached to;
+   *Closed* stops recording answers), the dates it is valid, and the
+   **thank-you message**.
+3. **Languages** — English is always on. Add a second language and every
+   question gets a translation field.
+4. **Scoring** — on by default. NPS, CSAT and rating answers count as their
+   value; for choice questions you give each option a score.
+5. In the middle, **+ Add question** and pick a type: **NPS (0–10)**, **CSAT
+   (1–5)**, **Rating**, **Single choice**, **Multiple choice** or **Free text**.
+   Write the question, tick **Required** if it is, and add options where the
+   type needs them.
+6. Optionally, one **branching rule** per question: *If the answer is …, skip to
+   question N* (or *the end*). Free-text questions cannot branch.
+7. Reorder with **↑ ↓**, remove with **×**. Ten questions is the limit — split a
+   longer survey into two.
+8. On the right, the **Preview** shows the survey as the customer sees it:
+   **Mobile** in the phone frame or **Web Self Care** as a card, in each
+   language. Branching rules show as a small note under their question.
+9. **Save**, or **Save & close** to go back to the list.
+
+### Attach it to a campaign or a journey
+
+- **Campaign** → step **Channel & content** → on the channel card, **Attach
+  survey** and pick it.
+  - **SMS, e-mail, push**: a `{{SURVEY_LINK}}` chip appears with the other
+    placeholders. Click in the text where the link should go, then click the
+    chip. The preview prints a personal link; the card reminds you if the link
+    is not in the text yet.
+  - **In-App, Web Self Care, Chatbot**: nothing to insert — the questions
+    render inside the card, under your content.
+- **Journey** → click a **Delivery** step → **Attach survey**. The same rule:
+  a link placeholder for sending channels, in the card for self care and chat.
+
+### Read the results
+
+**Results** on a survey row (or in the editor) opens **Operation analysis ›
+Surveys** on that survey. See *Operation analysis* below.
+
+---
+
 ## Journeys
 
 ### Journey Builder
@@ -465,6 +515,76 @@ would. **Export sample (CSV)** always writes the masked values.
 
 ---
 
+## Operation analysis
+
+**Operation analysis** in the menu (Operate), or **Results** on a campaign.
+Where Reports shows totals and charts, this page shows the rows behind them:
+each delivery execution, each eliminated customer, each promotion code and each
+survey response, with the ids support teams ask for. It replaces the old
+Delivery, Elimination, Promotion, Active Promotions and Survey Result screens.
+
+### Read an operational report
+
+1. **Set the scope** on the bar at the top: the **period** (last 7, 30 or 90
+   days), a **campaign** (click *All campaigns* and type to search), a
+   **channel** and a **campaign status**. The scope applies to every tab and
+   stays when you switch tabs. **Reset** clears it.
+2. **Pick a tab**:
+   - **Deliveries** — one row per execution: targeted, delivered, eliminated,
+     control group and the delivery status.
+   - **Eliminations** — who was removed before a send and by which rule. The
+     bars above the grid split the total by rule, with the same rules and
+     shares as the dashboard's funnel. **Click a bar** to see only that rule.
+   - **Promotions** — every promotion code, its unique promo code, recipient,
+     result, sent date, *Active until* and status. **Active only** shows the
+     codes still valid and not yet redeemed.
+   - **Surveys** — pick the survey at the top; see *Survey results* below.
+3. **Read the strip** of totals under the tabs — it follows the scope.
+4. **Click a row** to open the side panel with every field, the technical ids
+   included, and **Open campaign ›**, **Open delivery** (the campaign's Channel
+   & content step) and **Open customer** (a concept). **Esc** or **×** closes
+   it.
+
+From a campaign, **Results** (on the campaign list, or at the top of the
+editor) opens this page on Deliveries, already filtered to that campaign.
+
+### Shape the grid
+
+- **Columns** — tick to show or hide, **↑ ↓** to reorder, **Default columns**
+  to undo.
+- **Show technical IDs** — adds Communication, Delivery, Execution and Main DM
+  ID (and the others per tab). They are hidden by default.
+- **Sort** — click a column header; again to reverse, a third time to clear.
+- **Resize** — drag the right edge of a header.
+- **Advanced filter** — opens the condition builder: *column · operator ·
+  value*, **NOT** on a single condition, **AND / OR** to join them. **Apply**
+  turns each condition into a chip above the grid; × on a chip removes it.
+- **Saved views** — **Save view**, give it a name, and pick it from **Saved
+  views** later. It keeps the scope, the tab, the columns and the filters. The
+  prototype keeps them until you reload; the product saves them for you.
+
+Recipient e-mail and phone are masked (`a•••@example.com`,
+`+90 5•• ••• 12 34`). An admin can turn on **Show recipient details** in
+Promotions.
+
+### Export it
+
+**Export CSV** downloads what the grid shows: the rows that match the scope and
+filters, in their current order, with the visible columns. Masked values stay
+masked. **Export Excel** is a concept and disabled.
+
+### Survey results
+
+In the **Surveys** tab: responses, response rate (of the messages delivered
+with the survey), average score, completion rate and — for a survey with an NPS
+question — the NPS. The **Net Promoter Score** panel shows promoters, passives
+and detractors as one bar and the NPS over the period. Under it, one chart per
+question, and the latest written answers for free-text questions. The grid
+lists every response; click one to see all its answers, including the ones a
+branching rule skipped.
+
+---
+
 ## Administration (admin role)
 
 - **Templates** — the designs, per channel, with their named slots. Wording is
@@ -485,11 +605,12 @@ would. **Export sample (CSV)** always writes the masked values.
 ## Things worth knowing
 
 - **Nothing is saved.** Reloading starts over from the sample data.
-- **Nothing is sent.** Test sends and CSV exports raise a toast instead.
+- **Nothing is sent.** Test sends raise a toast instead. Operation analysis
+  exports a real CSV — of demo rows.
 - The sample data is 30 customers, 16 campaigns and 3 journeys. Every name,
   number and address in it is made up.
 - **Esc** closes any dialog: the manual, the report, new journey, the journey
-  list and the segment assistant.
+  list, the segment assistant and the Operation analysis side panel.
 - The prototype opens on the **Dashboard**.
 - Guided tours never block the page, and `?notour` in the URL turns off anything
   that would start on its own.

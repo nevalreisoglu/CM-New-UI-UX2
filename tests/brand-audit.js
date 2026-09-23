@@ -16,7 +16,7 @@ const SHOTS = path.join(__dirname, 'shots');
 const AA = 4.5, AA_LARGE = 3.0;
 
 const VIEWS = ['dashboard', 'start', 'programs', 'campaigns', 'journeys', 'monitor', 'offers', 'policies',
-  'segmentation', 'reports', 'datamart', 'content', 'parameters', 'about', 'api'];
+  'segmentation', 'surveys', 'reports', 'opsan', 'datamart', 'content', 'parameters', 'about', 'api'];
 
 const probe = () => {
   const lum = (rgb) => {
@@ -35,6 +35,12 @@ const probe = () => {
     let n = el;
     while (n && n !== document.documentElement) {
       const cs = getComputedStyle(n), c = parse(cs.backgroundColor);
+      /* a gradient surface (the e-mail hero, the self-care banner) counts as its
+         darkest-to-text stop: every stop is returned and the worst ratio wins */
+      if (/gradient/.test(cs.backgroundImage) && (n === el || overlaps(box, n.getBoundingClientRect()))) {
+        const stops = (cs.backgroundImage.match(/rgba?\([^)]+\)/g) || []).map(parse).filter((x) => x[3] === undefined || x[3] > 0.92);
+        if (stops.length) return stops.map((x) => x.slice(0, 3));
+      }
       if (c.length >= 3 && (c[3] === undefined || c[3] > 0.92)) {
         if (n === el || overlaps(box, n.getBoundingClientRect())) return c.slice(0, 3);
       }
@@ -52,9 +58,15 @@ const probe = () => {
     if (parseFloat(cs.fontSize) < 1) return;   // collapsed rail hides captions with font-size:0
     const box = el.getBoundingClientRect();
     if (box.width < 1 || box.height < 1) return;
+    /* text scrolled out of a scrolling container (the menu once it is taller
+       than the window) is not on screen, so it has no background to measure */
+    for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) {
+      const o = getComputedStyle(a).overflowY;
+      if ((o === 'auto' || o === 'scroll' || o === 'hidden') && !overlaps(box, a.getBoundingClientRect())) return;
+    }
     const fg = parse(cs.color);
     if (fg[3] !== undefined && fg[3] < 0.6) return;
-    const r = ratio(fg.slice(0, 3), bgOf(el));
+    const bg = bgOf(el), r = Array.isArray(bg[0]) ? Math.min(...bg.map((b) => ratio(fg.slice(0, 3), b))) : ratio(fg.slice(0, 3), bg);
     const size = parseFloat(cs.fontSize), w = +cs.fontWeight || 400;
     const large = size >= 24 || (size >= 18.66 && w >= 700) || (size >= 18 && w >= 600);
     out.push({ r: Math.round(r * 100) / 100, large, size, w, txt: txt.slice(0, 40), sel: el.tagName.toLowerCase() + '.' + (el.className || '').toString().split(' ')[0] });
@@ -110,6 +122,15 @@ const probe = () => {
     ['segment-workbench', async () => { await page.click('.nav button[data-view="segmentation"]'); await page.click('#seg-new'); await page.click('#seg-search'); }],
     ['program-detail', async () => { await page.click('.nav button[data-view="programs"]'); await page.click('#prg-card tbody tr', { timeout: 5000 }); }],
     ['datamart-columns', async () => { await page.click('.nav button[data-view="datamart"]'); await page.click('#dm-card tr[data-dm="DM-1"] [data-open]'); await page.click('[data-dmtab="columns"]'); }],
+    ['ops-eliminations', async () => { await page.click('.nav button[data-view="opsan"]'); await page.click('[data-opt="elim"]'); await page.click('.ops-rule[data-rule="Channel cooldown"]'); }],
+    ['ops-promotions-panel', async () => { await page.click('[data-opt="promo"]'); await page.click('#ops-active'); await page.click('#ops-grid tbody tr[data-oid]'); await page.waitForTimeout(250); }],
+    ['ops-advanced-filter', async () => { await page.keyboard.press('Escape'); await page.click('[data-opt="del"]'); await page.click('#ops-advbtn'); await page.click('#ops-colsbtn'); }],
+    ['ops-empty', async () => { await page.keyboard.press('Escape'); await page.evaluate(() => { opsScope.camp = '436'; renderOpsan(); }); }],
+    ['ops-surveys', async () => { await page.keyboard.press('Escape'); await page.click('#ops-reset'); await page.click('[data-opt="srv"]'); }],
+    ['ops-survey-response', async () => { await page.click('#ops-grid tbody tr[data-oid]'); await page.waitForTimeout(250); }],
+    ['survey-editor', async () => { await page.keyboard.press('Escape'); await page.click('.nav button[data-view="surveys"]'); await page.click('[data-srvopen="SRV-01"]'); }],
+    ['survey-editor-web', async () => { await page.click('[data-dev="web"]'); await page.click('[data-plang="uk"]'); }],
+    ['survey-attach-pull', async () => { await page.click('.nav button[data-view="campaigns"]'); await page.click('#camp-new'); await page.fill('#cc-name', 'Audit'); await page.click('#cc-start'); await page.evaluate(() => { campDraft.channels = ['wsc']; syncPlans(campDraft); campDraft.plans[0].survey = 'SRV-02'; campStep = 3; renderCampaigns(); }); }],
     ['journey-report', async () => { await page.click('.nav button[data-view="journeys"]'); await page.click('#btn-report', { timeout: 5000 }); }],
   ];
   for (const [name, go] of deep) {

@@ -10,7 +10,10 @@ const PAGES = [
   ['Offers', 'view-offers'],
   ['Policies', 'view-policies'],
   ['Segments', 'view-segmentation'],
+  ['Surveys', 'view-surveys'],
   ['Reports', 'view-reports'],
+  // the open tab follows the page name in the breadcrumb
+  ['Operation analysis', 'view-opsan', 'Deliveries'],
 ];
 
 test.describe('navigation', () => {
@@ -27,13 +30,14 @@ test.describe('navigation', () => {
     await expect(first).toHaveAttribute('data-grp', 'home');
   });
 
-  for (const [label, viewId] of PAGES) {
+  for (const [label, viewId, detail] of PAGES) {
     test(`the menu opens ${label}`, async ({ app }) => {
       await app.selectOption('#role-sel', 'admin');
       await openPage(app, label);
       await expect(app.locator('.view.active')).toHaveCount(1);
       await expect(app.locator('.view.active')).toHaveId(viewId);
-      await expect(app.locator('#crumb .cur')).toHaveText(label);
+      await expect(app.locator('#crumb .cur')).toHaveText(detail || label);
+      await expect(app.locator('#crumb')).toContainText(label);
     });
   }
 

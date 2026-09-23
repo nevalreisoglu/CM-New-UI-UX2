@@ -30,6 +30,15 @@ const SHOTS = [
     await app.locator('#seg-search').click();
   }],
   ['reports', 'admin', async (app) => app.locator('.nav button[data-view="reports"]').click()],
+  ['operation-analysis', 'marketer', async (app) => app.locator('.nav button[data-view="opsan"]').click()],
+  ['survey-results', 'marketer', async (app) => {
+    await app.locator('.nav button[data-view="surveys"]').click();
+    await app.locator('[data-srvres="SRV-01"]').click();
+  }],
+  ['survey-editor', 'marketer', async (app) => {
+    await app.locator('.nav button[data-view="surveys"]').click();
+    await app.locator('[data-srvopen="SRV-01"]').click();
+  }],
   ['parameters', 'admin', async (app) => app.locator('.nav button[data-view="parameters"]').click()],
   ['dashboard-cmo', 'cmo', async (app) => app.locator('.nav button[data-view="dashboard"]').click()],
   ['dashboard-campaign-detail', 'cmo', async (app) => {
