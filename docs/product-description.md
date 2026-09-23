@@ -31,8 +31,8 @@ what, in what order, with what feedback.
 
 | Role | What they do | What they see |
 | --- | --- | --- |
-| **Marketer** | Builds campaigns, journeys, segments and content. | Dashboard, Program, Campaign, Journey Builder, Offers, Policies, Segments, Reports, Journey Monitor. |
-| **Approver** (checker) | Reviews and activates what marketers submit. | The same plan/operate pages, plus the approval actions. No audience or content authoring. |
+| **Marketer** | Builds campaigns, journeys, segments, surveys and content. | Dashboard, Program, Campaign, Journey Builder, Offers, Policies, Segments, Surveys, Reports, Operation analysis, Journey Monitor. |
+| **Approver** (checker) | Reviews and activates what marketers submit. | The same plan/operate pages (Operation analysis included), plus the approval actions. No audience, survey or content authoring. |
 | **Admin** | Configures the platform: channels, senders, rule defaults, form fields, templates, licences. | Everything, including Datamart, Parameters and Release & licences. |
 | **CMO / Executive** | Watches outcomes. | Dashboard, Program and Reports only. Never the build pages. |
 
@@ -310,6 +310,92 @@ discussion in meeting 2 asked for.
 
 ---
 
+## 8d. Operation analysis (Operate)
+
+**The principle: one row-level screen with context above the grid, instead of
+five raw grids.** The current product has five report screens — Delivery
+Result, Elimination Result, Promotion Result, Active Promotions and Survey
+Result — each a grid with a permanent NOT/AND/OR strip and nothing else: no
+period, no campaign filter, no totals, no way back to the campaign, and the
+technical ids first. Customers use them often, so the grid keeps its power; the
+redesign adds what it lacked.
+
+- **One scope bar** — period (last 7, 30 or 90 days), a searchable campaign
+  picker, channel and campaign status, with Reset — filters every tab and stays
+  put when you switch tabs.
+- **Four tabs.** *Deliveries* is one row per execution: campaign, status,
+  channel, delivery type, execution date, targeted, delivered, eliminated,
+  control group, delivery status. *Eliminations* shows who was removed and by
+  which rule, with a breakdown by rule above the grid that uses the same reasons
+  and shares as the dashboard funnel — the two screens agree, and a bar filters
+  the grid. *Promotions* lists every promotion code with its promo code,
+  recipient, result, sent date, validity and status; **Active only** replaces
+  the separate Active Promotions screen. *Surveys* is the results view of §8e.
+- **A summary strip per tab** — targeted, delivered, eliminated, control group
+  and failed (red above zero); eliminated, the most-triggered rule, campaigns
+  affected and share of targeted; codes issued, sent, redeemed, redemption rate
+  and codes expiring within 7 days.
+- **The grid** — column chooser (show, hide, reorder), sort on any header,
+  resizable columns, a sticky header, 50-row pages. Technical ids are hidden
+  until *Show technical IDs* or the chooser asks for them. The NOT/AND/OR
+  builder opens from **Advanced filter** and each condition becomes a chip.
+  **Export CSV** writes the filtered rows and visible columns; Excel is a
+  concept. **Saved views** keep the scope, tab, columns and filters (in memory
+  in the prototype; per user in the product).
+- **A side panel** per row with every field, ids included, and **Open
+  campaign ›**, **Open delivery** (the campaign's Channel & content step) and
+  **Open customer** (a concept link).
+- **Privacy.** Recipient e-mail and phone are masked in the grid, the panel and
+  the export; an admin can reveal them with a switch.
+- **Entry from a campaign.** **Results** on the campaign list and in the editor
+  header opens Operation analysis on Deliveries, filtered to that campaign.
+- **Reports vs Operation analysis.** Each page says it in one line: Reports is
+  the aggregated, chart-led view; Operation analysis is the row-level,
+  operational one.
+
+The rows are a dated 90-day history built from each campaign's 90-day
+dashboard totals, so the 90-day view agrees with the dashboard; shorter periods
+are slices of that history.
+
+---
+
+## 8e. Surveys (Audience & content)
+
+**The principle: a narrow, native feedback capability, not a survey research
+platform.** Surveys ran through LimeSurvey; answers stayed in another tool.
+Natively, responses land in the Event DataMart and become segmentable — the
+detractors of last month are an audience like any other.
+
+- **A survey is content, not a campaign type.** There is no survey campaign
+  flow. In a campaign's *Channel & content* step every channel card (except
+  telemarketing) has **Attach survey**; the journey Delivery step has the same
+  control. SMS, e-mail and push get a personal `{{SURVEY_LINK}}` placeholder;
+  In-App, Web Self Care and Chatbot render the questions inside the card.
+- **The list** shows status (Draft / Active / Closed), question count,
+  channels, responses, last response and the campaigns that use each survey.
+- **The editor** is a workbench like Segments: definition on the left (name,
+  description, status, validity, thank-you message, languages, scoring),
+  questions in the middle, the survey as the customer sees it on the right — in
+  the phone frame, or as a Web Self Care card, in each language.
+- **Six question types**: NPS (0–10), CSAT (1–5), Rating (stars), Single choice,
+  Multiple choice, Free text. Each has its text, a required switch, options
+  where the type needs them (with a score when scoring is on), and **one
+  branching rule**: *if the answer is X, skip to question N or to the end*.
+  Reorder with ↑ ↓, remove with ×. **At most ten questions** — the screen says
+  why: completion drops with every question and most customers answer on a
+  phone.
+- **Deliberately out of scope**: pages or sections, drag-and-drop, a logic
+  canvas, quotas, panels.
+- **Results** are the Surveys tab of Operation analysis: a survey picker;
+  responses, response rate (of the deliveries that carried the survey), average
+  score, completion rate and NPS; an NPS panel with promoters, passives and
+  detractors as a stacked bar and the trend over the period; one chart per
+  question, with the latest free-text answers under masked customer ids; and
+  the response grid, whose side panel shows the full answer set, including the
+  questions a branching rule skipped.
+
+---
+
 ## 9. What is prototype scaffolding, not product
 
 The prototype has **no back end, no clock and no sends**. Nothing leaves the
@@ -325,7 +411,8 @@ Buttons inside the strip are deliberately not styled as primary actions. The
 prototype runs three simulated days at load so the monitor is not empty.
 
 Also demo-only: 30 customers, 16 campaigns, 3 journeys of fixed sample data;
-CSV export and test sends raise a toast instead of doing anything. The data names
+test sends raise a toast instead of doing anything. Operation analysis exports
+a real CSV of its demo rows; Excel export and Open customer are concepts. The data names
 no real person: users come from one fictional list (the signed-in user is Ayşe
 Demir in every role view), and sample customers have masked ids
 (`CUS-****7919`), `+90 5XX XXX nn nn` numbers and `@example.com` addresses.
@@ -348,6 +435,9 @@ collapsing the menu moves each label into a tooltip.
 ## 11. Known gaps in the prototype
 
 - Reports is a layout with sample numbers, not a reporting engine.
+- Operation analysis and survey results read generated demo rows; saved views
+  and new surveys last until the page reloads, and a newly attached survey
+  has no responses.
 - Nothing is persisted: a reload starts over. A guided tour resumed after a
   reload therefore always picks up from *New campaign* — the draft it was
   building no longer exists.

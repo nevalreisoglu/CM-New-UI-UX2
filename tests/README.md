@@ -35,6 +35,16 @@ version that matches.
 | `demo-data.spec.js` | No real person is named in the file; every e-mail address is on example.com; sample customers have masked ids and +90 5XX numbers; the top-bar user comes from `DEMO_USERS`. |
 | `screenshots.spec.js` | Writes reference screenshots of the main screens to `screenshots/`. |
 
+Node scripts (run with `node <name>.js`; an empty error list is the pass condition, screenshots go to `shots/`):
+
+| Script | What it walks |
+| --- | --- |
+| `ops.js` | Operation analysis: the scope bar, all four tabs, column chooser and technical ids, sort, resize, the advanced filter, CSV export, saved views, the row panel, empty states, masking, and **Results** from a campaign — at 1280 and 1440 px, menu open and collapsed. |
+| `srv.js` | Surveys: creates a survey with all six question types, previews it, attaches it to a push and a pull channel and a journey step, and reads its results. |
+| `dm.js` | The Datamart catalogue. |
+| `tour.js` | The guided tours. |
+| `brand-audit.js` | AA contrast of every rendered text node on every page and a set of deep states. |
+
 ## Screenshots
 
 `screenshots/*.png` are review material for the UX meetings, refreshed with:

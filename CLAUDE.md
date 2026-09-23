@@ -37,8 +37,8 @@ Olgay Bey, then the customer.
 ## Architecture in one page
 
 - **Views** are switched by `data-view` on the left nav: `dashboard`, `programs`,
-  `campaigns`, `journeys`, `monitor`, `segmentation`, `offers`, `content`, `reports`,
-  `policies`, `parameters`, `api`, `about`. Each has a `render<View>()` function.
+  `campaigns`, `journeys`, `monitor`, `segmentation`, `surveys`, `offers`, `content`, `reports`,
+  `opsan` (Operation analysis), `policies`, `parameters`, `api`, `about`. Each has a `render<View>()` function.
 - **Roles** — `marketer`, `approver`, `admin`, `cmo` — are applied by `applyRole()`
   reading `data-roles` attributes. Every new screen or control must declare its roles.
 - **Campaign editor** is a stepper:
@@ -52,6 +52,11 @@ Olgay Bey, then the customer.
   (`#segsplit`) with live result charts (`renderSegInsight()`). The natural-language
   assistant is a modal (`#seg-nl-modal`), never an input embedded in the audience column.
 - **Exclusions are channel-scoped** (`exclApplies`, `excludedCids`).
+- **Operation analysis** (`renderOpsan`) is the row-level view: one scope bar, four tabs, one
+  grid (`OPS_COLS`, `opsGridHtml`). Its rows come from `opsData()`, a seeded 90-day history.
+  Elimination reasons are `ELIM_REASONS`, shared with the dashboard funnel.
+- **Surveys** (`SURVEYS`) are content: attached per channel as `plan.survey` or on a journey
+  Delivery step (`cfg.survey`); results are the Surveys tab of Operation analysis.
 - **Programs** are business initiatives with a goal, a contact cap, member campaigns and
   journeys, and a Gantt timeline (`.gantt`).
 - Design tokens are CSS custom properties in `:root`. Some names are historical
@@ -65,7 +70,7 @@ Olgay Bey, then the customer.
    ```
    cd tests && npm install && npx playwright install chromium && npm run check
    ```
-   Also run `camp2.js`, `seg4.js`, `dash.js`, `prg.js`, `eml.js`. An empty error list is
+   Also run `camp2.js`, `seg4.js`, `dash.js`, `prg.js`, `eml.js`, `ops.js`, `srv.js`. An empty error list is
    the pass condition. Check 1280 px and 1440 px, menu open and collapsed.
 3. Commit in logical steps with a clear message; add a `CHANGELOG.md` entry per version.
 4. If a decision was made along the way, append it to `docs/decisions.md`.
