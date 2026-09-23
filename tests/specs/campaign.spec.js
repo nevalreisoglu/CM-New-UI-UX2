@@ -117,6 +117,20 @@ test.describe('campaign wizard', () => {
     await expect(ready).toContainText('1 of 7');
   });
 
+  test('every step opens with its marketing-toned heading; the stepper labels stay short', async ({ app }) => {
+    const HEADINGS = ['Tell us about your campaign', 'Who will you reach?', 'What will you offer?', 'How will you reach them?',
+      'Set the ground rules', 'When will it go out?', 'Send it for approval', 'Ready to launch'];
+    await app.locator('.nav button[data-view="campaigns"]').click();
+    await app.locator('#camp-table tr.row').first().click();
+    await app.locator('#camp-card select[data-k="type"]').selectOption('Offer');
+    const stepper = app.locator('#camp-card .stepper button');
+    for (let i = 0; i < STEPS.length; i++) {
+      await stepper.nth(i).click();
+      await expect(stepper.nth(i)).toContainText(STEPS[i]);
+      await expect(app.locator('#camp-card h1.step-h')).toHaveText(HEADINGS[i]);
+    }
+  });
+
   test('a readiness item jumps to its step', async ({ app }) => {
     await openNewCampaign(app);
     await app.locator('#camp-ready li[data-step="5"]').click();
