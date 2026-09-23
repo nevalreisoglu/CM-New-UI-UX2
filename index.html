@@ -805,11 +805,15 @@ body{font-size:14px;line-height:1.43}
 .db-p .pb{padding:10px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
 .db-p .tbl th,.db-p .tbl td{padding:7px 10px;font-size:12.5px}
 .live{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.live .c{border:1px solid var(--line-2);border-radius:6px;padding:8px 10px;cursor:pointer}
+.live .c{--st:#8A8AA0;--st-ink:var(--ink-3);border:1px solid var(--line-2);border-left:3px solid var(--st);border-radius:6px;padding:7px 10px 8px;cursor:pointer}
+.live .c.s-run{--st:var(--acc);--st-ink:var(--cta-hover)}.live .c.s-ok{--st:var(--ok);--st-ink:var(--ok)}
+.live .c.s-warn{--st:var(--orange);--st-ink:var(--warn)}.live .c.s-bad{--st:var(--bad);--st-ink:var(--bad)}
+.live .c .ct{display:flex;align-items:center;gap:6px;font-size:11px;line-height:16px;font-weight:600;color:var(--st-ink)}
+.live .c .ct .dot{width:8px;height:8px;border-radius:50%;background:var(--st);flex:none}
+.live .c .ct svg{width:15px;height:15px;margin-left:auto;stroke:var(--st);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .live .c:hover{background:var(--surface-2)}
 .live .c .v{font-size:20px;font-weight:600;color:var(--green-ink);font-variant-numeric:tabular-nums}
 .live .c .l{font-size:11.5px;color:var(--ink-2)}
-.live .c.warn .v{color:var(--orange-ink)}.live .c.bad .v{color:var(--bad)}
 .att{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .att li{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;padding:7px 9px;border:1px solid var(--line-2);border-radius:6px;cursor:pointer}
 .att li:hover{background:var(--surface-2)}
@@ -3404,6 +3408,10 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
       ${r.hasCG?`<table class="tbl"><tbody><tr><td>Control group</td><td class="num">${esc(c.cg)}</td></tr><tr><td>Campaign conversion rate</td><td class="num">${pct(r.rate,1)}</td></tr><tr><td>Control conversion rate</td><td class="num">${pct(r.cgRate,1)}</td></tr><tr><td>Uplift</td><td class="num"><b>${r.cgRate?'×'+(Math.round(10*r.rate/r.cgRate)/10):'—'}</b></td></tr><tr><td>Incremental conversions</td><td class="num"><b>${fmt(r.incr)}</b></td></tr></tbody></table>`
         :`<p class="empty" style="margin:0;padding:6px 0;text-align:left">This campaign has no control group, so there is nothing to measure uplift against. Keep one on the next run to see what it actually added.</p>`}</div></div>`; };
   const fun=[['Targeted',T('targeted')],['Eligible after rules',T('sent')],['Delivered',T('del')],['Opened',T('opened')],['Clicked',T('clicked')],['Converted',conv]]; const elim=T('elim'); const reasons=[['Consent / opt-out',0.34],['Channel cooldown',0.27],['Exclusion lists',0.2],['Type overlap',0.12],['Pre-sent period',0.07]];
+  /* Live now: status colour lives in the dot, the bar and the icon, always with a word saying what it means; the number stays dark */
+  const failed=Math.round(T('sent')*0.012);
+  const LIVE_IC={run:'<path d="M8 5.5v13l10.5-6.5z"/>',jrn:'<circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><path d="M8 6h2.5a3.5 3.5 0 0 1 3.5 3.5V12M8 18h2.5a3.5 3.5 0 0 0 3.5-3.5V12h2"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4.5l3 2"/>',wait:'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4h5v3h-5zM9.5 12h5M9.5 16h3"/>',fail:'<path d="M12 4l9 16H3z"/><path d="M12 10v4.5M12 17.5v.01"/>'};
+  const liveC=(cls,st,ic,go,v,l,x,vs)=>`<div class="c ${cls}" data-go="${go}"><div class="ct"><i class="dot"></i><span class="st">${st}</span><svg viewBox="0 0 24 24" aria-hidden="true">${LIVE_IC[ic]}</svg></div><div class="v"${vs?` style="${vs}"`:''}>${v}</div><div class="l">${l}</div></div>`;
   const P=(k,title,cls,body,sub)=>dbHidden.has(k)?'':`<div class="db-p ${cls||''}" data-p="${k}"><div class="ph">${title}${sub?` <small>— ${sub}</small>`:''}<button class="x" title="Hide panel" data-hide="${k}">×</button></div><div class="pb">${body}</div></div>`;
   card.innerHTML=`<div class="card-h"><h2>Dashboard</h2><span class="pill acc">${preset} preset</span><span class="pill">as of ${TODAY}</span><div class="grow"></div>
       <p>${exec?'Executive view: business outcome first, then what is live, then where to look. ':preset==='Marketer'?'Marketer view: your campaigns, what is waiting on you, how they perform. ':'Ops view: what is running, what failed, what is scheduled next. '}Every number opens the list behind it. Panels can be hidden and re-added; the layout is saved per user (concept).</p></div>
@@ -3422,12 +3430,12 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
     </div>
     <div class="db-grid">
       ${P('live','Live now','',`<div class="live">
-        <div class="c" data-go="campaigns:Active"><div class="v">${active.length}</div><div class="l">active campaigns</div></div>
-        <div class="c" data-go="monitor"><div class="v">${jlive.length}</div><div class="l">journeys live · ${topJ.reduce((t,x)=>t+x.n,0)} customers inside</div></div>
-        <div class="c" data-go="reports"><div class="v">${fmt(bars[bars.length-1])}</div><div class="l">delivered today</div></div>
-        <div class="c" data-go="campaigns:${nextSend?nextSend.c.id:''}"><div class="v" style="font-size:14px;padding-top:4px">${nextSend?nextSend.t:'—'}</div><div class="l">next scheduled send${nextSend?' · '+esc(nextSend.c.name):''}</div></div>
-        <div class="c ${pending.length?'warn':''}" data-go="campaigns:Pending approval"><div class="v">${pending.length}</div><div class="l">waiting for approval</div></div>
-        <div class="c ${Math.round(T('sent')*0.012)?'bad':''}" data-go="monitor"><div class="v">${fmt(Math.round(T('sent')*0.012))}</div><div class="l">failed deliveries · ${pct(Math.round(T('sent')*0.012),T('sent'))}</div></div>
+        ${liveC('s-run','running','run','campaigns:Active',active.length,'active campaigns')}
+        ${liveC('s-run','live','jrn','monitor',jlive.length,`journeys live · ${topJ.reduce((t,x)=>t+x.n,0)} customers inside`)}
+        ${liveC('s-ok','delivered','ok','reports',fmt(bars[bars.length-1]),'delivered today')}
+        ${liveC('s-idle',nextSend?'scheduled':'nothing scheduled','clock',`campaigns:${nextSend?nextSend.c.id:''}`,nextSend?nextSend.t:'—',`next scheduled send${nextSend?' · '+esc(nextSend.c.name):''}`,'','font-size:14px;padding-top:4px')}
+        ${liveC(pending.length?'s-warn warn':'s-idle',pending.length?'pending':'none waiting','wait','campaigns:Pending approval',pending.length,'waiting for approval')}
+        ${liveC(failed?'s-bad bad':'s-ok',failed?'failed':'none','fail','monitor',fmt(failed),`failed deliveries · ${pct(failed,T('sent'))}`)}
       </div>`,'counters')}
       ${P('att','Needs attention','w8',`<ul class="att">
         ${pending.map(c=>`<li class="info" data-go="campaigns:${c.id}"><i></i><div><b>${esc(c.name)}</b> is waiting for approval${c.approver?' from '+esc(c.approver):''}<small>${c.id} · submitted ${c.updated}</small></div></li>`).join('')}
