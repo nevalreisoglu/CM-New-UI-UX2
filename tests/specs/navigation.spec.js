@@ -10,6 +10,7 @@ const PAGES = [
   ['Offers', 'view-offers'],
   ['Policies', 'view-policies'],
   ['Segments', 'view-segmentation'],
+  ['Surveys', 'view-surveys'],
   ['Reports', 'view-reports'],
   // the open tab follows the page name in the breadcrumb
   ['Operation analysis', 'view-opsan', 'Deliveries'],

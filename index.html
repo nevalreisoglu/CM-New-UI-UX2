@@ -925,6 +925,81 @@ body{font-size:14px;line-height:1.43}
 .ops-kv dd{word-break:break-word}
 .rp-ops{display:flex;align-items:center;gap:8px;margin:0 20px 10px;padding:8px 12px;border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:6px;background:#fff;font-size:12.5px;color:var(--ink-2)}
 .rp-ops b{color:var(--ink)}
+/* Surveys — definition workbench, customer-facing preview, results */
+.srv-wb{display:grid;grid-template-columns:280px minmax(0,1fr) 330px;gap:12px;padding:4px 20px 16px;align-items:start}
+.srv-col{border:1px solid var(--line);border-radius:8px;background:#fff;min-width:0;display:flex;flex-direction:column}
+.srv-bh{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--sec-soft);color:var(--sec-ink);font-size:13px;font-weight:600;border-radius:8px 8px 0 0}
+.srv-bb{padding:12px;display:flex;flex-direction:column;gap:10px}
+.srv-2{display:grid;grid-template-columns:1fr;gap:10px}
+.srv-q{border:1px solid var(--line);border-left:3px solid var(--brand-lilac);border-radius:6px;padding:8px 10px 10px;display:flex;flex-direction:column;gap:8px}
+.srv-qh{display:flex;align-items:center;gap:6px}
+.srv-qh .grow{flex:1}
+.srv-qh .btn{padding:2px 8px}
+.srv-qn{font-weight:700;color:var(--ink);font-size:13px}
+.srv-opts{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.srv-oh{display:grid;grid-template-columns:minmax(0,1fr) 70px 30px;gap:6px;width:100%;font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.srv-o{display:grid;grid-template-columns:minmax(0,1fr) 70px 30px;gap:6px;width:100%}
+.srv-o input{border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-size:12.5px;min-width:0}
+.srv-o .btn{padding:2px 0;justify-content:center}
+.srv-o input:only-of-type{grid-column:1/3}
+.srv-br{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);border-top:1px dashed var(--line);padding-top:8px}
+.srv-br select{border:1px solid var(--line);border-radius:4px;padding:4px 6px;font-size:12px;background:#fff;max-width:170px}
+.srv-hint{font-size:11.5px;color:var(--ink-2)}
+.srv-add .pop{width:210px}
+.srv-langbar{display:flex;gap:6px;padding:8px 12px 0}
+.srv-pvb{padding:12px;display:flex;justify-content:center;background:var(--surface-2);border-radius:0 0 8px 8px;min-height:300px}
+.srv-pvb .phone{width:270px}
+.srv-form{display:flex;flex-direction:column;gap:10px;font-size:12.5px;color:var(--ink)}
+.srv-form.mobile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow)}
+.srv-form .sf-h{font-weight:700;font-size:13.5px}
+.srv-form .sf-t{margin-bottom:5px;line-height:1.35}
+.srv-form .sf-req{color:var(--bad);margin-left:2px}
+.sf-scale{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px}
+.sf-scale span{border:1px solid var(--line);border-radius:4px;text-align:center;font-size:11px;padding:3px 0;background:#fff;color:var(--ink)}
+.sf-ends{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-2);margin-top:2px}
+.sf-stars{font-size:20px;letter-spacing:3px;color:var(--sec-ink)}
+.sf-text{border:1px solid var(--line);border-radius:4px;padding:6px 8px;color:var(--ink-2);font-size:11.5px;min-height:34px;background:#fff}
+.sf-opts{display:flex;flex-direction:column;gap:4px}
+.sf-o{display:flex;align-items:center;gap:6px}
+.sf-o i{width:12px;height:12px;border:1.5px solid var(--ink-3);border-radius:50%;flex:none}
+.sf-o.multi i{border-radius:3px}
+.sf-none,.sf-more{color:var(--ink-2);font-size:11.5px}
+.sf-logic{font-size:11px;color:var(--cta-hover);margin-top:4px;font-style:italic}
+.sf-submit{align-self:flex-start;background:var(--cta);color:#fff;border-radius:6px;padding:6px 16px;font-weight:600;font-size:12.5px}
+.sf-thanks{font-size:11px;color:var(--ink-2)}
+.srv-form.inline{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:10px;gap:8px;font-size:12px}
+.srv-param{border-color:var(--cta-bright);background:var(--cta-soft)}
+.ops-srvbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:0 20px 10px;font-size:12.5px}
+.ops-srvbar label{font-weight:600;color:var(--ink-2)}
+.ops-srvbar select{border:1px solid var(--line);border-radius:4px;padding:6px 10px;background:#fff;font-size:12.5px;max-width:340px}
+.ops-srvbar .grow{flex:1}
+.ops-srvmeta{color:var(--ink-2)}
+.ops-srv{padding-top:0}
+.srv-npsp .pb{padding:12px}
+.srv-nps{display:grid;grid-template-columns:110px minmax(0,1.4fr) minmax(0,1fr);gap:18px;align-items:center}
+.srv-nps .nv{font-size:40px;font-weight:700;color:var(--ok);font-variant-numeric:tabular-nums;text-align:center}
+.srv-nps .nv.neg{color:var(--bad)}
+.srv-nps .bar{display:flex;height:22px;border-radius:4px;overflow:hidden;background:var(--surface-2)}
+.srv-nps .lg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink-2);margin:6px 0 4px}
+.srv-nps .lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.srv-nps .lg b{color:var(--ink)}
+i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0} i.det,.tb .tc i.det{background:var(--bad)}
+.srv-trend,.srv-dist{display:flex;align-items:flex-end;gap:6px;height:96px}
+.srv-trend .tb,.srv-dist .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
+.tb .tv{font-size:11px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tb .tc{height:60px;display:flex;align-items:flex-end;width:100%;justify-content:center}
+.tb .tc i{display:block;width:70%;max-width:28px;background:var(--ok);border-radius:3px 3px 0 0}
+.tb .tc i.neg{background:var(--bad)}
+.tb .tl{font-size:10.5px;color:var(--ink-2)}
+.srv-txt{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.srv-txt li{font-size:12.5px;border-left:3px solid var(--line);padding-left:8px}
+.srv-txt small{display:block;color:var(--ink-2);font-size:11px}
+.srv-ans{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+.srv-ans span{display:block;color:var(--ink-2)}
+.srv-ans b{font-weight:600}
+.srv-ans b.skip{font-weight:400;font-style:italic;color:var(--ink-2)}
+.srv-empty{margin:0 20px 10px;border:1px dashed var(--line);border-radius:8px}
+@media (max-width:1320px){ .srv-wb{grid-template-columns:260px minmax(0,1fr)} .srv-prev{grid-column:1/-1} }
 .jb{grid-template-columns:138px 1fr}
 .palette button{font-size:12px;padding:7px 8px}
 .palette .pt{font-size:13.5px}
@@ -973,6 +1048,7 @@ body{font-size:14px;line-height:1.43}
     <button data-view="policies" data-roles="marketer admin" data-grp="plan"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg><span class="nl">Policies</span></button>
     <div class="grp" data-grp="aud">Audience &amp; content</div>
     <button data-view="segmentation" data-roles="marketer admin" data-grp="aud"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 4a3 3 0 0 1 0 6M21 20a6 6 0 0 0-5-6"/></svg><span class="nl">Segments</span></button>
+    <button data-view="surveys" data-roles="marketer admin" data-grp="aud"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4v2.5h6V4M8.5 11h7M8.5 14.5h7M8.5 18h4"/></svg><span class="nl">Surveys</span></button>
     <div class="grp" data-grp="ops">Operate</div>
     <button data-view="reports" data-roles="marketer approver admin cmo" data-grp="ops"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l4-6 4 3 4-5"/></svg><span class="nl">Reports</span></button>
     <button data-view="opsan" data-roles="marketer approver admin" data-grp="ops"><svg viewBox="0 0 24 24"><path d="M4 6h12M4 11h7M4 16h5"/><circle cx="15.5" cy="14.5" r="3.5"/><path d="M18 17l3 3"/></svg><span class="nl">Operation analysis</span></button>
@@ -1236,6 +1312,7 @@ body{font-size:14px;line-height:1.43}
 
     <!-- REPORTS (concept: flexible dashboard, role based) -->
     <section class="view" id="view-reports"><div class="card" id="rp-card" style="display:flex;flex-direction:column;overflow:auto;flex:1;min-height:0"></div></section>
+    <section class="view" id="view-surveys"><div class="card" id="srv-card" style="display:flex;flex-direction:column;overflow:auto;flex:1;min-height:0"></div></section>
     <section class="view" id="view-opsan"><div class="card" id="ops-card" style="display:flex;flex-direction:column;overflow:auto;flex:1;min-height:0;padding-bottom:12px"></div><div class="dm-drawer" id="ops-drawer" hidden></div></section>
 
     <!-- PARAMETERS (admin only) -->
@@ -2606,6 +2683,8 @@ function renderNodePanel(){
       html+=`<div class="sec">Delivery — owned by <b>${j.id}</b></div><div style="font-size:11.5px;color:var(--ink-2)">Same as a campaign delivery, minus the schedule: <b>when</b> comes from the journey (the Timer / Wait before this step), <b>who</b> from the customer reaching it. Content (the text below) belongs to this journey; the template only gives the design. Reporting key: JOURNEY_ID ${j.id} · step ${n.id}.</div>`
       +sel('channel','Channel',CHANNELS)+sel('content',isAB?'Template A':'Template',contentsFor(n.cfg.channel))
       +`<div class="fld"><label for="f-text">Content text <span style="color:var(--ink-3)">— this journey's own text, rendered in the template</span></label><textarea id="f-text" data-k="text" style="font-family:var(--sans);font-size:12.5px;min-height:64px">${esc(pc.text||'')}</textarea><div class="chips" style="margin-top:4px">${PARAMS.map(x=>`<span class="param" data-jins="${x}" title="Insert">{{${x}}}</span>`).join('')}</div></div>`
+      +(()=>{ const sv=pc.survey&&pc.survey!=='— none'&&srvById(String(pc.survey).split(' ·')[0]); const inCard=['wsc','chatbot','inapp'].includes(pc.channel);
+        return sel('survey','Attach survey',['— none',...SURVEYS.filter(s=>s.status!=='Closed').map(s=>`${s.id} · ${s.name}`)])+(sv?`<div style="font-size:11.5px;color:var(--ink-2);margin-top:-4px">${inCard?`${esc(sv.name)} renders inside the ${pc.channel==='wsc'?'self-care card':'chat'}, under the text.`:`Insert <span class="param" data-jins="SURVEY_LINK" title="Insert the personal survey link">{{SURVEY_LINK}}</span> where the link to ${esc(sv.name)} goes.`}</div>`:''); })()
       +sel('variant','Content mode',['Single content','A/B test (2 variants, winner by open rate)','Dynamic content (rule on categorical attribute)'])
       +(isAB?sel('contentB','Template B',contentsFor(n.cfg.channel))+`<div class="fld"><label>Test share <span style="color:var(--ink-3)">— rest gets the winner</span></label><div class="range"><input type="range" min="10" max="50" step="5" data-k="abSplit" value="${pc.abSplit}"><output id="ab-out">${pc.abSplit}%</output></div></div>`:'')
       +(isDyn?sel('dyn','Variant by column',['LANGUAGE','CUSTOMER_TYPE','REGION','DEVICE_5G','APP_INSTALLED']):'')
@@ -2630,7 +2709,7 @@ function renderNodePanel(){
   }
   html+=`<div class="fld"><div class="row"><button class="btn sm outline" id="btn-disable">${n.label.startsWith('[off]')?'Enable step':'Disable step'}</button>${n.type!=='entry'?`<button class="btn sm outline" id="btn-delete-step" style="color:var(--bad)">Delete step</button>`:''}</div></div>`;
   body.innerHTML=html;
-  body.querySelectorAll('[data-k]').forEach(el=>el.addEventListener(el.tagName==='SELECT'?'change':'input',()=>{ const k=el.dataset.k; if(k==='__label') n.label=el.value; else n.cfg[k]=el.value; if(k==='channel') n.cfg.content=contentsFor(el.value)[0]; if(k==='content'){ const id=String(el.value).split(' ·')[0]; n.cfg.text=contentTextOf(id); } renderCanvas(); if(el.tagName==='SELECT'&&(k==='offer'||k==='channel'||k==='variant'||k==='controlGroup'||k==='content')) renderNodePanel(); }));
+  body.querySelectorAll('[data-k]').forEach(el=>el.addEventListener(el.tagName==='SELECT'?'change':'input',()=>{ const k=el.dataset.k; if(k==='__label') n.label=el.value; else n.cfg[k]=el.value; if(k==='channel') n.cfg.content=contentsFor(el.value)[0]; if(k==='content'){ const id=String(el.value).split(' ·')[0]; n.cfg.text=contentTextOf(id); } renderCanvas(); if(el.tagName==='SELECT'&&(k==='offer'||k==='channel'||k==='variant'||k==='controlGroup'||k==='content'||k==='survey')) renderNodePanel(); }));
   body.querySelectorAll('[data-rule]').forEach(el=>el.onchange=()=>{ n.cfg.rules[el.dataset.rule][el.dataset.f]=el.checked; });
   body.querySelectorAll('[data-rk]').forEach(el=>el.onchange=()=>{ n.cfg[el.dataset.rk]=el.checked; renderNodePanel(); });
   body.querySelectorAll('[data-jins]').forEach(sp=>sp.onclick=()=>{ const ta=body.querySelector('#f-text'); if(!ta) return; const v=`{{${sp.dataset.jins}}}`; const st=ta.selectionStart||ta.value.length; ta.value=ta.value.slice(0,st)+v+ta.value.slice(st); ta.dispatchEvent(new Event('input')); ta.focus(); });
@@ -2774,7 +2853,7 @@ function showView(v){ curView=v; document.querySelectorAll('.view').forEach(s=>s
      time the builder is shown rather than at boot. Later visits keep the pan
      and zoom the user left behind. */
   if(v==='journeys'&&!jFitted){ jFitted=true; fitView(); setTimeout(fitView,200); } }
-function render(){ renderCanvas(); renderNodePanel(); renderOffers(); renderPolicies(); renderMonitor(); renderApi(); renderSegmentation(); renderCampaigns(); renderContent(); renderParameters(); renderReports(); renderDashboard(); renderPrograms(); renderDatamart(); renderStart(); renderOpsan(); }
+function render(){ renderCanvas(); renderNodePanel(); renderOffers(); renderPolicies(); renderMonitor(); renderApi(); renderSegmentation(); renderCampaigns(); renderContent(); renderParameters(); renderReports(); renderDashboard(); renderPrograms(); renderDatamart(); renderStart(); renderOpsan(); renderSurveys(); }
 
 document.querySelectorAll('.nav button[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 
@@ -2975,7 +3054,12 @@ const campKind=c=>{ const chs=c.channels||[]; return chs.some(ch=>CH_KIND[ch]===
 const prioRelevant=c=>(c.channels||[]).some(ch=>CH_KIND[ch]==='pull'||ch==='tm');
 const planModeText=p=>[p.ab?'A/B':'',p.dynOn?'Dynamic · '+p.dyn:''].filter(Boolean).join(' · ')||'Single';
 /* render the picked template with this campaign's edited text — the marketer sees what the customer sees */
-function planPreviewHtml(p,cust,variant){ const sl=variant==='B'?p.slotsB:p.slots; if(!p.content) return '<div class="empty" style="padding:14px">No template.</div>'; const d=contentToItem(p.ch,p.content,sl); if(p.dynOn&&cust&&cust.row.LANGUAGE==='uk'&&p.bodyAlt){ d.variants={uk:p.bodyAlt}; d.body=p.bodyAlt; } return `<div class="prev-wrap" style="margin:0;padding:10px;overflow:hidden">${ctPreviewHtml(d,cust)}</div>`; }
+function planPreviewHtml(p,cust,variant){ let sl=variant==='B'?p.slotsB:p.slots; if(!p.content) return '<div class="empty" style="padding:14px">No template.</div>';
+  /* an attached survey: push channels print the personal link, pull channels render the questions inside the card */
+  const sv=p.survey&&typeof srvById==='function'&&srvById(p.survey); if(sv) sl=Object.fromEntries(Object.entries(sl||{}).map(([k,v])=>[k,String(v||'').replace(/\{\{SURVEY_LINK\}\}/g,srvLink(sv))]));
+  const d=contentToItem(p.ch,p.content,sl); if(p.dynOn&&cust&&cust.row.LANGUAGE==='uk'&&p.bodyAlt){ d.variants={uk:p.bodyAlt}; d.body=p.bodyAlt; }
+  let html=ctPreviewHtml(d,cust); if(sv&&CH_KIND[p.ch]==='pull'){ const k=html.lastIndexOf('</div>'); html=html.slice(0,k)+srvFormHtml(sv,'en','inline')+html.slice(k); }
+  return `<div class="prev-wrap" style="margin:0;padding:10px;overflow:hidden">${html}</div>`; }
 const PLAN_RULES=[['cg','Control group','from the campaign: size and method'],['cooldown','Channel cooldown','days between two sends on the same channel, any campaign'],['type','Campaign Type (overlap)','max. Info / Offer sends per day'],['presend','Campaign pre-sent','days between two sends of this same campaign to one customer (default from Parameters)']];
 const PLAN_STATUS_CLS={Draft:'warn','Waiting for approval':'warn',Scheduled:'acc',Running:'ok',Paused:'',Completed:'',Stopped:'bad'};
 const defaultRules=c=>({cg:{use:c.cg!=='No Control Group',log:true},cooldown:{use:true,log:true},type:{use:true,log:true},presend:{use:true,log:true}});
@@ -3002,6 +3086,7 @@ function campContentHtml(c){
         ${hid?`<div class="fld span2"><label>Template ${tip('This channel has no design to choose: the default template (sender, footer, counters) is applied automatically. Managed under Administration › Templates.')}</label><div style="font-size:12.5px;color:var(--ink-2);padding-top:4px"><b>${esc((t||{}).name||'Default')}</b> — ${esc((t||{}).desc||'')} <span class="pill">applied automatically</span></div></div>`
         :`<div class="fld"><label class="req">Template (design) ${tip(TIPS.template)}</label><select data-pi="${i}" data-pk="content"><option value="">— pick a design</option>${tpls.map(x=>`<option value="${x.id}" ${x.id===p.content?'selected':''}>${esc(x.name)}${x.status==='Draft'?' (draft)':''}</option>`).join('')}</select>${t?`<small style="color:var(--ink-3)">${esc(t.desc)} · fixed: ${t.fixed.join(', ')}</small>`:`<small style="color:var(--ink-3)">Designs are managed by the admin (Administration › Templates).</small>`}</div>`}
         <div class="fld"><label>Variants ${tip(TIPS.variants)}</label><div style="display:flex;gap:16px;flex-wrap:wrap;padding-top:6px"><label class="ck"><input type="checkbox" data-pi="${i}" data-pk="ab" ${p.ab?'checked':''}> A/B test</label><label class="ck"><input type="checkbox" data-pi="${i}" data-pk="dynOn" ${p.dynOn?'checked':''}> Dynamic by column</label></div></div>
+        ${p.ch!=='tm'?`<div class="fld"><label>Attach survey ${tip('A survey is content: it goes out with this message. SMS, e-mail and push get a personal {{SURVEY_LINK}}; In-App, Web Self Care and Chatbot show the questions inside the card.')}</label><select data-pi="${i}" data-pk="survey" aria-label="Attach survey"><option value="">— no survey</option>${SURVEYS.filter(s=>s.status!=='Closed'||s.id===p.survey).map(s=>`<option value="${s.id}" ${p.survey===s.id?'selected':''}>${esc(s.name)}${s.status!=='Active'?' ('+s.status.toLowerCase()+')':''}</option>`).join('')}</select>${p.survey&&srvById(p.survey)?`<small style="color:var(--ink-2)">${CH_KIND[p.ch]==='pull'?'The survey renders inside the card, under your content — see the preview.':`Insert <span class="mono">{{SURVEY_LINK}}</span> where the link goes; each customer gets a personal link. <b id="srvnote-${i}" ${Object.values(p.slots).some(t=>String(t||'').includes('{{SURVEY_LINK}}'))?'hidden':''}>Not in the text yet.</b>`}</small>`:''}</div>`:''}
         ${p.ab?`<div class="fld"><label>Test share ${tip(TIPS.abSplit)}<span style="color:var(--ink-3)"> — rest gets the winner by open rate</span></label><div class="range"><input type="range" min="10" max="50" step="5" data-pi="${i}" data-pk="abSplit" value="${p.abSplit}"><output>${p.abSplit}%</output></div></div>`:''}
         ${p.dynOn?`<div class="fld"><label>Variant by column ${tip(TIPS.dyn)}</label><select data-pi="${i}" data-pk="dyn">${['LANGUAGE','CUSTOMER_TYPE','REGION','DEVICE_5G','APP_INSTALLED'].map(x=>`<option ${p.dyn===x?'selected':''}>${x}</option>`).join('')}</select><small style="color:var(--ink-3)">Write the alternative ${defs.find(d=>d[0]==='body')[1].toLowerCase()} for the second value below; customers without a match get the main one.</small></div>`:''}
         <div class="span2" style="display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:14px">
@@ -3009,7 +3094,7 @@ function campContentHtml(c){
             <div class="form2" style="padding:0;gap:8px 12px">${p.ab?`<div class="span2" style="font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em">Variant A</div>`:''}${defs.map(d=>slotField('A',d,d[0]==='body')).join('')}
             ${p.dynOn?`<div class="fld span2"><label>${defs.find(d=>d[0]==='body')[1]} — ${p.dyn}=${p.dyn==='LANGUAGE'?'uk':'other value'}</label><textarea data-pi="${i}" data-pk="bodyAlt" style="font-family:var(--sans);font-size:12.5px;min-height:56px">${esc(p.bodyAlt||'')}</textarea></div>`:''}
             ${p.ab?`<div class="span2" style="font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin-top:6px">Variant B</div>${defs.filter(d=>['subject','title','body','cta'].includes(d[0])).map(d=>slotField('B',d,d[0]==='body')).join('')}`:''}</div>
-            <div class="chips" style="margin-top:8px">${PARAMS.map(x=>`<span class="param" data-pi="${i}" data-ins="${x}" title="Insert into the last edited field">{{${x}}}</span>`).join('')}</div>
+            <div class="chips" style="margin-top:8px">${PARAMS.map(x=>`<span class="param" data-pi="${i}" data-ins="${x}" title="Insert into the last edited field">{{${x}}}</span>`).join('')}${p.survey&&srvById(p.survey)&&CH_KIND[p.ch]!=='pull'?`<span class="param srv-param" data-pi="${i}" data-ins="SURVEY_LINK" title="Personal link to ${esc(srvById(p.survey).name)} — insert into the last edited field">{{SURVEY_LINK}}</span>`:''}</div>
           </div>
           <div><div style="font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Rendered${p.ab?' · A':''} · ${esc(cust.name)}</div><div id="pv-${i}">${planPreviewHtml(p,cust,'A')}</div>${p.ab?`<div style="font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin:10px 0 4px">Rendered · B</div><div id="pvb-${i}">${planPreviewHtml(p,cust,'B')}</div>`:''}</div>
         </div>
@@ -3040,7 +3125,7 @@ function bindDelivery(card,c,step){
   const rerender=()=>renderCampDetail(card);
   if(step===3){ let lastTa=null;
     card.querySelectorAll('[data-pk]').forEach(el=>{ const h=()=>{ const i=+el.dataset.pi; const p=c.plans[i]; const k=el.dataset.pk; if(el.type==='range'){ p[k]=+el.value; el.parentElement.querySelector('output').textContent=el.value+'%'; return; } if(el.type==='checkbox'){ p[k]=el.checked; if(k==='ab'&&p.ab&&!(p.slotsB.body||'').trim()) p.slotsB=Object.assign({},p.slots); syncPlans(c); rerender(); return; } p[k]=el.value; if(k==='bodyAlt'){ const pv=card.querySelector('#pv-'+i); if(pv) pv.innerHTML=planPreviewHtml(p,CUSTOMERS[0],'A'); return; } syncPlans(c); rerender(); }; el.oninput=el.onchange=h; });
-    card.querySelectorAll('[data-slot]').forEach(el=>{ el.onfocus=()=>{ lastTa=el; }; el.oninput=()=>{ const i=+el.dataset.pi; const p=c.plans[i]; const tgt=el.dataset.v==='B'?p.slotsB:p.slots; tgt[el.dataset.slot]=el.value; if(el.dataset.slot==='body'&&el.dataset.v==='A') p.text=el.value; const pv=card.querySelector((el.dataset.v==='B'?'#pvb-':'#pv-')+i); if(pv) pv.innerHTML=planPreviewHtml(p,CUSTOMERS[0],el.dataset.v); const pill=el.closest('.card').querySelector('.card-h .pill'); if(pill){ const ok=planReady(p); pill.className='pill '+(ok?'ok':'warn'); pill.textContent=ok?'content ready':'no content'; } }; });
+    card.querySelectorAll('[data-slot]').forEach(el=>{ el.onfocus=()=>{ lastTa=el; }; el.oninput=()=>{ const i=+el.dataset.pi; const p=c.plans[i]; const tgt=el.dataset.v==='B'?p.slotsB:p.slots; tgt[el.dataset.slot]=el.value; if(el.dataset.slot==='body'&&el.dataset.v==='A') p.text=el.value; const pv=card.querySelector((el.dataset.v==='B'?'#pvb-':'#pv-')+i); if(pv) pv.innerHTML=planPreviewHtml(p,CUSTOMERS[0],el.dataset.v); const pill=el.closest('.card').querySelector('.card-h .pill'); if(pill){ const ok=planReady(p); pill.className='pill '+(ok?'ok':'warn'); pill.textContent=ok?'content ready':'no content'; } const sn=card.querySelector('#srvnote-'+i); if(sn) sn.hidden=Object.values(p.slots).some(t=>String(t||'').includes('{{SURVEY_LINK}}')); }; });
     card.querySelectorAll('[data-ins]').forEach(sp=>sp.onclick=()=>{ const ta=lastTa&&lastTa.dataset.pi===sp.dataset.pi?lastTa:card.querySelector(`[data-slot="body"][data-pi="${sp.dataset.pi}"][data-v="A"]`); if(!ta) return; const v=`{{${sp.dataset.ins}}}`; const st=ta.selectionStart||ta.value.length; ta.value=ta.value.slice(0,st)+v+ta.value.slice(st); ta.dispatchEvent(new Event('input')); ta.focus(); });
     card.querySelectorAll('[data-copyfrom]').forEach(el=>el.onchange=()=>{ if(!el.value) return; const i=+el.dataset.pi; const p=c.plans[i]; const src=CAMPAIGNS.find(x=>x.id===el.value); const q=(src.plans||[]).find(q=>q.ch===p.ch); if(!q) return; Object.assign(p,JSON.parse(JSON.stringify({content:q.content,slots:q.slots,slotsB:q.slotsB,bodyAlt:q.bodyAlt,ab:q.ab,dynOn:q.dynOn,dyn:q.dyn,abSplit:q.abSplit,text:q.text}))); syncPlans(c); rerender(); toast('Content copied',`${chName(p.ch)} content of campaign ${src.id} copied — edit it for this campaign.`); });
     card.querySelectorAll('[data-ptest]').forEach(b=>b.onclick=()=>{ const p=c.plans[+b.dataset.ptest]; toast('Test send',`${chName(p.ch)} content rendered for ${p.tests.join(', ')} — test delivery is not enabled in this environment.`,'warn'); });
@@ -3929,7 +4014,7 @@ function renderOpsan(){ const card=document.getElementById('ops-card'); if(!card
       ${ROLE==='admin'?`<span class="ops-swl">Show recipient details <button class="sw ${opsReveal?'on':''}" id="ops-reveal" aria-pressed="${opsReveal}" title="Admin only — unmasks e-mail and phone"></button></span>`:''}
       <small>${opsReveal&&ROLE==='admin'?'Recipient details are shown unmasked — admin view.':'Recipient e-mail and phone are masked'+(ROLE==='admin'?'.':'; an admin can reveal them.')}</small></div>`
       +opsGridHtml('promo',rows,opsEmpty(opsActiveOnly?'No active promotion codes in this scope — every code was redeemed, expired or cancelled.':'No promotion codes in this scope. Only campaigns with a promo code issue them.')); }
-  else { body=renderOpsSurveys(); }
+  else { const o=renderOpsSurveys(); tiles=o.tiles; body=o.body; rows=o.rows; }
 
   card.innerHTML=`<div class="card-h"><h2>Operation analysis</h2><span class="pill">as of ${TODAY}</span><div class="grow"></div><button class="btn sm outline" id="ops-toreports" style="white-space:nowrap">Reports ›</button>
       <p><b>Operation analysis is the row-level, operational view</b> — every delivery execution, eliminated customer, promotion code and survey response, with the ids behind them. For aggregated, chart-led results, open <b>Reports</b>.</p></div>
@@ -3976,7 +4061,7 @@ function renderOpsan(){ const card=document.getElementById('ops-card'); if(!card
   card.querySelectorAll('[data-rule]').forEach(b=>b.onclick=()=>{ opsElimRule=opsElimRule===b.dataset.rule?'':b.dataset.rule; opsGrid('elim').page=1; renderOpsan(); });
   if(q('#ops-active')) q('#ops-active').onclick=()=>{ opsActiveOnly=!opsActiveOnly; opsGrid('promo').page=1; renderOpsan(); };
   if(q('#ops-reveal')) q('#ops-reveal').onclick=()=>{ opsReveal=!opsReveal; renderOpsan(); };
-  if(opsTab==='srv') bindOpsSurveys(card); else opsBindGrid(card,opsTab,rows);
+  if(opsTab==='srv') bindOpsSurveys(card); opsBindGrid(card,opsTab,rows);
   renderOpsDrawer(rows);
 }
 /* clicks outside an open popover close it */
@@ -4002,11 +4087,241 @@ function renderOpsDrawer(rows){ const dr=document.getElementById('ops-drawer'); 
 }
 window.addEventListener('keydown',e=>{ if(e.key==='Escape'&&curView==='opsan'){ if(opsPop){ opsPop=''; renderOpsan(); } else if(opsDrawer){ opsDrawer=null; renderOpsan(); } } });
 
-/* the Surveys tab is filled by the Surveys module */
-function renderOpsSurveys(){ return `<div class="empty ops-empty">Survey results arrive with the Surveys module.</div>`; }
-function bindOpsSurveys(){}
-function srvDrawerFields(){ return []; }
-function srvDrawerAnswers(){ return ''; }
+/* ---------- SURVEYS ----------
+   A narrow, native feedback capability instead of the LimeSurvey integration: NPS, CSAT and a few
+   short questions, sent as content inside a campaign or journey delivery. Responses land in the
+   Event DataMart, so they can be segmented like any other feedback. Deliberately small — no pages,
+   no logic canvas, no drag-and-drop, at most ten questions, one branching rule per question. */
+const SRV_TYPES=[['nps','NPS (0–10)'],['csat','CSAT (1–5)'],['rating','Rating (1–5 stars)'],['single','Single choice'],['multi','Multiple choice'],['text','Free text']];
+const SRV_TYPE_LBL=Object.fromEntries(SRV_TYPES);
+const SRV_LANGS=[['en','English'],['uk','Ukrainian'],['tr','Turkish']];
+const SRV_MAX=10;
+const SRV_STATUS_CLS={Draft:'grey',Active:'ok',Closed:''};
+const SURVEYS=[
+  {id:'SRV-01',name:'Renewal NPS',desc:'Sent after a package renewal: would the customer recommend us, and what should we improve first.',status:'Active',start:'2026-06-01',end:'2026-12-31',thanks:'Thank you — your answer helps us improve.',langs:['en','uk'],scoring:true,created:'2026-05-28',by:DEMO_USERS.crm,
+    qs:[{id:'q1',type:'nps',text:'How likely are you to recommend us to a friend or colleague?',tr:{uk:'Наскільки ймовірно, що ви порекомендуєте нас другу чи колезі?'},req:true,opts:[],branch:{if:'Promoter (9–10)',to:'q3'}},
+        {id:'q2',type:'single',text:'What should we improve first?',tr:{uk:'Що нам варто покращити насамперед?'},req:false,opts:[{t:'Price',s:0},{t:'Network coverage',s:0},{t:'Data speed',s:0},{t:'Customer service',s:0},{t:'The app',s:0}],branch:null},
+        {id:'q3',type:'text',text:'Anything else you would like to tell us?',tr:{uk:'Чи хочете ви ще щось нам сказати?'},req:false,opts:[],branch:null}]},
+  {id:'SRV-02',name:'Service message CSAT',desc:'Three questions after a service or reminder message: was it useful, was it easy, what would make it better.',status:'Active',start:'2026-06-15',end:'2026-12-31',thanks:'Thanks — we read every answer.',langs:['en'],scoring:true,created:'2026-06-10',by:DEMO_USERS.me,
+    qs:[{id:'q1',type:'csat',text:'How satisfied are you with this message?',tr:{},req:true,opts:[],branch:{if:'5',to:'end'}},
+        {id:'q2',type:'rating',text:'How easy was it to do what the message asked?',tr:{},req:true,opts:[],branch:null},
+        {id:'q3',type:'multi',text:'What would make these messages more useful?',tr:{},req:false,opts:[{t:'Shorter text',s:0},{t:'Better timing',s:0},{t:'More detail',s:0},{t:'Fewer messages',s:0},{t:'In my language',s:0}],branch:null}]},
+  {id:'SRV-03',name:'Chatbot quick feedback',desc:'One question at the end of a chatbot conversation. Not sent yet.',status:'Draft',start:'2026-10-01',end:'2026-12-31',thanks:'Thanks!',langs:['en'],scoring:false,created:'2026-09-11',by:DEMO_USERS.me,
+    qs:[{id:'q1',type:'csat',text:'Did the assistant solve your question?',tr:{},req:true,opts:[],branch:null}]},
+];
+/* the demo campaigns that carry a survey: NPS after the renewal offer, CSAT after service messages */
+[['433','sms','SRV-01'],['2511','email','SRV-01'],['2001','email','SRV-02'],['435','sms','SRV-02']].forEach(([cid,ch,sid])=>{ const c=CAMPAIGNS.find(x=>x.id===cid); const p=c&&(c.plans||[]).find(q=>q.ch===ch); if(p) p.survey=sid; });
+const srvById=id=>SURVEYS.find(s=>s.id===id);
+const srvLink=sv=>`s.example.com/${sv.id.toLowerCase()}/k7q2`;
+const npsCat=v=>v>=9?'Promoter':v>=7?'Passive':'Detractor';
+const NPS_BANDS=['Detractor (0–6)','Passive (7–8)','Promoter (9–10)'];
+function srvBranchOpts(q){ return q.type==='nps'?NPS_BANDS:q.type==='csat'||q.type==='rating'?['1','2','3','4','5']:q.type==='single'||q.type==='multi'?q.opts.map(o=>o.t).filter(Boolean):[]; }
+function srvBranchHit(q,a){ const b=q.branch; if(!b||!b.if||a===undefined||a===null||a==='') return false;
+  if(q.type==='nps') return NPS_BANDS.find(x=>x.startsWith(npsCat(a)))===b.if;
+  if(q.type==='multi') return Array.isArray(a)&&a.includes(b.if);
+  return String(a)===b.if; }
+function srvUsedBy(id){ return {camps:CAMPAIGNS.filter(c=>(c.plans||[]).some(p=>p.survey===id)),journeys:JOURNEYS.filter(j=>j.nodes.some(n=>n.type==='delivery'&&String(n.cfg.survey||'').startsWith(id+' ')))}; }
+function srvChannels(id){ const u=srvUsedBy(id); return [...new Set(u.camps.flatMap(c=>c.plans.filter(p=>p.survey===id).map(p=>chName(p.ch))).concat(u.journeys.flatMap(j=>j.nodes.filter(n=>n.type==='delivery'&&String(n.cfg.survey||'').startsWith(id+' ')).map(n=>n.cfg.channel))))]; }
+function srvScore(sv,ans){ if(!sv.scoring) return null; let t=0; sv.qs.forEach(q=>{ const a=ans[q.id]; if(a===undefined||a==='') return;
+  if(q.type==='nps'||q.type==='csat'||q.type==='rating') t+=+a; else if(q.type==='single') t+=+((q.opts.find(o=>o.t===a)||{}).s||0); else if(q.type==='multi') t+=a.reduce((s,x)=>s+(+((q.opts.find(o=>o.t===x)||{}).s||0)),0); }); return t; }
+function srvResult(sv,ans){ const n=sv.qs.find(q=>q.type==='nps'&&ans[q.id]!==undefined); if(n) return npsCat(ans[n.id]);
+  const cs=sv.qs.filter(q=>q.type==='csat'&&ans[q.id]!==undefined); if(cs.length){ const m=cs.reduce((t,q)=>t+ +ans[q.id],0)/cs.length; return m>=4?'Satisfied':m>=3?'Neutral':'Dissatisfied'; } return 'Answered'; }
+const SRV_TEXTS=['The renewal was quick, thanks.','Coverage at home could be better.','Please send the reminder a day earlier.','Happy with the bonus data.','The app keeps logging me out.','Prices went up too often this year.','Good service overall.','I would like the message in Ukrainian.','More data for the same price, please.','Fast answer from the support team.'];
+/* generated answers follow the survey's own branching rules, so the result screen is consistent with the definition */
+function srvGenAnswers(sv,rnd,complete){ const ans={}; let i=0, n=0; const w=(ws)=>{ let r=rnd()*ws.reduce((t,x)=>t+x,0); for(let k=0;k<ws.length;k++){ r-=ws[k]; if(r<=0) return k; } return ws.length-1; };
+  while(i<sv.qs.length){ const q=sv.qs[i]; if(!complete&&n>=1) break; let a;
+    if(q.type==='nps'){ const r=rnd(); a=r<0.46?9+(rnd()<0.55?1:0):r<0.76?7+(rnd()<0.5?1:0):[2,3,4,5,5,6,6,6][Math.floor(rnd()*8)]; }
+    else if(q.type==='csat'||q.type==='rating') a=1+w(q.type==='csat'?[0.06,0.1,0.18,0.36,0.3]:[0.05,0.08,0.22,0.4,0.25]);
+    else if(q.type==='single') a=q.opts.length?q.opts[w(q.opts.map((o,k)=>1+((k*7+3)%5)))].t:'';
+    else if(q.type==='multi'){ a=q.opts.filter(()=>rnd()<0.3).map(o=>o.t); if(!a.length&&q.opts.length) a=[q.opts[Math.floor(rnd()*q.opts.length)].t]; }
+    else a=rnd()<0.45?SRV_TEXTS[Math.floor(rnd()*SRV_TEXTS.length)]:'';
+    ans[q.id]=a; n++;
+    if(srvBranchHit(q,a)){ if(q.branch.to==='end') break; const j=sv.qs.findIndex(x=>x.id===q.branch.to); i=j>i?j:i+1; } else i++; }
+  return ans; }
+let SRV_RESP=null;
+function srvResponses(){ if(SRV_RESP) return SRV_RESP; const rnd=seedRng(9157); let n=1; SRV_RESP=[];
+  opsData().execs.forEach(ex=>{ const p=(ex.c.plans||[]).find(q=>q.ch===ex.ch), sv=p&&p.survey&&srvById(p.survey); if(!sv||sv.status==='Draft') return;
+    const k=Math.round(ex.del*(0.3+rnd()*0.12));
+    for(let j=0;j<k;j++){ const cust=CUSTOMERS[Math.floor(rnd()*CUSTOMERS.length)], resp=[dAdd(ex.date,Math.floor(rnd()*4)),TODAY].sort()[0], done=rnd()<0.88, ans=srvGenAnswers(sv,rnd,done);
+      SRV_RESP.push({_id:'RSP-'+String(n++).padStart(5,'0'),ex,c:ex.c,ch:ex.ch,sv,cust,date:ex.date,resp,done,ans,score:srvScore(sv,ans),result:srvResult(sv,ans)}); } });
+  return SRV_RESP; }
+const srvRespOf=id=>srvResponses().filter(r=>r.sv.id===id);
+
+/* the survey as the customer sees it: mobile (in the phone frame), web self care, or inline inside a pull channel's card */
+function srvFormHtml(sv,lang,mode){ const L=lang||'en'; const tx=q=>{ const t=(L!=='en'&&q.tr&&q.tr[L])||q.text; return t?esc(t):'<i>Question text…</i>'; };
+  const scale=(from,to,cls)=>`<div class="sf-scale ${cls||''}">${Array.from({length:to-from+1},(_,k)=>`<span>${from+k}</span>`).join('')}</div>`;
+  const ctl=q=>q.type==='nps'?scale(0,10,'nps')+'<div class="sf-ends"><span>Not likely</span><span>Very likely</span></div>'
+    :q.type==='csat'?scale(1,5)+'<div class="sf-ends"><span>Very dissatisfied</span><span>Very satisfied</span></div>'
+    :q.type==='rating'?'<div class="sf-stars" aria-label="1 to 5 stars">★★★★★</div>'
+    :q.type==='text'?'<div class="sf-text">Type your answer</div>'
+    :`<div class="sf-opts">${q.opts.filter(o=>o.t).map(o=>`<span class="sf-o ${q.type}"><i></i>${esc(o.t)}</span>`).join('')||'<span class="sf-none">Add options</span>'}</div>`;
+  const logic=(q,i)=>{ if(!q.branch||!q.branch.if) return ''; const to=q.branch.to==='end'?'the end':'Q'+(sv.qs.findIndex(x=>x.id===q.branch.to)+1); return `<div class="sf-logic">If “${esc(q.branch.if)}” → skips to ${to}</div>`; };
+  const qs=mode==='inline'?sv.qs.slice(0,2):sv.qs;
+  return `<div class="srv-form ${mode||''}"><div class="sf-h">${esc(sv.name||'Survey')}</div>
+    ${qs.map((q,i)=>`<div class="sf-q"><div class="sf-t"><b>${i+1}.</b> ${tx(q)}${q.req?'<span class="sf-req" aria-label="required">*</span>':''}</div>${ctl(q)}${mode==='inline'?'':logic(q,i)}</div>`).join('')||'<div class="sf-none">No questions yet.</div>'}
+    ${mode==='inline'&&sv.qs.length>2?`<div class="sf-more">+ ${sv.qs.length-2} more question${sv.qs.length-2>1?'s':''}</div>`:''}
+    <div class="sf-submit">${L==='uk'?'Надіслати':L==='tr'?'Gönder':'Send'}</div>${mode==='inline'?'':`<div class="sf-thanks">After sending: “${esc(sv.thanks||'Thank you.')}”</div>`}</div>`; }
+function srvPreviewHtml(sv,dev,lang){ return dev==='web'
+  ? `<div class="mail" style="max-width:440px"><div class="hd"><i></i>Self care · Feedback</div><div class="bd">${srvFormHtml(sv,lang,'web')}</div></div>`
+  : `<div class="phone"><div class="time">Survey link · now</div>${srvFormHtml(sv,lang,'mobile')}</div>`; }
+
+let srvMode='list', srvSel=null, srvDraft=null, srvQ='', srvStatusF='All', srvDev='mobile', srvLang='en', srvSavedAt='', srvAddOpen=false;
+function srvBlank(){ const n=Math.max(0,...SURVEYS.map(s=>parseInt(s.id.slice(4))||0))+1; return {id:'SRV-'+String(n).padStart(2,'0'),name:'',desc:'',status:'Draft',start:TODAY,end:dAdd(TODAY,90),thanks:'Thank you for your answer.',langs:['en'],scoring:true,created:TODAY,by:DEMO_USERS.me,qs:[]}; }
+function srvOpen(id){ srvMode='edit'; srvSel=id; srvSavedAt=''; srvAddOpen=false; srvLang='en'; srvDraft=id?JSON.parse(JSON.stringify(srvById(id))):srvBlank(); renderSurveys(); }
+function srvNewQ(type){ const d=srvDraft; const id='q'+(Math.max(0,...d.qs.map(q=>parseInt(q.id.slice(1))||0))+1);
+  const opts=type==='single'||type==='multi'?[{t:'Option 1',s:0},{t:'Option 2',s:0}]:[];
+  return {id,type,text:'',tr:{},req:type==='nps'||type==='csat',opts,branch:null}; }
+function srvCheck(d){ if(!d.name.trim()) return 'Give the survey a name.'; if(!d.qs.length) return 'Add at least one question.';
+  const i=d.qs.findIndex(q=>!q.text.trim()); if(i>=0) return `Question ${i+1} has no text.`;
+  const j=d.qs.findIndex(q=>(q.type==='single'||q.type==='multi')&&q.opts.filter(o=>o.t.trim()).length<2); if(j>=0) return `Question ${j+1} needs at least two options.`; return ''; }
+function srvSave(close){ const d=srvDraft, err=srvCheck(d); if(err){ toast('Not saved yet',err,'bad'); return false; }
+  d.qs.forEach(q=>{ q.opts=q.opts.filter(o=>o.t.trim()); if(q.branch&&(!q.branch.if||!srvBranchOpts(q).includes(q.branch.if))) q.branch=null; });
+  const i=SURVEYS.findIndex(s=>s.id===d.id), copy=JSON.parse(JSON.stringify(d)); if(i>=0) SURVEYS[i]=copy; else SURVEYS.push(copy);
+  srvSel=d.id; srvSavedAt=new Date().toTimeString().slice(0,5); toast(`Saved · ${d.id}`,`${d.name} — ${d.qs.length} question${d.qs.length>1?'s':''}, ${d.status}.${d.status==='Draft'?' Set it Active to attach it to a live campaign.':''}`);
+  if(close){ srvMode='list'; } renderSurveys(); return true; }
+function opsOpenSurvey(id){ opsResetScope(); opsTab='srv'; opsSrv=id; opsRange=90; opsDrawer=null; opsPop=''; showView('opsan'); }
+
+function renderSurveys(){ const card=document.getElementById('srv-card'); if(!card||curView!=='surveys') return;
+  setCrumb(srvMode==='edit'?(srvSel||'New survey'):''); if(srvMode==='edit') renderSrvEditor(card); else renderSrvList(card); }
+function renderSrvList(card){ const q=srvQ.toLowerCase();
+  const rows=SURVEYS.filter(s=>(srvStatusF==='All'||s.status===srvStatusF)&&(!q||(s.id+' '+s.name+' '+s.desc).toLowerCase().includes(q)));
+  card.innerHTML=`<div class="card-h"><h2>Surveys</h2><div class="grow"></div><button class="btn primary sm" id="srv-new" style="white-space:nowrap">+ New survey</button>
+      <p>Short feedback surveys — NPS, CSAT and a few questions — sent as content in a campaign channel or a journey delivery. Answers land in the Event DataMart, so they can be segmented; results are in Operation analysis › Surveys.</p></div>
+    <div class="toolrow" style="gap:8px">
+      <div class="search-in"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="srv-q" placeholder="Search by name or survey ID" value="${esc(srvQ)}" aria-label="Search surveys"></div>
+      <div class="chipbar"><span style="color:var(--ink-3);font-size:11px">STATUS</span>${['All','Draft','Active','Closed'].map(s=>`<button class="fchip ${srvStatusF===s?'on':''}" data-srvst="${s}">${s}</button>`).join('')}</div>
+      <span class="kpi"><b>${rows.length}</b> surveys</span></div>
+    <div class="padx" style="overflow:auto"><table class="tbl" id="srv-table"><thead><tr><th>Survey</th><th>Status</th><th class="num">Questions</th><th>Channels</th><th class="num">Responses</th><th>Last response</th><th>Used by</th><th>Actions</th></tr></thead>
+    <tbody>${rows.map(s=>{ const u=srvUsedBy(s.id), rs=srvRespOf(s.id), last=rs.map(r=>r.resp).sort().pop(), chs=srvChannels(s.id);
+      return `<tr class="row" data-srv="${s.id}"><td><span class="lnk">${esc(s.name)}</span> <span class="mono" style="color:var(--ink-3)">${s.id}</span><br><small style="color:var(--ink-2)">${esc(s.desc||'')}</small></td><td><span class="pill ${SRV_STATUS_CLS[s.status]||''}">${s.status}</span></td><td class="num">${s.qs.length}</td><td>${chs.map(c=>`<span class="chip">${esc(c)}</span>`).join(' ')||'—'}</td><td class="num">${rs.length.toLocaleString()}</td><td>${last||'—'}</td>
+        <td>${u.camps.map(c=>`<span class="chip" title="${esc(c.name)}">${c.id}</span>`).join(' ')}${u.journeys.map(j=>` <span class="chip">${j.id}</span>`).join('')||(u.camps.length?'':'—')}</td>
+        <td><span class="act"><button class="btn sm outline" data-srvopen="${s.id}">Open</button>${rs.length?`<button class="btn sm outline" data-srvres="${s.id}">Results</button>`:''}</span></td></tr>`; }).join('')
+      ||'<tr><td colspan="8" class="empty">No survey matches that. Clear the search, or create one — a short NPS takes a minute.</td></tr>'}</tbody></table></div>
+    <div class="note" style="margin:10px 20px 16px">A survey is content, not a campaign type: attach it in a campaign's <b>Channel &amp; content</b> step, or in a journey's Delivery step. SMS, e-mail and push carry a personal <span class="mono">{{SURVEY_LINK}}</span>; In-App, Web Self Care and Chatbot show the questions inside the card.</div>`;
+  card.querySelector('#srv-new').onclick=()=>srvOpen(null);
+  card.querySelector('#srv-q').oninput=e=>{ srvQ=e.target.value; const v=srvQ; renderSrvList(card); const i=card.querySelector('#srv-q'); i.focus(); i.setSelectionRange(v.length,v.length); };
+  card.querySelectorAll('[data-srvst]').forEach(b=>b.onclick=()=>{ srvStatusF=b.dataset.srvst; renderSrvList(card); });
+  card.querySelectorAll('#srv-table tr[data-srv]').forEach(tr=>tr.onclick=e=>{ if(e.target.tagName==='BUTTON') return; srvOpen(tr.dataset.srv); });
+  card.querySelectorAll('[data-srvopen]').forEach(b=>b.onclick=()=>srvOpen(b.dataset.srvopen));
+  card.querySelectorAll('[data-srvres]').forEach(b=>b.onclick=()=>opsOpenSurvey(b.dataset.srvres));
+}
+function renderSrvEditor(card){ const d=srvDraft, full=d.qs.length>=SRV_MAX, second=d.langs.filter(l=>l!=='en');
+  if(!d.langs.includes(srvLang)) srvLang='en';
+  const qCard=(q,i)=>{ const bo=srvBranchOpts(q), later=d.qs.slice(i+1);
+    return `<div class="srv-q" data-q="${i}"><div class="srv-qh"><span class="srv-qn">Q${i+1}</span><span class="chip">${SRV_TYPE_LBL[q.type]}</span><div class="grow"></div>
+        <button class="btn sm outline" data-qmv="${i}" data-dir="-1" ${i?'':'disabled'} title="Move up" aria-label="Move question ${i+1} up">↑</button><button class="btn sm outline" data-qmv="${i}" data-dir="1" ${i<d.qs.length-1?'':'disabled'} title="Move down" aria-label="Move question ${i+1} down">↓</button><button class="btn sm outline" data-qrm="${i}" title="Remove question" aria-label="Remove question ${i+1}">×</button></div>
+      <div class="fld"><label class="req" for="sq-${i}">Question</label><input id="sq-${i}" data-qf="${i}" data-k="text" value="${esc(q.text)}" placeholder="${q.type==='nps'?'How likely are you to recommend us to a friend?':q.type==='csat'?'How satisfied are you with …?':'Your question'}"></div>
+      ${second.map(l=>`<div class="fld"><label for="sq-${i}-${l}">${SRV_LANGS.find(x=>x[0]===l)[1]} text</label><input id="sq-${i}-${l}" data-qf="${i}" data-tr="${l}" value="${esc((q.tr||{})[l]||'')}" placeholder="Translation"></div>`).join('')}
+      <label class="ck"><input type="checkbox" data-qf="${i}" data-k="req" ${q.req?'checked':''}> Required</label>
+      ${q.type==='single'||q.type==='multi'?`<div class="srv-opts"><div class="srv-oh"><span>Options</span>${d.scoring?'<span>Score</span>':''}</div>${q.opts.map((o,k)=>`<div class="srv-o"><input data-qf="${i}" data-opt="${k}" value="${esc(o.t)}" aria-label="Option ${k+1}" placeholder="Option ${k+1}">${d.scoring?`<input type="number" data-qf="${i}" data-optscore="${k}" value="${o.s}" aria-label="Score for option ${k+1}">`:''}<button class="btn sm outline" data-optrm="${i}" data-k2="${k}" aria-label="Remove option ${k+1}" ${q.opts.length>2?'':'disabled'}>×</button></div>`).join('')}<button class="btn sm outline" data-optadd="${i}" ${q.opts.length>=8?'disabled':''}>+ Add option</button></div>`
+        :d.scoring&&q.type!=='text'?`<small class="srv-hint">Score = the answer (${q.type==='nps'?'0–10':'1–5'}).</small>`:''}
+      <div class="srv-br">${bo.length?`<span>If the answer is</span><select data-qf="${i}" data-br="if" aria-label="Branch condition"><option value="">— no rule</option>${bo.map(o=>`<option ${q.branch&&q.branch.if===o?'selected':''}>${esc(o)}</option>`).join('')}</select><span>skip to</span><select data-qf="${i}" data-br="to" aria-label="Branch target" ${q.branch&&q.branch.if?'':'disabled'}>${later.slice(1).map((x,k)=>`<option value="${x.id}" ${q.branch&&q.branch.to===x.id?'selected':''}>question ${i+k+3}</option>`).join('')}<option value="end" ${q.branch&&q.branch.to==='end'?'selected':''}>the end</option></select>`
+        :`<span class="srv-hint">${q.type==='text'?'Free-text answers cannot branch.':'Add options to branch on them.'}</span>`}</div></div>`; };
+  card.innerHTML=`<div class="card-h"><button class="btn sm outline" id="srv-back">‹ Surveys</button><h2 style="font-size:16px">${srvSel?esc(d.name||d.id):'New survey'}</h2><span class="pill ${SRV_STATUS_CLS[d.status]||''}">${d.status}</span><span class="mono" style="color:var(--ink-3)">${d.id}</span>${srvSavedAt?`<span class="savebar">✓ Saved ${srvSavedAt}</span>`:''}<div class="grow"></div>
+      ${srvSel&&srvRespOf(d.id).length?`<button class="btn sm outline" id="srv-results">Results</button>`:''}<button class="btn sm outline" id="srv-save">Save</button><button class="btn sm primary" id="srv-saveclose">Save &amp; close</button></div>
+    <div class="srv-wb">
+      <div class="srv-col srv-def"><div class="srv-bh">Definition</div><div class="srv-bb">
+        <div class="fld"><label class="req" for="srv-name">Name</label><input id="srv-name" data-d="name" value="${esc(d.name)}" placeholder="e.g. Renewal NPS" maxlength="80"></div>
+        <div class="fld"><label for="srv-desc">Description</label><textarea id="srv-desc" data-d="desc" style="font-family:var(--sans);font-size:12.5px;min-height:52px" placeholder="What it asks, and after which message">${esc(d.desc)}</textarea></div>
+        <div class="fld"><label for="srv-status">Status ${tip('Draft: can be attached, nothing is sent. Active: goes out with the message it is attached to. Closed: the link shows the thank-you message and no longer records answers.')}</label><select id="srv-status" data-d="status">${['Draft','Active','Closed'].map(s=>`<option ${d.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
+        <div class="srv-2"><div class="fld"><label for="srv-start">Valid from</label><input type="date" id="srv-start" data-d="start" value="${d.start}"></div><div class="fld"><label for="srv-end">Valid until</label><input type="date" id="srv-end" data-d="end" value="${d.end}"></div></div>
+        <div class="fld"><label for="srv-thanks">Thank-you message</label><textarea id="srv-thanks" data-d="thanks" style="font-family:var(--sans);font-size:12.5px;min-height:44px">${esc(d.thanks)}</textarea></div>
+        <div class="fld"><label>Languages ${tip('English is always on. A second language adds a translation field to every question; each customer gets the language in their LANGUAGE column.')}</label><div class="chsel">${SRV_LANGS.map(([k,l])=>`<button type="button" class="${d.langs.includes(k)?'on':''}" data-lang="${k}" ${k==='en'?'disabled title="Always on"':''}>${l}</button>`).join('')}</div></div>
+        <label class="ck"><input type="checkbox" id="srv-scoring" ${d.scoring?'checked':''}> Scoring ${tip('Adds a total score per response: NPS, CSAT and rating answers count as their value, choice options carry the score you give them.')}</label>
+        <div class="note">Kept deliberately short: one page, at most ${SRV_MAX} questions, one branching rule per question. Responses land in the Event DataMart and can be used in segments.</div>
+      </div></div>
+      <div class="srv-col srv-qs"><div class="srv-bh">Questions <span class="pill" style="margin-left:auto">${d.qs.length} of ${SRV_MAX}</span></div><div class="srv-bb">
+        ${d.qs.map(qCard).join('')||'<div class="empty" style="padding:18px">No questions yet. Start with an NPS or CSAT question — most feedback surveys need only one or two.</div>'}
+        <div class="dm-menu srv-add"><button class="btn sm primary" id="srv-addq" ${full?'disabled':''} aria-expanded="${srvAddOpen}">+ Add question</button>
+          <div class="pop" ${srvAddOpen&&!full?'':'hidden'} style="left:0;right:auto;top:32px">${SRV_TYPES.map(([k,l])=>`<button data-addq="${k}">${l}</button>`).join('')}</div></div>
+        ${full?`<div class="note">Ten questions is the limit. Completion drops with every question after the first few, and most customers answer on a phone — split a longer survey into two.</div>`:''}
+      </div></div>
+      <div class="srv-col srv-prev"><div class="srv-bh">Preview <div class="seg" style="margin-left:auto"><button class="${srvDev==='mobile'?'on':''}" data-dev="mobile">Mobile</button><button class="${srvDev==='web'?'on':''}" data-dev="web">Web Self Care</button></div></div>
+        ${d.langs.length>1?`<div class="srv-langbar">${d.langs.map(l=>`<button class="fchip ${srvLang===l?'on':''}" data-plang="${l}">${SRV_LANGS.find(x=>x[0]===l)[1]}</button>`).join('')}</div>`:''}
+        <div class="srv-pvb" id="srv-pv">${srvPreviewHtml(d,srvDev,srvLang)}</div></div>
+    </div>`;
+  const g=id=>card.querySelector('#'+id), rer=()=>renderSrvEditor(card), pv=()=>{ const el=g('srv-pv'); if(el) el.innerHTML=srvPreviewHtml(d,srvDev,srvLang); };
+  g('srv-back').onclick=()=>{ srvMode='list'; renderSurveys(); };
+  g('srv-save').onclick=()=>srvSave(false); g('srv-saveclose').onclick=()=>srvSave(true);
+  if(g('srv-results')) g('srv-results').onclick=()=>opsOpenSurvey(d.id);
+  card.querySelectorAll('[data-d]').forEach(el=>{ el.oninput=el.onchange=()=>{ d[el.dataset.d]=el.value; if(el.dataset.d==='status'){ rer(); return; } if(el.dataset.d==='name'||el.dataset.d==='thanks') pv(); }; });
+  card.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{ const k=b.dataset.lang, i=d.langs.indexOf(k); if(i>=0) d.langs.splice(i,1); else d.langs.push(k); rer(); });
+  g('srv-scoring').onchange=e=>{ d.scoring=e.target.checked; rer(); };
+  card.querySelectorAll('[data-dev]').forEach(b=>b.onclick=()=>{ srvDev=b.dataset.dev; rer(); });
+  card.querySelectorAll('[data-plang]').forEach(b=>b.onclick=()=>{ srvLang=b.dataset.plang; rer(); });
+  g('srv-addq').onclick=e=>{ e.stopPropagation(); srvAddOpen=!srvAddOpen; rer(); };
+  card.querySelectorAll('[data-addq]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); if(d.qs.length>=SRV_MAX) return; d.qs.push(srvNewQ(b.dataset.addq)); srvAddOpen=false; rer(); const ins=card.querySelectorAll('.srv-q input[data-k="text"]'); if(ins.length) ins[ins.length-1].focus(); });
+  card.querySelectorAll('[data-qmv]').forEach(b=>b.onclick=()=>{ const i=+b.dataset.qmv, j=i+(+b.dataset.dir); [d.qs[i],d.qs[j]]=[d.qs[j],d.qs[i]]; d.qs.forEach((q,k)=>{ if(q.branch&&q.branch.to!=='end'&&d.qs.findIndex(x=>x.id===q.branch.to)<=k+1) q.branch=null; }); rer(); });
+  card.querySelectorAll('[data-qrm]').forEach(b=>b.onclick=()=>{ const q=d.qs.splice(+b.dataset.qrm,1)[0]; d.qs.forEach(x=>{ if(x.branch&&x.branch.to===q.id) x.branch=null; }); rer(); });
+  card.querySelectorAll('[data-qf]').forEach(el=>{ const q=()=>d.qs[+el.dataset.qf];
+    if(el.dataset.k==='text') el.oninput=()=>{ q().text=el.value; pv(); };
+    else if(el.dataset.k==='req') el.onchange=()=>{ q().req=el.checked; pv(); };
+    else if(el.dataset.tr) el.oninput=()=>{ q().tr=q().tr||{}; q().tr[el.dataset.tr]=el.value; pv(); };
+    else if(el.dataset.opt!==undefined) el.oninput=()=>{ q().opts[+el.dataset.opt].t=el.value; pv(); };
+    else if(el.dataset.optscore!==undefined) el.oninput=()=>{ q().opts[+el.dataset.optscore].s=+el.value||0; };
+    else if(el.dataset.br) el.onchange=()=>{ const x=q(); if(el.dataset.br==='if'){ x.branch=el.value?{if:el.value,to:(x.branch&&x.branch.to)||(d.qs[+el.dataset.qf+2]||{}).id||'end'}:null; } else if(x.branch) x.branch.to=el.value; rer(); }; });
+  card.querySelectorAll('[data-optadd]').forEach(b=>b.onclick=()=>{ const q=d.qs[+b.dataset.optadd]; q.opts.push({t:'',s:0}); rer(); const ins=card.querySelectorAll(`[data-qf="${b.dataset.optadd}"][data-opt]`); ins[ins.length-1].focus(); });
+  card.querySelectorAll('[data-optrm]').forEach(b=>b.onclick=()=>{ const q=d.qs[+b.dataset.optrm]; const o=q.opts.splice(+b.dataset.k2,1)[0]; if(q.branch&&o&&q.branch.if===o.t) q.branch=null; rer(); });
+}
+document.addEventListener('click',e=>{ if(curView==='surveys'&&srvAddOpen&&!e.target.closest('.srv-add')){ srvAddOpen=false; renderSurveys(); } });
+
+/* ---- results: the Surveys tab of Operation analysis ---- */
+let opsSrv='SRV-01';
+OPS_COLS.srv=[
+  {k:'cust',l:'Customer',v:r=>r.cust.cid,h:r=>custCell(r.cust)},
+  {k:'camp',l:'Campaign',v:r=>r.c.name,h:r=>campCell(r.c)},
+  {k:'ch',l:'Channel',v:r=>chName(r.ch)},
+  {k:'score',l:'Total score',num:1,v:r=>r.score===null?'':r.score,h:r=>r.score===null?'—':String(r.score)},
+  {k:'result',l:'Result',v:r=>r.result,h:r=>`<span class="pill ${/Promoter|Satisfied/.test(r.result)?'ok':/Detractor|Dissatisfied/.test(r.result)?'bad':''}">${esc(r.result)}</span>`},
+  {k:'sent',l:'Sent date',v:r=>r.date},
+  {k:'resp',l:'Response date',v:r=>r.resp},
+  {k:'done',l:'Completed',hide:1,v:r=>r.done?'Yes':'No'},
+  {k:'rid',l:'Response ID',tech:1,v:r=>r._id},
+  {k:'sid',l:'Survey ID',tech:1,v:r=>r.sv.id},
+  {k:'dp',l:'Delivery ID',tech:1,v:r=>r.ex.dp},
+  {k:'ex',l:'Execution ID',tech:1,v:r=>r.ex.ex},
+  {k:'dm',l:'Main DM ID',tech:1,v:r=>r.ex.dm}];
+function srvAnsText(q,a){ if(a===undefined) return null; if(Array.isArray(a)) return a.join(', ')||'—'; if(q.type==='nps') return `${a} · ${npsCat(a)}`; if(q.type==='rating') return '★'.repeat(+a)+` (${a})`; return a===''?'— (left empty)':String(a); }
+function srvDrawerFields(r){ return OPS_COLS.srv.map(x=>[x.l,x.v(r),x.tech]).concat([['Survey',r.sv.name]]); }
+function srvDrawerAnswers(r){ return `<div><div class="sec">Answers</div><ol class="srv-ans">${r.sv.qs.map(q=>{ const t=srvAnsText(q,r.ans[q.id]); return `<li><span>${esc(q.text)}</span><b class="${t===null?'skip':''}">${t===null?(r.done?'skipped by a branching rule':'not answered — response incomplete'):esc(t)}</b></li>`; }).join('')}</ol></div>`; }
+function npsOf(rs,q){ const v=rs.map(r=>r.ans[q.id]).filter(a=>a!==undefined&&a!==''); const p=v.filter(a=>a>=9).length, pa=v.filter(a=>a>=7&&a<9).length, d=v.length-p-pa; return {n:v.length,p,pa,d,nps:v.length?Math.round(100*(p-d)/v.length):0}; }
+function renderOpsSurveys(){ if(!srvById(opsSrv)) opsSrv=SURVEYS[0].id; const sv=srvById(opsSrv), fmt=n=>Number(n).toLocaleString(), pct=(a,b)=>b?Math.round(1000*a/b)/10+'%':'—';
+  const scoped=srvRespOf(sv.id).filter(r=>opsIn(r.c,r.ch,r.resp)); const rows=opsSorted(opsApplyAdv(scoped,'srv'),'srv');
+  const delivered=opsData().execs.filter(x=>{ const p=(x.c.plans||[]).find(q=>q.ch===x.ch); return p&&p.survey===sv.id&&opsIn(x.c,x.ch,x.date); }).reduce((t,x)=>t+x.del,0);
+  const done=scoped.filter(r=>r.done).length, sc=scoped.filter(r=>r.score!==null), avg=sc.length?sc.reduce((t,r)=>t+r.score,0)/sc.length:null;
+  const nq=sv.qs.find(q=>q.type==='nps'), N=nq?npsOf(scoped,nq):null, u=srvUsedBy(sv.id);
+  const tiles=opsTile('Responses',fmt(scoped.length),`${new Set(scoped.map(r=>r.cust.cid)).size} customers`)
+    +opsTile('Response rate',pct(scoped.length,delivered),`of ${fmt(delivered)} delivered with the survey`)
+    +opsTile('Average score',avg===null?'—':(Math.round(avg*10)/10).toString(),sv.scoring?'total score per response':'scoring is off for this survey')
+    +opsTile('Completion rate',pct(done,scoped.length),'answered every question shown')
+    +(N?opsTile('NPS',N.n?(N.nps>0?'+':'')+N.nps:'—',`${fmt(N.p)} promoters · ${fmt(N.pa)} passives · ${fmt(N.d)} detractors`,N.n?(N.nps>=0?'ok':'bad'):''):'');
+  /* NPS trend: up to six buckets over the period */
+  let trend='';
+  if(N&&N.n){ const B=opsRange===7?7:6, len=Math.ceil(opsRange/B), from=opsSince();
+    const bk=Array.from({length:B},(_,i)=>{ const a=dAdd(from,i*len), b=[dAdd(from,(i+1)*len-1),TODAY].sort()[0]; return {a,b,...npsOf(scoped.filter(r=>r.resp>=a&&r.resp<=b),nq)}; }).filter(x=>x.a<=TODAY);
+    trend=`<div class="srv-trend">${bk.map(x=>`<div class="tb" title="${x.a} → ${x.b}: ${x.n} answers"><span class="tv">${x.n?(x.nps>0?'+':'')+x.nps:'—'}</span><span class="tc"><i class="${x.nps<0?'neg':''}" style="height:${x.n?Math.max(4,Math.round(Math.abs(x.nps)*0.6)):0}px"></i></span><span class="tl">${x.a.slice(5)}</span></div>`).join('')}</div><small style="color:var(--ink-2)">NPS per ${opsRange===7?'day':len+' days'} · bar height = distance from zero, red when negative</small>`; }
+  const P=(title,sub,cls,body)=>`<div class="db-p ${cls}"><div class="ph">${title}${sub?` <small>— ${sub}</small>`:''}</div><div class="pb">${body}</div></div>`;
+  const qPanel=(q,i)=>{ const rs=scoped.filter(r=>r.ans[q.id]!==undefined), n=rs.length;
+    let body='';
+    if(q.type==='text'){ const t=rs.filter(r=>r.ans[q.id]).sort((a,b)=>b.resp.localeCompare(a.resp)).slice(0,6); body=t.length?`<ul class="srv-txt">${t.map(r=>`<li>“${esc(r.ans[q.id])}”<small>${esc(r.cust.cid)} · ${r.resp}</small></li>`).join('')}</ul><small style="color:var(--ink-2)">${fmt(rs.filter(r=>r.ans[q.id]).length)} written answers · most recent first</small>`:'<p class="empty" style="padding:8px;margin:0">No written answers yet.</p>'; }
+    else if(q.type==='nps'){ const c=Array.from({length:11},(_,v)=>rs.filter(r=>r.ans[q.id]===v).length), mx=Math.max(1,...c); body=`<div class="srv-dist">${c.map((k,v)=>`<div class="tb" title="${v}: ${k} answers"><span class="tv">${k}</span><span class="tc"><i class="${v>=9?'pro':v>=7?'pas':'det'}" style="height:${Math.round(56*k/mx)}px"></i></span><span class="tl">${v}</span></div>`).join('')}</div>`; }
+    else { const opts=q.type==='single'||q.type==='multi'?q.opts.map(o=>o.t):['1','2','3','4','5']; const c=opts.map(o=>rs.filter(r=>Array.isArray(r.ans[q.id])?r.ans[q.id].includes(o):String(r.ans[q.id])===o).length), mx=Math.max(1,...c);
+      body=opts.map((o,k)=>`<div class="hbar"><span class="lb">${q.type==='rating'?'★'.repeat(+o):esc(o)}</span><span class="tr"><i style="width:${Math.round(100*c[k]/mx)}%"></i></span><span class="n">${pct(c[k],n)}</span></div>`).join('')+(q.type==='multi'?'<small style="color:var(--ink-2)">several answers per customer — shares add up to more than 100%</small>':''); }
+    return P(`Q${i+1} · ${esc(q.text)}`,`${SRV_TYPE_LBL[q.type]} · ${fmt(n)} answers`,(i===sv.qs.length-1&&sv.qs.length%2?'w12':'w6')+' srv-qp',body); };
+  const body=`<div class="ops-srvbar"><label for="ops-srv">Survey</label><select id="ops-srv">${SURVEYS.map(s=>`<option value="${s.id}" ${s.id===sv.id?'selected':''}>${esc(s.name)} · ${s.id}${s.status!=='Active'?' ('+s.status.toLowerCase()+')':''}</option>`).join('')}</select>
+      <span class="pill ${SRV_STATUS_CLS[sv.status]||''}">${sv.status}</span><span class="ops-srvmeta">${sv.qs.length} question${sv.qs.length>1?'s':''} · attached to ${u.camps.length?u.camps.map(c=>c.id).join(', '):'no campaign yet'}</span><div class="grow"></div>${ROLE!=='approver'?`<button class="btn sm outline" id="ops-srvopen">Open survey ›</button>`:''}</div>
+    <div class="db-hd ops-hd">${tiles}</div>
+    ${scoped.length?`<div class="db-grid ops-srv">
+      ${N?P('Net Promoter Score',`${fmt(N.n)} answers to Q${sv.qs.indexOf(nq)+1}`,'w12 srv-npsp',`<div class="srv-nps"><div class="nv ${N.nps<0?'neg':''}">${N.nps>0?'+':''}${N.nps}</div><div class="nb"><div class="bar"><i class="pro" style="width:${100*N.p/N.n}%"></i><i class="pas" style="width:${100*N.pa/N.n}%"></i><i class="det" style="width:${100*N.d/N.n}%"></i></div>
+        <div class="lg"><span><i class="pro"></i>Promoters (9–10) <b>${fmt(N.p)}</b> · ${pct(N.p,N.n)}</span><span><i class="pas"></i>Passives (7–8) <b>${fmt(N.pa)}</b> · ${pct(N.pa,N.n)}</span><span><i class="det"></i>Detractors (0–6) <b>${fmt(N.d)}</b> · ${pct(N.d,N.n)}</span></div>
+        <small style="color:var(--ink-2)">NPS = % promoters − % detractors, from −100 to +100.</small></div><div class="nt">${trend}</div></div>`):''}
+      ${sv.qs.map(qPanel).join('')}</div>`
+      :`<div class="empty ops-empty srv-empty">${sv.status==='Draft'?'This survey is a draft and has not been sent, so there are no responses yet. Set it Active and attach it to a campaign channel.':u.camps.length?`No responses in this scope. ${opsRange<90?'Widen the period or clear the filters.':'Clear the filters, or wait for the next send.'}`:'No responses yet — attach this survey to a campaign channel in Channel &amp; content, and the answers will appear here.'}</div>`}
+    <div class="h4" style="padding-top:4px">Responses</div>
+    ${opsGridHtml('srv',rows,opsEmpty('No survey responses in this scope.'))}`;
+  return {tiles:'',body,rows}; }
+function bindOpsSurveys(card){ const s=card.querySelector('#ops-srv'); if(s) s.onchange=()=>{ opsSrv=s.value; opsDrawer=null; opsGrid('srv').page=1; renderOpsan(); };
+  const o=card.querySelector('#ops-srvopen'); if(o) o.onclick=()=>{ showView('surveys'); srvOpen(opsSrv); }; }
 /* static form labels (segment editor) get their tooltips once */
 const STATIC_TIPS={'Name':'Short and searchable — shown in Targeting, journeys and reports.','Description':'Optional. Shown in the segment list so colleagues know what the segment is for.','Segment Group':'Groups are defined by the admin in Parameters; they keep the segment list organised and filterable.','DataMart':'Main = customer master data. Event = delivery feedback (sent, opened, clicked). Add a second DataMart to join them on the reference column.','Customer key column':'The column in the uploaded file that identifies the customer; matched to CUSTOMER_ID or MSISDN.','SQL on the selected DataMart':'For power users. The query must return the customer key; it is validated before saving.','Exclude these customers from deliveries on':'Channel-scoped exclusion: applied at delivery time only on the selected channels; empty = every channel.'};
 function applyStaticTips(){ document.querySelectorAll('#view-segmentation label').forEach(l=>{ const t=(l.childNodes[0]&&l.childNodes[0].textContent||'').trim(); if(STATIC_TIPS[t]&&!l.querySelector('.tip')) l.insertAdjacentHTML('beforeend',tip(STATIC_TIPS[t])); }); }
