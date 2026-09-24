@@ -400,6 +400,10 @@ pre.code{margin:0;background:var(--brand-navy);color:#E6E6F0;border-radius:6px;p
 .chsel button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:3px 10px;font-size:11.5px;color:var(--ink-2);display:inline-flex;align-items:center;gap:6px}
 .chsel button.on{background:var(--orange-soft);border-color:var(--orange);color:var(--orange-ink);font-weight:600}
 .chsel button.on::after{content:"×";font-weight:400;opacity:.7}
+.goalsel{display:flex;flex-wrap:wrap;gap:6px}
+.goalsel button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:12.5px;color:var(--ink-2)}
+.goalsel button:hover{border-color:var(--ink-3)}
+.goalsel button.on{background:var(--orange-soft);border-color:var(--orange);color:var(--orange-ink);font-weight:600}
 /* assistant */
 .assist{background:var(--orange-soft);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
 .assist .row{display:flex;gap:6px}
@@ -1647,9 +1651,10 @@ opens Operation analysis filtered to it. **+ New campaign** starts a new one.
 
 1. **Campaign name** — the cursor is already there. Required.
 2. **What is it for?** — pick one objective card: Acquisition, Upsell /
-   Cross-sell, Retention, Winback or Informational. Optional; it files the
-   campaign under the matching category, and Informational makes it an Info
-   campaign.
+   Cross-sell, Retention, Winback or Informational. The goal decides the
+   campaign type and category for you: Informational is an Info campaign (no
+   Offer step), the other four are Offer campaigns filed under their category.
+   You are not asked for type, category or sub-category again.
 3. **How will it reach people?** — **We send it** (push: SMS, e-mail, push,
    telemarketing) or **The customer sees it when they come** (pull: in-app,
    self-care, chatbot). You pick the exact channels in the Info step.
@@ -1658,7 +1663,7 @@ opens Operation analysis filtered to it. **+ New campaign** starts a new one.
 
 Below that, **Start from a template** opens a copy of one of your three most
 recent campaigns, and **Skip — go straight to the form** opens an empty editor.
-Everything chosen here can be changed in Info.
+The goal and the channels can still be changed in Info.
 
 In the editor, **‹ Campaign list** goes back, and **Results** (once the
 campaign has run) opens Operation analysis on its deliveries.
@@ -1683,8 +1688,9 @@ them?*, *Set the ground rules*, *When will it go out?*, *Send it for approval*,
 
 #### 1 · Info
 
-Name (required — Next will refuse without it), Campaign Type (Offer or Info),
-category and sub-category, start and end, control group, and program.
+Name (required — Next will refuse without it), the **Goal** you picked on the
+first screen (click another to change it; with *Skip* you pick it here), start
+and end, control group, and program.
 
 **Channels** are in two groups:
 
@@ -2281,7 +2287,7 @@ const statusPill=st=>`<span class="pill ${CAMP_STATUS_CLS[st]||''}">${st}</span>
 const APPROVERS=[DEMO_USERS.approver,DEMO_USERS.approver2,'Marketing lead (any)'];
 /* tooltip helper — every field that needs explaining gets one (meeting 3) */
 const tip=t=>`<span class="tip" data-tip="${esc(t)}">i</span>`;
-const TIPS={converted:'Customers who took the action the campaign asked for — renewing a package, accepting an offer, buying an upsell. The action is defined per campaign and counted within 7 days of delivery.',name:'Shown in lists, reports and the approver\'s queue. Keep it searchable: what, for whom, when.',id:'Given by the system when the campaign is first saved. Used in reports and the Event DataMart.',type:'Offer = the customer gets an offer or promo code (Offer step). Info = a message only; the Offer step is skipped.',label:'Which brand sends the campaign. Only shown for multi-brand customers (Parameters › Campaign form).',category:'Reporting dimension. Categories are managed in Parameters.',sub:'Second reporting level under the category.',channels:'Pick the channels this campaign sends on. One content per channel is created in Channel & content; the same schedule applies to all of them.',start:'From this moment the campaign may run. Nothing is sent before it.',end:'After this moment no send happens, even if a schedule is still open.',cg:'A random share of the target is held back and gets nothing, so the effect can be measured. Method and size come from Parameters.',presend:'Days between two sends of this same campaign to one customer.',program:'Optional grouping of campaigns that belong to one business programme.',cbd:'Customer based delivery: one customer gets one send per run, even if several rows match.',alarms:'Get an alarm when a run fails or delivers below the expected volume.',priority:'When several pull campaigns compete for the same slot (app card, WSC banner, chatbot) the higher priority wins. Not used for push sends.',objective:'What the campaign should achieve, in one or two sentences. Shown to the approver.',desc:'Long description for colleagues. Hidden by default (Parameters › Campaign form).',target:'Segments are applied top to bottom: includes add customers, excludes remove them. Global exclusion lists are always applied last.',sortCol:'When a channel has a daily capacity, customers are sent in this order.',template:'The design: layout, brand blocks, fixed elements. Made by the admin under Templates. You write the text into its slots below; the design stays untouched.',variants:'A/B: two texts, a share of the target gets B, the rest gets the winner. Dynamic: the template\'s language / segment variants are picked per customer from a DataMart column.',abSplit:'Share of the target that receives variant B during the test.',dyn:'DataMart column whose value picks the variant at send time.',text:'The message itself. Placeholders like {{FIRST_NAME}} resolve per customer at send time.',override:'Sends to everyone in the target and ignores cooldown, overlap and pre-sent rules. Only for regulatory or service messages.',trigger:'Run now = once, right after approval. Schedule = at the chosen times until the end date.',sto:'Send time optimisation: the AI picks each customer\'s best hour on the day; the time here is the earliest slot.',approver:'Who is asked to approve. The approver sees the summary and this note.',approvalNote:'Tell the approver what to look at: the audience size, the offer, anything unusual.',promo:'Optional code the customer quotes to claim the offer. Use {{PROMO_CODE}} in the content.'};
+const TIPS={goal:'What the campaign is for — chosen when it was created. It sets the campaign type and files it under a category: Informational is an Info campaign with no Offer step, the others are Offer campaigns.',converted:'Customers who took the action the campaign asked for — renewing a package, accepting an offer, buying an upsell. The action is defined per campaign and counted within 7 days of delivery.',name:'Shown in lists, reports and the approver\'s queue. Keep it searchable: what, for whom, when.',id:'Given by the system when the campaign is first saved. Used in reports and the Event DataMart.',type:'Offer = the customer gets an offer or promo code (Offer step). Info = a message only; the Offer step is skipped.',label:'Which brand sends the campaign. Only shown for multi-brand customers (Parameters › Campaign form).',category:'Reporting dimension. Categories are managed in Parameters.',sub:'Second reporting level under the category.',channels:'Pick the channels this campaign sends on. One content per channel is created in Channel & content; the same schedule applies to all of them.',start:'From this moment the campaign may run. Nothing is sent before it.',end:'After this moment no send happens, even if a schedule is still open.',cg:'A random share of the target is held back and gets nothing, so the effect can be measured. Method and size come from Parameters.',presend:'Days between two sends of this same campaign to one customer.',program:'Optional grouping of campaigns that belong to one business programme.',cbd:'Customer based delivery: one customer gets one send per run, even if several rows match.',alarms:'Get an alarm when a run fails or delivers below the expected volume.',priority:'When several pull campaigns compete for the same slot (app card, WSC banner, chatbot) the higher priority wins. Not used for push sends.',objective:'What the campaign should achieve, in one or two sentences. Shown to the approver.',desc:'Long description for colleagues. Hidden by default (Parameters › Campaign form).',target:'Segments are applied top to bottom: includes add customers, excludes remove them. Global exclusion lists are always applied last.',sortCol:'When a channel has a daily capacity, customers are sent in this order.',template:'The design: layout, brand blocks, fixed elements. Made by the admin under Templates. You write the text into its slots below; the design stays untouched.',variants:'A/B: two texts, a share of the target gets B, the rest gets the winner. Dynamic: the template\'s language / segment variants are picked per customer from a DataMart column.',abSplit:'Share of the target that receives variant B during the test.',dyn:'DataMart column whose value picks the variant at send time.',text:'The message itself. Placeholders like {{FIRST_NAME}} resolve per customer at send time.',override:'Sends to everyone in the target and ignores cooldown, overlap and pre-sent rules. Only for regulatory or service messages.',trigger:'Run now = once, right after approval. Schedule = at the chosen times until the end date.',sto:'Send time optimisation: the AI picks each customer\'s best hour on the day; the time here is the earliest slot.',approver:'Who is asked to approve. The approver sees the summary and this note.',approvalNote:'Tell the approver what to look at: the audience size, the offer, anything unusual.',promo:'Optional code the customer quotes to claim the offer. Use {{PROMO_CODE}} in the content.'};
 /* ---------- PROGRAM = a business initiative: goal, period, owner, its campaigns and journeys, roll-up results. Not a folder of campaign IDs. ---------- */
 const PROGRAMS=[
   {id:'PRG-1',name:'Package renewal',desc:'Keep prepaid customers on a package: reminders before expiry, a renewal offer, a last-day nudge and the app follow-up.',owner:'Felix (CVM)',category:'Retention',start:'2026-09-01',end:'2026-12-31',goal:{metric:'Conversions',target:120},journeys:['JRN-07'],cap:{n:2,per:'week'},report:true,created:'2026-08-20',by:DEMO_USERS.me},
@@ -3349,16 +3355,23 @@ const campFilter={q:'',type:'All',status:'All',category:'',label:'',datamart:'',
 const campUsedBy=id=>JOURNEYS.filter(j=>j.nodes.some(n=>n.type==='delivery'&&String(n.cfg.campaign).startsWith(id+' '))).map(j=>j.id);
 const chanIcon={sms:'SMS',email:'Email',push:'Push',tm:'TM',wsc:'WSC',whatsapp:'WA',chatbot:'Bot',order:'Order'};
 function campBlank(){ const nid=String(Math.max(...CAMPAIGNS.map(c=>parseInt(c.id)||0))+1); return {id:nid,name:'',type:'Offer',status:'Draft',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:'',created:TODAY,updated:TODAY,start:TODAY+'T00:00',end:'2026-09-30T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:1,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[],offers:[],channels:['sms'],contents:[],plans:[],eventDriven:false,promo:{code:'',kind:'Single code',valid:''},rules:null,sched:null,rulesSet:false,schedSet:false,sortCol:'',sortDir:'',approver:'',approvalNote:'',approvals:[]}; }
-function campCopy(id){ const src=CAMPAIGNS.find(x=>x.id===id); campOpen(null); Object.assign(campDraft,JSON.parse(JSON.stringify({type:src.type,label:src.label,category:src.category,sub:src.sub,cg:src.cg,presend:src.presend,program:src.program,objective:src.objective,desc:src.desc,lists:src.lists,strategy:src.strategy,offers:src.offers,channels:src.channels,contents:src.contents,plans:src.plans.map(p=>Object.assign({},p,{status:'Draft'})),eventDriven:src.eventDriven,promo:src.promo,rules:src.rules,sched:src.sched,rulesSet:src.rulesSet,schedSet:src.schedSet,priority:src.priority})),{name:src.name+' (copy)'}); renderCampaigns(); toast('Campaign copied',`Settings of ${src.id} copied into a new draft — rename and adjust.`); }
+function campCopy(id){ const src=CAMPAIGNS.find(x=>x.id===id); campOpen(null); Object.assign(campDraft,JSON.parse(JSON.stringify({type:src.type,goal:src.goal,label:src.label,category:src.category,sub:src.sub,cg:src.cg,presend:src.presend,program:src.program,objective:src.objective,desc:src.desc,lists:src.lists,strategy:src.strategy,offers:src.offers,channels:src.channels,contents:src.contents,plans:src.plans.map(p=>Object.assign({},p,{status:'Draft'})),eventDriven:src.eventDriven,promo:src.promo,rules:src.rules,sched:src.sched,rulesSet:src.rulesSet,schedSet:src.schedSet,priority:src.priority})),{name:src.name+' (copy)'}); renderCampaigns(); toast('Campaign copied',`Settings of ${src.id} copied into a new draft — rename and adjust.`); }
 /* New campaign starts on a centred creation screen (decision C9): name, objective, push or pull, one CTA.
    The stepper appears only once the draft exists. campOpen(null) still goes straight to the form. */
 let ccObj='', ccReach='push';
+/* The goal is asked once, on the creation screen, and carries the campaign type, category and
+   sub-category with it — the Info step shows the goal, not the three fields (decision C13). */
+const CAMP_GOAL={'Acquisition':{type:'Offer',category:'Onboarding',sub:'Welcome'},'Upsell / Cross-sell':{type:'Offer',category:'Upsell',sub:'Data add-on'},
+  'Retention':{type:'Offer',category:'Retention',sub:'Package renewal'},'Winback':{type:'Offer',category:'Win-back',sub:'Discount'},'Informational':{type:'Info'}};
+function campGoal(c){ if(c.goal) return c.goal; if(c.type!=='Offer') return 'Informational';
+  return {Onboarding:'Acquisition',Upsell:'Upsell / Cross-sell',Retention:'Retention','Win-back':'Winback'}[c.category]||''; }
+function campSetGoal(c,g){ c.goal=g; Object.assign(c,CAMP_GOAL[g]||{}); }
 const CC_OBJ=[
-  ['Acquisition','Win new customers or new lines','<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M18 8v6M15 11h6"/>',null],
-  ['Upsell / Cross-sell','Grow what existing customers buy','<path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/>',{category:'Upsell',sub:'Data add-on'}],
-  ['Retention','Keep customers who might leave','<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',{category:'Retention',sub:'Package renewal'}],
-  ['Winback','Bring back customers who left','<path d="M4 5v5h5"/><path d="M5.6 15a7 7 0 1 0 1.3-7.6L4 10"/>',{category:'Win-back',sub:'Discount'}],
-  ['Informational','Tell customers something, no offer','<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.01"/>',{type:'Info'}]];
+  ['Acquisition','Win new customers or new lines','<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M18 8v6M15 11h6"/>'],
+  ['Upsell / Cross-sell','Grow what existing customers buy','<path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/>'],
+  ['Retention','Keep customers who might leave','<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'],
+  ['Winback','Bring back customers who left','<path d="M4 5v5h5"/><path d="M5.6 15a7 7 0 1 0 1.3-7.6L4 10"/>'],
+  ['Informational','Tell customers something, no offer','<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.01"/>']];
 const CC_REACH=[
   ['push','We send it','SMS, e-mail, push or a call — it goes out on a schedule.','<path d="M4 12l16-8-6 16-3-7z"/>','sms'],
   ['pull','The customer sees it when they come','In the app, on self-care or in the chatbot — nothing is sent.','<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 17h2"/>','inapp']];
@@ -3385,7 +3398,7 @@ function renderCampCreate(card){ const c=campDraft; const ic=d=>`<svg viewBox="0
   card.querySelector('#cc-skip').onclick=()=>campOpen(null);
   card.querySelectorAll('[data-cctpl]').forEach(b=>b.onclick=()=>campCopy(b.dataset.cctpl));
   card.querySelector('#cc-start').onclick=()=>{ if(!c.name.trim()){ toast('Name is required','Give the campaign a name your team will recognise.','bad'); nm.focus(); return; }
-    const o=CC_OBJ.find(x=>x[0]===ccObj); if(o&&o[3]) Object.assign(c,o[3]); c.channels=[CC_REACH.find(x=>x[0]===ccReach)[4]]; syncPlans(c);
+    if(ccObj) campSetGoal(c,ccObj); c.channels=[CC_REACH.find(x=>x[0]===ccReach)[4]]; syncPlans(c);
     campMode='detail'; campStep=0; renderCampaigns(); };
 }
 function campOpen(id){ campMode='detail'; campSel=id; campStep=0; campDraft=id?JSON.parse(JSON.stringify(CAMPAIGNS.find(c=>c.id===id))):campBlank(); campSavedAt=''; renderCampaigns(); }
@@ -3564,8 +3577,8 @@ function renderCampDetail(card){
     body=`<div class="form2">
       <div class="fld"><label class="req">Name ${tip(TIPS.name)}</label><input data-k="name" maxlength="100" value="${esc(c.name)}" placeholder="Campaign name"><div class="cnt">${c.name.length}/100</div></div>
       ${inp('id','Campaign ID',false,'text',true)}
-      ${sel('type','Campaign Type',CAMP_TYPES,true)}${CAMP_CFG.multiBrand?sel('label','Campaign Brand',CAMP_LABELS,true):''}
-      ${sel('category','Category',Object.keys(CAMP_CATS),true)}${sel('sub','Sub Category',CAMP_CATS[c.category]||[c.sub],true)}
+      <div class="fld span2"><label class="req">Goal ${tip(TIPS.goal)}</label><div class="goalsel" id="camp-goal" role="group" aria-label="Goal">${CC_OBJ.map(([k])=>`<button type="button" class="${campGoal(c)===k?'on':''}" data-goal="${k}" aria-pressed="${campGoal(c)===k}">${k}</button>`).join('')}</div></div>
+      ${CAMP_CFG.multiBrand?sel('label','Campaign Brand',CAMP_LABELS,true):''}
       <div class="fld span2"><label class="req">Channels ${tip(TIPS.channels)}</label>
         <div class="chgrp ${kind?kind+'-on':''}"><div class="push"><div class="gh">Push — we send to the customer ${tip('Outbound sends: SMS, MMS, e-mail, mobile / web push, telemarketing. One schedule for all of them.')}</div><div class="chsel">${PLAN_CHANNELS.filter(([k])=>CH_KIND[k]==='push').map(chBtn).join('')}</div></div><div class="pull"><div class="gh">Pull — shown when the customer comes ${tip('In-app card, web self-care banner, chatbot answer. Nothing is sent; the campaign is offered when the customer opens the channel. Priority decides which campaign wins the slot.')}</div><div class="chsel">${PLAN_CHANNELS.filter(([k])=>CH_KIND[k]==='pull').map(chBtn).join('')}</div></div></div>
         <small style="color:var(--ink-3)">A campaign uses either push or pull channels, not both${kind?` — this one is <b>${kind}</b>`:''}. A follow-up on the other kind is a second campaign or a journey step.</small></div>
@@ -3626,7 +3639,7 @@ function renderCampDetail(card){
       </div>
     </div>`; }
   else { const u=campUsedBy(c.id); body=`<div class="form2" style="padding-top:14px">
-      <dl class="kv"><dt>Campaign</dt><dd><b>${c.id}</b> · ${esc(c.name)||'<i>unnamed</i>'}</dd><dt>Type</dt><dd><span class="typechip ${c.type}">${c.type}</span> ${CAMP_CFG.multiBrand?`<span class="lbl-chip">${c.label}</span>`:''}</dd><dt>Category</dt><dd>${c.category} › ${c.sub}</dd><dt>Period</dt><dd>${c.start.replace('T',' ')} → ${c.end.replace('T',' ')}</dd><dt>Control group</dt><dd>${c.cg}</dd><dt>Pre-sent</dt><dd>${RULE_DEFAULTS.presend} <span style="color:var(--ink-3)">(Parameters)</span></dd><dt>Priority</dt><dd>${c.priority} / 20</dd></dl>
+      <dl class="kv"><dt>Campaign</dt><dd><b>${c.id}</b> · ${esc(c.name)||'<i>unnamed</i>'}</dd><dt>Type</dt><dd><span class="typechip ${c.type}">${c.type}</span> ${CAMP_CFG.multiBrand?`<span class="lbl-chip">${c.label}</span>`:''}</dd><dt>Goal</dt><dd>${esc(campGoal(c)||c.category)}</dd><dt>Period</dt><dd>${c.start.replace('T',' ')} → ${c.end.replace('T',' ')}</dd><dt>Control group</dt><dd>${c.cg}</dd><dt>Pre-sent</dt><dd>${RULE_DEFAULTS.presend} <span style="color:var(--ink-3)">(Parameters)</span></dd><dt>Priority</dt><dd>${c.priority} / 20</dd></dl>
       <dl class="kv"><dt>Target</dt><dd><b>${a.count}</b> customers · ${c.lists.map(l=>`${l.id} (${l.mode})`).join(', ')||'no segment'}</dd><dt>Offer</dt><dd>${c.type!=='Offer'?'—':c.strategy==='NBO'?'Next Best Offer (Digital Twin)':(c.offers.join(', ')||'no offer')}${c.promo.code?' · promo '+esc(c.promo.code):''}</dd><dt>Content</dt><dd>${c.plans.map(p=>`<div>${chName(p.ch)} · ${planFilled(p)?esc((p.slots.subject||p.slots.title||p.slots.body||'').slice(0,60))+(tplHidden(p.ch)?'':' <span style="color:var(--ink-3)">· '+esc((tplOf(p.content)||{}).name||'')+'</span>'):'<i>no content</i>'}${planModeText(p)!=='Single'?' · '+planModeText(p):''}</div>`).join('')||'—'}</dd><dt>Rules</dt><dd>${rulesText(c)}</dd><dt>Schedule</dt><dd>${esc(planSchedText(c))}${c.sched.sto?' · STO':''} · next ${planNext(c)}</dd><dt>Journeys</dt><dd>${u.join(', ')||'not referenced'}</dd></dl>
       <div class="note span2">Read-only overview of the whole campaign. Submitting and approving happen in the <b>Approval</b> step. No messages are sent from this environment.</div></div>`; }
   const rd=campReady(c);
@@ -3655,6 +3668,7 @@ function renderCampDetail(card){
   card.querySelectorAll('[data-k]').forEach(el=>{ const h=()=>{ const k=el.dataset.k; if(el.type==='checkbox') c[k]=el.checked; else if(el.type==='range'){ c[k]=+el.value; g('prio-out').textContent=el.value; return; } else c[k]=el.value; if(k==='category'){ c.sub=(CAMP_CATS[c.category]||[''])[0]; renderCampDetail(card); } if((k==='type'||k==='cg')&&campStep===0) renderCampDetail(card); }; el.oninput=h; el.onchange=h; });
   card.querySelectorAll('[data-pr]').forEach(el=>{ el.oninput=el.onchange=()=>{ c.promo[el.dataset.pr]=el.value; }; });
   card.querySelectorAll('.cnt').forEach(cn=>{ const inp=cn.parentElement.querySelector('[maxlength]'); if(inp) inp.addEventListener('input',()=>cn.textContent=`${inp.value.length}/${inp.maxLength}`); });
+  if(campStep===0) card.querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>{ campSetGoal(c,b.dataset.goal); renderCampDetail(card); });
   if(campStep===0) card.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{ const ch=b.dataset.ch; c.channels=c.channels||[]; const i=c.channels.indexOf(ch); if(i>=0) c.channels.splice(i,1); else { const kind=campKind(c); if(kind&&CH_KIND[ch]!==kind){ toast('Push and pull don\'t mix',`${chName(ch)} is a ${CH_KIND[ch]} channel; this campaign already uses ${kind} channels (${c.channels.map(chName).join(', ')}). Remove them first, or make a second campaign / a journey.`,'warn'); return; } c.channels.push(ch); } syncPlans(c); renderCampDetail(card); });
   if(campStep===1){
     g('tg-q').oninput=e=>{ tgQ=e.target.value; const v=tgQ; renderCampDetail(card); const i=g('tg-q'); i.focus(); i.setSelectionRange(v.length,v.length); };
@@ -5349,8 +5363,8 @@ const TOURS={
     title:'Pick a goal, then start building', body:'The goal and <b>push or pull</b> set sensible defaults — a <b>Retention</b> goal files it under Retention, <b>We send it</b> starts it on SMS. Everything stays editable. <b>Start building</b> opens the editor with its steps.',
     advance:{until:()=>campMode==='detail'},
     sample:()=>{ ccObj=ccObj||'Retention'; const b=document.getElementById('cc-start'); if(b) b.click(); }},
-   {id:'type', view:'campaigns', before:()=>tourCampStep(0), target:'#camp-card select[data-k="type"]', placement:'bottom',
-    title:'Offer or Info?', body:'An <b>Offer</b> campaign gives something — a discount, a bonus, a package. An <b>Info</b> campaign only tells people something, so it skips the Offer step entirely. Ours is an Offer.',
+   {id:'type', view:'campaigns', before:()=>tourCampStep(0), target:'#camp-goal', placement:'bottom',
+    title:'The goal you picked', body:'The goal from the first screen is here, and it decides the rest: <b>Informational</b> only tells people something, so it skips the Offer step; every other goal is an <b>Offer</b> campaign and is filed under its category. Ours is Retention.',
     advance:'next'},
    {id:'channels', view:'campaigns', before:()=>tourCampStep(0), target:'#camp-card .chgrp', placement:'top',
     title:'Pick the channels', body:'<b>Push</b> means we send it: SMS, e-mail, push, telemarketing. <b>Pull</b> means it waits to be shown when the customer comes to the app or the portal. A campaign uses one kind or the other, never both. Pick <b>SMS</b>.',
