@@ -2,6 +2,9 @@
 
 Version numbers follow the published artifact versions.
 
+## v51 — 24 Sept 2026
+**Offers and Policies hidden from every role** (decision X6). Their menu entries are hidden by one `HIDDEN_VIEWS` set in `applyRole()`; the pages, their render functions and their `data-roles` stay in the file, so taking a name out of the set brings a page back. The journey Offer step's *Open offer* link is hidden with it; the campaign Offer step is unchanged. The menu is two entries shorter.
+
 ## v50 — 24 Sept 2026
 **Demo campaigns in the approval loop.** Two seeded campaigns so the Marketer strip, Needs attention and the approver tour are not empty in a demo: **2004 · 5G upgrade reminder — e-mail** (Pending approval, submitted by another marketer, waiting 3 days) and **2613 · Win-back 15 % — autumn** (sent back by the approver with a note, back in Draft). The marketer's *Needs your action* now reads "1 draft · 1 rejected" and *Waiting for approval* "1 · oldest waiting 3 days"; the approver can run *Review and approve a campaign* without first running the marketer tour. Neither campaign has sent, so no aggregate figure changes.
 

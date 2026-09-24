@@ -31,7 +31,7 @@ what, in what order, with what feedback.
 
 | Role | What they do | What they see |
 | --- | --- | --- |
-| **Marketer** | Builds campaigns, journeys, segments, surveys and content. | Dashboard, Program, Campaign, Journey Builder, Offers, Policies, Segments, Surveys, Reports, Operation analysis, Journey Monitor. |
+| **Marketer** | Builds campaigns, journeys, segments, surveys and content. | Dashboard, Program, Campaign, Journey Builder, Segments, Surveys, Reports, Operation analysis, Journey Monitor. |
 | **Approver** (checker) | Reviews and activates what marketers submit. | The same plan/operate pages (Operation analysis included), plus the approval actions. No audience, survey or content authoring. |
 | **Admin** | Configures the platform: channels, senders, rule defaults, form fields, templates, licences. | Everything, including Datamart, Parameters and Release & licences. |
 | **CMO / Executive** | Watches outcomes. | Dashboard, Program and Reports only. Never the build pages. |
@@ -454,6 +454,9 @@ collapsing the menu moves each label into a tooltip.
 
 ## 11. Known gaps in the prototype
 
+- **Offers and Policies are hidden from every role** (not removed): their pages
+  are still in `index.html`, but no menu entry leads to them. Campaigns still
+  pick offers in the Offer step.
 - Reports is a layout with sample numbers, not a reporting engine.
 - Operation analysis and survey results read generated demo rows; saved views
   and new surveys last until the page reloads, and a newly attached survey

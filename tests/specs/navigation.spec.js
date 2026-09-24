@@ -7,8 +7,6 @@ const PAGES = [
   ['Program', 'view-programs'],
   ['Campaign', 'view-campaigns'],
   ['Journey Builder', 'view-journeys'],
-  ['Offers', 'view-offers'],
-  ['Policies', 'view-policies'],
   ['Segments', 'view-segmentation'],
   ['Surveys', 'view-surveys'],
   ['Reports', 'view-reports'],
@@ -40,6 +38,16 @@ test.describe('navigation', () => {
       await expect(app.locator('#crumb')).toContainText(label);
     });
   }
+
+  test('Offers and Policies stay in the code but no role sees them', async ({ app }) => {
+    for (const role of ['marketer', 'approver', 'admin', 'cmo']) {
+      await app.selectOption('#role-sel', role);
+      for (const v of ['offers', 'policies']) {
+        await expect(app.locator(`.nav button[data-view="${v}"]`)).toBeHidden();
+        await expect(app.locator(`#view-${v}`)).toHaveCount(1);
+      }
+    }
+  });
 
   test('the burger collapses the menu to an icon rail and back', async ({ app }) => {
     const shell = app.locator('.app');
