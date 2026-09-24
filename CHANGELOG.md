@@ -2,6 +2,14 @@
 
 Version numbers follow the published artifact versions.
 
+## v55 — 24 Sept 2026
+**Campaign editor: Information type, goal chip, connected stepper** (decisions C14–C16).
+- The campaign type **Info** is now **Information** everywhere it is shown — type chips, the list's Type filter, the editor header, Summary, tooltips, the readiness panel, Parameters' overlap rule. The **Info** step keeps its name. Demo data migrated.
+- The Goal field is gone from the Info step. The goal is a **header chip** (*Goal: Retention*) that opens a popover of the five goals; *Skip* campaigns read *Set goal*. Summary shows it.
+- The **stepper is one connected path**: green ✓ and a green connector for steps whose readiness item is met (Summary when all are), orange for the current step, amber for a visited step that still needs something, grey otherwise. It refreshes as you type, with the readiness panel. An Information campaign shows seven steps. The stepper fits one line at 1280 px with the menu open.
+- Fixed: opening Summary on a new campaign before Schedule threw an error.
+- Tests: campaign.spec picks goals from the header chip, checks the Information stepper and a new spec for the stepper colours; the brand audit adds the stepper states and the goal popover (8,075 text nodes, all AA).
+
 ## v54 — 24 Sept 2026
 **The goal replaces Campaign Type, Category and Sub Category in Info** (decision C13). The objective picked on *Create your campaign* now sets all three (`CAMP_GOAL`; Acquisition files under Onboarding); the Info step shows it as one Goal chip row, changeable there. Summary shows Goal. The first-campaign tour's type step points at the goal. Tests: campaign.spec selects goals instead of the type select and checks the three selects are gone.
 

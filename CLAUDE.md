@@ -44,7 +44,10 @@ Olgay Bey, then the customer.
 - **Campaign editor** is a stepper:
   `CAMP_STEPS = ['Info','Targeting','Offer','Channel & content','Communication rules','Schedule','Approval','Summary']`,
   filtered per campaign by `campStepsFor()`. Readiness is computed by `campReady()` and is
-  **advisory** — it never blocks navigation between steps.
+  **advisory** — it never blocks navigation between steps. The stepper's colours come from
+  `campReady()` (`campStepperHtml`, refreshed in place by `campStepSync`). Campaign types are
+  `Offer` and `Information` (never "Info" — that is the step); the goal is a header chip
+  (`#camp-goalchip`), not a form field.
 - **Templates vs content**: `SLOT_DEFS` / `TEMPLATES` define the *design* (admin-owned,
   slot structure per channel). `CONTENT_ITEMS` and the per-delivery slot values are the
   *text*. `tplFor` / `slotsFor` / `planPreviewHtml` bind them.

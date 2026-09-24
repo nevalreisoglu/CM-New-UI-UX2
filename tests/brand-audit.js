@@ -122,7 +122,8 @@ const probe = () => {
   const deep = [
     ['campaign-create', async () => { await page.click('.nav button[data-view="campaigns"]'); await page.click('#camp-new'); await page.click('[data-obj="Retention"]'); }],
     ['campaign-editor', async () => { await page.click('#cc-skip'); }],
-    ['campaign-list-empty', async () => { await page.click('#camp-back'); await page.fill('#camp-q', 'no such campaign'); }],
+    ['campaign-stepper-states', async () => { await page.fill('#camp-card input[data-k="name"]', 'Audit'); await page.click('.stepper button[data-step="1"]'); await page.click('.stepper button[data-step="3"]'); await page.click('#camp-goalchip'); }],
+    ['campaign-list-empty', async () => { await page.keyboard.press('Escape'); await page.click('#camp-back'); await page.fill('#camp-q', 'no such campaign'); }],
     ['dashboard-campaign-detail', async () => { await page.click('.nav button[data-view="dashboard"]'); await page.evaluate(() => { CAMPAIGNS.find((c) => c.status === 'Draft').status = 'Pending approval'; renderDashboard(); }); await page.click('#db-card [data-dbc]'); }],
     ['segment-workbench', async () => { await page.click('.nav button[data-view="segmentation"]'); await page.click('#seg-new'); await page.click('#seg-search'); }],
     ['program-detail', async () => { await page.click('.nav button[data-view="programs"]'); await page.click('#prg-card tbody tr', { timeout: 5000 }); }],

@@ -3,6 +3,12 @@ const { test, expect } = require('./fixtures');
 
 const STEPS = ['Info', 'Targeting', 'Offer', 'Channel & content', 'Communication rules', 'Schedule', 'Approval', 'Summary'];
 
+/** Pick a goal from the header chip's popover. */
+async function pickGoal(app, goal) {
+  await app.locator('#camp-goalchip').click();
+  await app.locator(`#camp-goalpop [data-goal="${goal}"]`).click();
+}
+
 /** + New campaign opens the creation screen; its skip link goes straight to an empty form. */
 async function openNewCampaign(app) {
   await app.locator('.nav button[data-view="campaigns"]').click();
@@ -39,9 +45,10 @@ test.describe('campaign creation screen', () => {
 
     await expect(app.locator('#camp-card .stepper button.on')).toContainText('Info');
     await expect(app.locator('#camp-card input[data-k="name"]')).toHaveValue('Win-back by app card');
-    await expect(app.locator('#camp-card [data-goal="Winback"]')).toHaveClass(/on/);
-    // The goal carries type and category with it; the Info step does not ask for them again.
-    await expect(app.locator('#camp-card select[data-k="type"], #camp-card select[data-k="category"], #camp-card select[data-k="sub"]')).toHaveCount(0);
+    // The goal is asked once: it is a header chip, not a field of the Info step.
+    await expect(app.locator('#camp-goalchip')).toHaveText(/Goal: Winback/);
+    await expect(app.locator('#camp-card .typechip')).toHaveText('Offer');
+    await expect(app.locator('#camp-card [data-goal], #camp-card select[data-k="type"], #camp-card select[data-k="category"], #camp-card select[data-k="sub"]')).toHaveCount(0);
     await expect(app.locator('#camp-card .chgrp')).toHaveClass(/pull-on/);
   });
 
@@ -68,25 +75,63 @@ test.describe('campaign wizard', () => {
     await expect(rows.first()).toContainText('Win-back 20% discount');
   });
 
-  test('a new campaign shows all eight steps, with Offer disabled for an Info campaign', async ({ app }) => {
+  test('a new campaign shows eight steps; an Information campaign skips Offer and shows seven', async ({ app }) => {
     await openNewCampaign(app);
     const stepper = app.locator('#camp-card .stepper button');
+    // Skip — go straight to the form: no goal yet.
+    await expect(app.locator('#camp-goalchip')).toHaveText(/Set goal/);
+    await expect(app.locator('#camp-goalchip')).toHaveClass(/unset/);
 
     // An Offer campaign can use every step.
-    await app.locator('#camp-card [data-goal="Retention"]').click();
+    await pickGoal(app, 'Retention');
+    await expect(app.locator('#camp-goalchip')).toHaveText(/Goal: Retention/);
     await expect(stepper).toHaveCount(STEPS.length);
     await expect(stepper.nth(2)).toBeEnabled();
     await expect(app.locator('#camp-card .stepper')).toContainText('Step 1 of 8');
 
-    // An Info campaign has nothing to offer, so the step stays visible but dead.
-    await app.locator('#camp-card [data-goal="Informational"]').click();
-    await expect(stepper).toHaveCount(STEPS.length);
+    // An Information campaign has nothing to offer: the step leaves the path and the
+    // connector runs from Targeting straight to Channel & content.
+    await pickGoal(app, 'Informational');
+    await expect(app.locator('#camp-card .typechip')).toHaveText('Information');
     const offer = stepper.nth(2);
-    await expect(offer).toContainText('Offer');
+    await expect(offer).toBeHidden();
     await expect(offer).toBeDisabled();
-    await expect(offer).toHaveAttribute('title', 'Info campaign — no offer');
-    await expect(offer.locator('i')).toHaveText('–');
+    await expect(offer).toHaveAttribute('title', 'Information campaign — no offer');
+    await expect(app.locator('#camp-card .stepper button:visible')).toHaveCount(7);
+    await expect(app.locator('#camp-card .stepper .sconn')).toHaveCount(6);
     await expect(app.locator('#camp-card .stepper')).toContainText('Step 1 of 7');
+  });
+
+  test('the stepper colours follow readiness, not visits, and never block', async ({ app }) => {
+    await openNewCampaign(app);
+    const step = (i) => app.locator(`#camp-card .stepper button[data-step="${i}"]`);
+    const name = app.locator('#camp-card input[data-k="name"]');
+
+    // Filling the Info step's required parts turns it green without leaving it.
+    await expect(step(0)).not.toHaveClass(/done/);
+    await name.fill('Stepper check');
+    await expect(step(0)).toHaveClass(/done/);
+    await expect(step(0)).toHaveClass(/on/);
+    await expect(step(0).locator('i')).toHaveText('✓');
+    await expect(app.locator('#camp-card .stepper .sconn').first()).toHaveClass(/ok/);
+    await expect(name).toBeFocused();
+    await expect(app.locator('#camp-card .stepper')).toContainText('readiness 1/7');
+    // Clearing it turns it back.
+    await name.fill('');
+    await expect(step(0)).not.toHaveClass(/done/);
+    await expect(app.locator('#camp-card .stepper .sconn').first()).not.toHaveClass(/ok/);
+    await name.fill('Stepper check');
+
+    // A visited step that still needs something is amber, not green; an unvisited one is neither.
+    await step(1).click();
+    await step(3).click();
+    await expect(step(1)).toHaveClass(/todo/);
+    await expect(step(1)).not.toHaveClass(/done/);
+    await expect(step(5)).not.toHaveClass(/todo|done/);
+    // Nothing blocks: any step can be clicked.
+    await step(7).click();
+    await expect(step(7)).toHaveClass(/on/);
+    await expect(step(7)).not.toHaveClass(/done/);
   });
 
   test('the name is required before leaving the Info step', async ({ app }) => {
@@ -124,7 +169,7 @@ test.describe('campaign wizard', () => {
       'Set the ground rules', 'When will it go out?', 'Send it for approval', 'Ready to launch'];
     await app.locator('.nav button[data-view="campaigns"]').click();
     await app.locator('#camp-table tr.row').first().click();
-    await app.locator('#camp-card [data-goal="Retention"]').click();
+    await pickGoal(app, 'Retention');
     const stepper = app.locator('#camp-card .stepper button');
     for (let i = 0; i < STEPS.length; i++) {
       await stepper.nth(i).click();
