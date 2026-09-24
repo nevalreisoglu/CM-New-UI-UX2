@@ -28,8 +28,9 @@ test.describe('role views', () => {
     await setRole(app, 'admin');
     const pages = await visibleNavLabels(app);
     expect(pages).toEqual(expect.arrayContaining(['Parameters', 'Campaign', 'Segments', 'Dashboard']));
-    const hidden = await app.$$eval('.nav button[data-view]', (bs) => bs.filter((b) => b.hidden).length);
-    expect(hidden, 'admin has nothing hidden').toBe(0);
+    // Offers and Policies are hidden from every role (decision X6); nothing else is hidden from the admin
+    const hidden = await app.$$eval('.nav button[data-view]', (bs) => bs.filter((b) => b.hidden).map((b) => b.dataset.view));
+    expect(hidden, 'admin sees everything except the pages hidden for all').toEqual(['offers', 'policies']);
   });
 
   test('switching to a role that cannot see the open page moves off it', async ({ app }) => {

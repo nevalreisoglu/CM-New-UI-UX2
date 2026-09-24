@@ -15,7 +15,7 @@ const URL = 'file://' + path.resolve(__dirname, '..', 'index.html') + '?notour';
 const SHOTS = path.join(__dirname, 'shots');
 const AA = 4.5, AA_LARGE = 3.0;
 
-const VIEWS = ['dashboard', 'start', 'programs', 'campaigns', 'journeys', 'monitor', 'offers', 'policies',
+const VIEWS = ['dashboard', 'start', 'programs', 'campaigns', 'journeys', 'monitor',
   'segmentation', 'surveys', 'reports', 'opsan', 'datamart', 'content', 'parameters', 'about', 'api'];
 
 const probe = () => {

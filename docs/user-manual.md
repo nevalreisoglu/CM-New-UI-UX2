@@ -22,7 +22,7 @@ tooltips, so nothing becomes unidentifiable.
 
 | Role | Sees |
 | --- | --- |
-| Marketer | Dashboard, Program, Campaign, Journey Builder, Offers, Policies, Segments, Surveys, Reports, Operation analysis, Journey Monitor |
+| Marketer | Dashboard, Program, Campaign, Journey Builder, Segments, Surveys, Reports, Operation analysis, Journey Monitor |
 | Approver | The same, minus audience, survey and content authoring, plus the approve/activate actions |
 | Admin | Everything, including Datamart, Parameters, Templates, Release & licences |
 | CMO / Executive | Dashboard, Program, Reports |
@@ -527,13 +527,13 @@ would. **Export sample (CSV)** always writes the masked values.
 
 ---
 
-## Offers, Policies, Reports
+## Reports
 
-- **Offers** — the offer catalogue; **+** adds one. Journey and campaign offer
-  steps point at these.
-- **Policies** — contact policies and eligibility rules.
 - **Reports** — campaign and journey results. **Export CSV** is disabled in the
   prototype and says so.
+
+*Offers* and *Policies* are hidden from the menu for every role for now. The
+screens are still in the prototype and can be brought back without rework.
 
 ---
 

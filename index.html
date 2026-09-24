@@ -1424,7 +1424,7 @@ tooltips, so nothing becomes unidentifiable.
 
 | Role | Sees |
 | --- | --- |
-| Marketer | Dashboard, Program, Campaign, Journey Builder, Offers, Policies, Segments, Surveys, Reports, Operation analysis, Journey Monitor |
+| Marketer | Dashboard, Program, Campaign, Journey Builder, Segments, Surveys, Reports, Operation analysis, Journey Monitor |
 | Approver | The same, minus audience, survey and content authoring, plus the approve/activate actions |
 | Admin | Everything, including Datamart, Parameters, Templates, Release & licences |
 | CMO / Executive | Dashboard, Program, Reports |
@@ -1929,13 +1929,13 @@ would. **Export sample (CSV)** always writes the masked values.
 
 ---
 
-## Offers, Policies, Reports
+## Reports
 
-- **Offers** — the offer catalogue; **+** adds one. Journey and campaign offer
-  steps point at these.
-- **Policies** — contact policies and eligibility rules.
 - **Reports** — campaign and journey results. **Export CSV** is disabled in the
   prototype and says so.
+
+*Offers* and *Policies* are hidden from the menu for every role for now. The
+screens are still in the prototype and can be brought back without rework.
 
 ---
 
@@ -2864,7 +2864,7 @@ function renderNodePanel(){
     case 'offer': { const o=OFFERS.find(x=>x.id===n.cfg.offer)||{};
       html+=sel('offer','Offer',OFFERS.map(x=>x.id),id=>{ const x=OFFERS.find(y=>y.id===id); return x?`${x.id} · ${x.name}`:id; })
       +`<dl class="kv"><dt>Catalog</dt><dd class="mono">${esc(o.catalog||'')}</dd><dt>Priority</dt><dd>${o.priority}</dd><dt>Tags</dt><dd>${(o.tags||[]).join(' › ')}</dd><dt>Activation</dt><dd>${esc(o.activation||'')}</dd></dl>`
-      +sel('priorityBoost','Priority rule (customer level)',PRIO)+`<button class="btn sm outline" id="goto-offer">Open offer</button>`; break; }
+      +sel('priorityBoost','Priority rule (customer level)',PRIO)+(HIDDEN_VIEWS.has('offers')?'':`<button class="btn sm outline" id="goto-offer">Open offer</button>`); break; }
     case 'nbo': html+=sel('source','Decision source',NBO_SOURCES)+sel('scope','Candidate offers',NBO_SCOPES)+sel('min','Minimum score',NBO_MIN)+sel('fallback','Fallback offer',OFFERS.map(x=>x.id),id=>{ const x=OFFERS.find(y=>y.id===id); return x?`${x.id} · ${x.name}`:id; })
       +`<div class="sec">How it decides</div><dl class="kv"><dt>Input</dt><dd>customer profile + candidate offers in scope</dd><dt>Decision</dt><dd>Digital Twin NBO score per offer; Business Assurance checks eligibility and conflicts against live BSS state</dd><dt>Output</dt><dd>journey variable <span class="mono">nbo.offer</span>, used by the next delivery and the Decision API</dd></dl><div class="note">Today: NBO and Business Assurance live in Digital Twin; ECM offers "AI recommended target list". Proposed: this step calls the Digital Twin decision API per customer inside the journey.</div>`; break;
     case 'par': html+=f('branches','Branches',n.cfg.branches)+sel('join','Join rule',JOINS)+`<div class="note">All parallel branches are live for the customer at the same time; the join waits for all (or first) before continuing.</div>`; break;
@@ -3023,10 +3023,13 @@ function render(){ renderCanvas(); renderNodePanel(); renderOffers(); renderPoli
 document.querySelectorAll('.nav button[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 
 /* role view — pages and actions follow the signed-in role (persona decision from the UX meeting) */
+/* Pages kept in the code but hidden from every role (decision X6). Their render functions still run,
+   so taking a view out of this set brings it back unchanged. */
+const HIDDEN_VIEWS=new Set(['offers','policies']);
 const ROLE_NAMES={marketer:'Marketer',approver:'Approver',admin:'Etiya Admin',cmo:'CMO / Executive'};
 let ROLE='marketer';
 function applyRole(r){ ROLE=r; document.getElementById('role-lbl').textContent=ROLE_NAMES[r];
-  document.querySelectorAll('.nav button[data-roles]').forEach(b=>{ b.hidden=!b.dataset.roles.split(' ').includes(r); });
+  document.querySelectorAll('.nav button[data-roles]').forEach(b=>{ b.hidden=HIDDEN_VIEWS.has(b.dataset.view)||!b.dataset.roles.split(' ').includes(r); });
   document.querySelectorAll('.nav .grp[data-grp]').forEach(g=>{ g.hidden=![...document.querySelectorAll(`.nav button[data-grp="${g.dataset.grp}"]`)].some(b=>!b.hidden); });
   const cur=document.querySelector(`.nav button[data-view="${curView}"]`);
   if(!cur||cur.hidden){ const first=[...document.querySelectorAll('.nav button[data-view]')].find(b=>!b.hidden); if(first) showView(first.dataset.view); else showView('monitor'); } else render();
