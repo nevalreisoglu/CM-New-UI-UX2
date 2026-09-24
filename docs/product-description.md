@@ -88,23 +88,43 @@ want. Each step of the editor then opens with a heading in the marketer's voice
 (*Tell us about your campaign*, *Who will you reach?* … *Ready to launch*); the
 stepper labels stay short.
 
-**Steps are not a wizard you must finish in order.** You can jump to any step.
-The **readiness panel** on the right lists the seven things that make a campaign
-complete, ticks what is done, and links to whatever is not. It never blocks
-saving. Parts of a campaign are done by different people on different days, and
-the UI now says so out loud: *"nothing here blocks saving"*.
+**Steps are not a wizard you must finish in order.** You can jump to any step,
+and nothing blocks saving: parts of a campaign are done by different people on
+different days.
+
+**Readiness means "ready to submit", and counts only what the maker does.** Six
+items — name, period and channels; a target with customers in it; an offer (not
+for Information campaigns, which count five); content for every required slot
+of every channel, variant B included; an explicit rules choice; an explicit
+schedule choice. Approval is not an item — the marketer cannot complete it — so
+the Approval step shows a **state**: not submitted, pending, approved or
+rejected. The header reads *Ready to submit: n of 6*.
+
+**Defaults are not counted as done.** Communication rules start with *Apply the
+standard rules* and *Customise for this campaign* both unselected; Schedule
+starts with *Run now* and *Schedule* both unselected. A preselected Run now made
+an accidental immediate send one click away.
+
+**Readiness lives where the work is, not in a side panel.** The panel that
+listed the items repeated the stepper, took a fifth of the width and still did
+not say what was missing inside a step. Now the stepper carries it, a step's
+tooltip lists what it still needs in plain words (*SMS: message is empty*),
+empty required fields are marked once you have left the step or tried to
+submit, Summary opens with **Before you can submit** — each item linked to its
+step and field — and **Submit for approval** with anything missing opens the
+same list as a dialog instead of submitting.
 
 **The stepper is one connected path, coloured by readiness.** A line joins the
 steps; a step whose readiness item is met is green with a ✓ and the line after
 it is green (Summary turns green when every item is met); the current step keeps
 its orange highlight; a step you visited that still needs something has an
-amber outline and dot; the rest are grey. The colours follow `campReady()`, not
-clicks, update as you type, and never block moving between steps.
+amber outline and dot; the rest are grey. Approval is grey, amber, green or red
+with the approval state. The colours follow `campReady()`, not clicks, update
+as you type, and never block moving between steps.
 
 **Steps that do not apply leave the path.** An Information campaign has no
 offer, so the stepper shows seven steps and runs from Targeting straight to
-Channel & content; the readiness panel still lists *"Offer (Information
-campaign — skipped)"*, so nothing silently disappears.
+Channel & content, and *Ready to submit* counts five.
 
 Step by step:
 
@@ -119,19 +139,23 @@ Step by step:
    admin turns them on per customer in Parameters, so single-brand operators
    never see a brand picker.
 2. **Targeting** — two columns: available segments on the left, the target on
-   the right, with a live count. Exclusions are channel-scoped.
+   the right, with a live count of customers and of the segments you included
+   and excluded; the global exclusion lists are a separate quiet line, since
+   the marketer did not add them. Exclusions are channel-scoped.
 3. **Offer / NBO** — name offers, or hand the choice to Next Best Offer.
    Optional promo code. Skipped for Information campaigns.
 4. **Channel & content** — one content block per channel, written into the
    slots of a chosen template, with a live render (phone frame for SMS/push,
    mail frame for e-mail). A/B and dynamic content are two independent
    switches. Content can be copied from another campaign.
-5. **Communication rules** — contact policies, frequency caps, quiet hours.
-6. **Schedule** — when it runs. The pre-sent period lives in Parameters now, not
-   here.
-7. **Approval** — its own step, with a timeline of who did what. The approver
-   activates; the marketer cannot.
-8. **Summary** — everything on one page for the final read.
+5. **Communication rules** — an explicit choice: apply the standard rules from
+   Parameters (shown read-only) or customise them for this campaign.
+6. **Schedule** — an explicit choice: Run now or Schedule, with its date and
+   time. The pre-sent period lives in Parameters now, not here.
+7. **Approval** — its own step, with a timeline of who did what and the
+   approval state. The approver activates; the marketer cannot.
+8. **Summary** — *Before you can submit* at the top, then everything on one page
+   for the final read.
 
 ---
 
