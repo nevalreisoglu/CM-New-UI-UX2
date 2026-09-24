@@ -61,9 +61,9 @@ test.describe('campaign wizard', () => {
     const all = await rows.count();
     expect(all).toBeGreaterThan(0);
 
-    await app.locator('#camp-q').fill('Win-back');
+    await app.locator('#camp-q').fill('Win-back 20%');
     await expect(rows).toHaveCount(1);
-    await expect(rows.first()).toContainText('Win-back');
+    await expect(rows.first()).toContainText('Win-back 20% discount');
   });
 
   test('a new campaign shows all eight steps, with Offer disabled for an Info campaign', async ({ app }) => {

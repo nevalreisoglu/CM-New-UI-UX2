@@ -629,8 +629,10 @@ branching rule skipped.
 - **Nothing is saved.** Reloading starts over from the sample data.
 - **Nothing is sent.** Test sends raise a toast instead. Operation analysis
   exports a real CSV — of demo rows.
-- The sample data is 30 customers, 16 campaigns and 3 journeys. Every name,
-  number and address in it is made up.
+- The sample data is 30 customers, 18 campaigns and 3 journeys. Two of the
+  campaigns are in the approval loop: **2004** is waiting for approval and
+  **2613** was sent back by the approver, so the dashboard and the approver
+  tour have something to show. Every name, number and address is made up.
 - **Esc** closes any dialog: the manual, the report, new journey, the journey
   list, the segment assistant and the Operation analysis side panel.
 - The prototype opens on the **Dashboard**.

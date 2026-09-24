@@ -24,7 +24,7 @@ With GitHub Pages enabled on this repo it is served at the repo's Pages URL.
 - **Etiya brand kit** — navy and lilac primary, orange as accent, turquoise as action, Roboto throughout. Palette, token map and contrast rules in [`docs/brand.md`](docs/brand.md); `tests/brand-audit.js` checks every rendered text node against AA.
 - Tooltips on every meaningful field.
 
-Demo data only (30 customers, 16 campaigns, 3 journeys). Nothing is sent.
+Demo data only (30 customers, 18 campaigns, 3 journeys). Nothing is sent.
 
 ## Repository layout
 

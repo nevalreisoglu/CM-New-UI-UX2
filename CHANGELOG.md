@@ -2,6 +2,9 @@
 
 Version numbers follow the published artifact versions.
 
+## v50 — 24 Sept 2026
+**Demo campaigns in the approval loop.** Two seeded campaigns so the Marketer strip, Needs attention and the approver tour are not empty in a demo: **2004 · 5G upgrade reminder — e-mail** (Pending approval, submitted by another marketer, waiting 3 days) and **2613 · Win-back 15 % — autumn** (sent back by the approver with a note, back in Draft). The marketer's *Needs your action* now reads "1 draft · 1 rejected" and *Waiting for approval* "1 · oldest waiting 3 days"; the approver can run *Review and approve a campaign* without first running the marketer tour. Neither campaign has sent, so no aggregate figure changes.
+
 ## v49 — 24 Sept 2026
 **Dashboard KPIs readable at operator scale** (decisions D13, D14).
 - Aggregate figures on the dashboard (strip and panels) and on Reports go through one `scaleRows()` with `DEMO_SCALE = 1900`: ≈ 2.4M delivered, 55K converted customers (2.3 %), 19K extra conversions (35 %), ₴ 40M revenue, ₴ 2.7M spend, ROI 4.1x over 30 days. Row-level screens keep the 30-customer demo set. A *Demo figures at operator scale* pill sits next to *as of*. Unit economics: ₴ 720 per conversion, ₴ 1.10 per message; ROI = net ÷ spend.
