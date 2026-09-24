@@ -178,14 +178,26 @@ Both carry a **simulation strip** (see §9).
 - **Dashboard** — the page the prototype opens on. Presets per role, and
   panels can be hidden and re-added from a fixed set; there is no panel builder.
   - **Headline strip — business outcome only.** The Executive preset shows five
-    tiles: **Campaigns** run in the period (active · ended), **Conversions**
-    (with the conversion rate), **Revenue** attributed to campaigns, **ROI**
-    (with the net contribution) and **Incremental** conversions measured against
-    the control group (with their share of all conversions). Each tile has a
-    sparkline of the period's daily series and a delta against the previous
-    period. Revenue and ROI are marked *BSS feed, demo*: in the prototype they
-    are derived from the conversions (₴186 per conversion; ROI = incremental
-    revenue ÷ sending cost at ₴0.06 per message). The **Marketer preset** shows
+    tiles, and every one carries its denominator or comparison on the second
+    line, never a bare percentage: **Campaigns** run in the period (active ·
+    ended); **Converted customers** — the unit in the label, "2.3 % of
+    delivered · 2.4M delivered" underneath, a tooltip saying what counts as a
+    conversion; **Revenue** with the average per conversion; **ROI** with net
+    and spend; and **Extra conversions from campaigns** — a two-segment bar,
+    baseline grey and incremental turquoise, that sums to the converted total,
+    with "n would have converted anyway · n thanks to campaigns", the share of
+    all conversions, and a tooltip that walks through the control-group
+    arithmetic. Each tile has a sparkline of the period's daily series and a
+    delta against the previous period; a zero change says "no change" with no
+    arrow. Revenue and ROI are marked *BSS feed, demo*: in the prototype they
+    are derived from the conversions (₴ 720 ARPU uplift per conversion, ₴ 1.10
+    per message sent; ROI = net ÷ spend).
+  - **Operator scale.** Aggregate figures on the dashboard and on Reports are
+    multiplied once (`DEMO_SCALE`) so the CMO view reads as it would in
+    production — millions delivered, tens of thousands converted — and a pill
+    says *Demo figures at operator scale*. The row-level screens (campaign
+    list, targeting, journeys, Operation analysis) keep the 30-customer demo
+    set, because they are about individual records. The **Marketer preset** shows
     the state of the marketer's work instead: **Needs your action** (drafts,
     rejected, without content, ending within 7 days), **Waiting for approval**
     (with the oldest wait), **Going out this week** (scheduled sends, the next

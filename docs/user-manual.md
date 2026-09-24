@@ -131,14 +131,24 @@ five tiles:
 | Tile | Big number | Line under it |
 | --- | --- | --- |
 | Campaigns | campaigns that ran in the period | how many are active and how many ended |
-| Conversions | conversions | the conversion rate |
-| Revenue | revenue, in ₴ | "attributed to campaigns" |
-| ROI | e.g. `4.7x` | the net contribution |
-| Incremental | conversions the control group says would not have happened | share of all conversions |
+| Converted customers | customers who took the action the campaign asked for | "2.3% of delivered · 2.4M delivered" — the share and what it is a share of |
+| Revenue | revenue, in ₴ | the average per conversion and the conversion count |
+| ROI | e.g. `4.1x` | net and spend |
+| Extra conversions from campaigns | conversions the control group says would not have happened | a bar split into "would have converted anyway" (grey) and "thanks to campaigns" (turquoise) — together they are the converted total — then the share of all conversions |
 
-Each tile has a small sparkline of the period, day by day, and the change
-against the previous period. Revenue and ROI say **BSS feed, demo**: in the
-prototype they are calculated from the conversions, not read from billing.
+Hover the **i** on Converted customers and Extra conversions for what is
+counted and the control-group arithmetic. Each tile has a small sparkline of
+the period, day by day, and the change against the previous period; when
+nothing changed it says *no change*, with no arrow. Revenue and ROI say **BSS
+feed, demo**: in the prototype they are calculated from the conversions, not
+read from billing.
+
+**Demo figures at operator scale** (the pill next to *as of*): the totals on
+the dashboard and on Reports are multiplied to a telecom operator's scale so
+the screen reads as it would in production. The lists, targeting counts,
+journeys and Operation analysis show the small 30-customer demo set as it is —
+so a campaign that reaches 12 customers in Targeting shows tens of thousands
+delivered here. That is the scale, not a bug.
 As a **marketer** the strip is about your work, not totals:
 
 | Tile | Big number | Line under it |
