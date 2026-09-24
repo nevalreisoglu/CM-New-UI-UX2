@@ -138,7 +138,9 @@ const probe = () => {
     ['survey-attach-pull', async () => { await page.click('.nav button[data-view="campaigns"]'); await page.click('#camp-new'); await page.fill('#cc-name', 'Audit'); await page.click('#cc-start'); await page.evaluate(() => { campDraft.channels = ['wsc']; syncPlans(campDraft); campDraft.plans[0].survey = 'SRV-02'; campStep = 3; renderCampaigns(); }); }],
     ['dashboard-executive', async () => { await page.selectOption('#role-sel', 'cmo'); await page.click('.nav button[data-view="dashboard"]'); }],
     ['dashboard-marketer', async () => { await page.selectOption('#role-sel', 'marketer'); await page.click('.nav button[data-view="dashboard"]'); await page.click('#db-card .db-hd .tile[data-dbc]'); }],
-    ['journey-report', async () => { await page.selectOption('#role-sel', 'admin'); await page.click('.nav button[data-view="journeys"]'); await page.click('#btn-report', { timeout: 5000 }); }],
+    ['journey-list-advanced', async () => { await page.keyboard.press('Escape'); await page.selectOption('#role-sel', 'admin'); await page.click('.nav button[data-view="journeys"]'); await page.click('#jl-adv'); await page.click('[data-jmore="JRN-07"]'); }],
+    ['journey-create', async () => { await page.click('#jl-new'); await page.click('[data-trig="schedule"]'); }],
+    ['journey-report', async () => { await page.selectOption('#role-sel', 'admin'); await page.click('.nav button[data-view="journeys"]'); await page.click('#jl-table [data-jopen="JRN-20"]'); await page.click('#btn-report', { timeout: 5000 }); }],
   ];
   for (const [name, go] of deep) {
     try { await go(); } catch (e) { console.log('skip', name, e.message.slice(0, 50)); continue; }

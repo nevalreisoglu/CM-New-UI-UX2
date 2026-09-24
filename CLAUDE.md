@@ -57,6 +57,8 @@ Olgay Bey, then the customer.
   Elimination reasons are `ELIM_REASONS`, shared with the dashboard funnel.
 - **Surveys** (`SURVEYS`) are content: attached per channel as `plan.survey` or on a journey
   Delivery step (`cfg.survey`); results are the Surveys tab of Operation analysis.
+- **Journey Builder** opens on a list (`jMode`: `list` · `create` · `canvas`, `renderJourneysView()`);
+  `jOpen(id)` is the only way onto the canvas.
 - **Programs** are business initiatives with a goal, a contact cap, member campaigns and
   journeys, and a Gantt timeline (`.gantt`).
 - Design tokens are CSS custom properties in `:root`. Some names are historical
@@ -70,7 +72,7 @@ Olgay Bey, then the customer.
    ```
    cd tests && npm install && npx playwright install chromium && npm run check
    ```
-   Also run `camp2.js`, `seg4.js`, `dash.js`, `prg.js`, `eml.js`, `ops.js`, `srv.js`. An empty error list is
+   Also run `camp2.js`, `seg4.js`, `dash.js`, `prg.js`, `eml.js`, `ops.js`, `srv.js`, `jlist.js`. An empty error list is
    the pass condition. Check 1280 px and 1440 px, menu open and collapsed.
 3. Commit in logical steps with a clear message; add a `CHANGELOG.md` entry per version.
 4. If a decision was made along the way, append it to `docs/decisions.md`.

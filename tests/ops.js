@@ -70,7 +70,7 @@ const noHScroll = (p) => p.evaluate(() => document.documentElement.scrollWidth <
   const failed = await page.$eval('.ops-hd .tile:last-child', (t) => ({ v: +t.querySelector('.v').textContent.replace(/,/g, ''), bad: t.classList.contains('bad') }));
   check(failed.v === 0 || failed.bad, `Failed is red when above zero (${failed.v})`);
   let h = await heads(page);
-  check(JSON.stringify(h) === JSON.stringify(['Campaign', 'Status', 'Channel', 'Delivery type', 'Execution date', 'Targeted', 'Delivered', 'Eliminated', 'Control group', 'Delivery status']), 'default columns: ' + h.join(' · '));
+  check(JSON.stringify(h) === JSON.stringify(['Source', 'Status', 'Channel', 'Delivery type', 'Execution date', 'Targeted', 'Delivered', 'Eliminated', 'Control group', 'Delivery status']), 'default columns: ' + h.join(' · '));
   check(!h.some((x) => /ID$/.test(x)), 'technical ids are hidden by default');
   await page.click('#ops-tech');
   h = await heads(page);
@@ -90,7 +90,7 @@ const noHScroll = (p) => p.evaluate(() => document.documentElement.scrollWidth <
   await page.screenshot({ path: path.join(SHOTS, 'ops-columns.png') });
   await page.click('#ops-colreset');
   await page.keyboard.press('Escape');
-  check((await heads(page))[0] === 'Campaign' && !(await page.$('.ops-cols:not([hidden])')), 'Default columns restores the layout; Esc closes the chooser');
+  check((await heads(page))[0] === 'Source' && !(await page.$('.ops-cols:not([hidden])')), 'Default columns restores the layout; Esc closes the chooser');
 
   console.log('\nsort and resize');
   await page.click('#ops-grid [data-sort="targeted"]');
@@ -132,7 +132,7 @@ const noHScroll = (p) => p.evaluate(() => document.documentElement.scrollWidth <
   const [dl] = await Promise.all([page.waitForEvent('download'), page.click('#ops-csv')]);
   const csv = fs.readFileSync(await dl.path(), 'utf8').split('\n');
   check(dl.suggestedFilename().startsWith('operation-analysis-del'), 'a real download: ' + dl.suggestedFilename());
-  check(csv.length === before + 1 && csv[0].startsWith('"Campaign","Status","Channel"'), `CSV holds the header and ${before} rows`);
+  check(csv.length === before + 1 && csv[0].startsWith('"Source","Status","Channel"'), `CSV holds the header and ${before} rows`);
   check(await page.$eval('.ops-gt > button[disabled]', (b) => b.textContent.includes('Excel') && !!b.title), 'Export Excel is a concept button, disabled with a tooltip');
 
   console.log('\nthe side panel');
@@ -165,6 +165,28 @@ const noHScroll = (p) => p.evaluate(() => document.documentElement.scrollWidth <
   await page.click('#ops-reset');
   check((await page.textContent('#ops-campbtn')).includes('All campaigns') && await page.$eval('.fchip[data-opr="30"]', (b) => b.classList.contains('on')), 'Reset clears the scope');
 
+  console.log('\ncampaigns and journeys');
+  await page.selectOption('#ops-src', 'journey');
+  const jr = await page.$$eval('#ops-grid tbody tr[data-oid]', (trs) => trs.map((tr) => tr.children[0].textContent.trim()));
+  check(jr.length > 0 && jr.every((t) => t.startsWith('Journey') && /JRN-\d+/.test(t)), `Source = Journeys shows journey deliveries only (${jr.length} on this page)`);
+  await page.click('#ops-grid tbody tr[data-oid]');
+  await page.waitForSelector('#ops-drawer:not([hidden])');
+  check(/Open journey ›/.test(await page.textContent('#ops-drawer .df')), 'a journey row links to its journey');
+  await page.click('#ops-drawer [data-go^="journeys:"]');
+  await page.waitForSelector('#view-journeys.active');
+  check(await page.$eval('#jsplit', (e) => !e.hidden) && /JRN-\d+/.test(await page.textContent('#crumb .cur')), 'Open journey › lands on that journey\'s canvas');
+  await page.click('.nav button[data-view="opsan"]');
+  await page.click('#ops-campbtn');
+  const groups = await page.$$eval('.ops-camplist .ops-pgh', (g) => g.map((x) => x.textContent));
+  check(JSON.stringify(groups) === '["Journeys"]', 'with Source = Journeys the picker offers journeys');
+  await page.keyboard.press('Escape');
+  await page.selectOption('#ops-src', '');
+  await page.click('#ops-campbtn');
+  const groups2 = await page.$$eval('.ops-camplist .ops-pgh', (g) => g.map((x) => x.textContent));
+  check(JSON.stringify(groups2) === '["Campaigns","Journeys"]', 'with all sources it offers campaigns and journeys');
+  await page.keyboard.press('Escape');
+  await page.click('#ops-reset');
+
   console.log('\nEliminations');
   const et = await page.$$eval('.ops-hd .tile .l', (ls) => ls.map((l) => l.textContent.trim()));
   check(JSON.stringify(et) === JSON.stringify(['Eliminated', 'Most-triggered rule', 'Campaigns affected', 'Share of targeted']), 'summary strip: ' + et.join(' · '));
@@ -180,7 +202,7 @@ const noHScroll = (p) => p.evaluate(() => document.documentElement.scrollWidth <
   await page.click('.ops-rule[data-rule="Channel cooldown"]');
   const ruleCells = await page.$$eval('#ops-grid tbody tr', (trs) => trs.map((tr) => tr.children[2].textContent.trim()));
   check(ruleCells.length > 0 && ruleCells.every((t) => t === 'Channel cooldown'), 'clicking a bar filters the grid to that rule');
-  check(JSON.stringify(await heads(page)) === JSON.stringify(['Campaign', 'Customer', 'Rule', 'Channel', 'Execution date', 'Marketing list']), 'grid: Campaign · Customer · Rule · Channel · Execution date · Marketing list');
+  check(JSON.stringify(await heads(page)) === JSON.stringify(['Source', 'Customer', 'Rule', 'Channel', 'Execution date', 'Marketing list']), 'grid: Source · Customer · Rule · Channel · Execution date · Marketing list');
   await page.screenshot({ path: path.join(SHOTS, 'ops-eliminations.png') });
   await page.click('.ops-rule[data-rule="Channel cooldown"]');
 

@@ -146,6 +146,7 @@ const lastQ = (p) => p.$$('.srv-q').then((qs) => qs.length - 1);
 
   console.log('\nattach it to a journey Delivery step');
   await page.click('.nav button[data-view="journeys"]');
+  await page.click('#jl-table [data-jopen="JRN-07"]');
   const dnode = await page.evaluate(() => { const j = JOURNEYS.find((x) => x.id === curJ); const n = j.nodes.find((x) => x.type === 'delivery'); selNode = n.id; renderCanvas(); renderNodePanel(); return n.id; });
   check(!!(await page.$('#f-survey')), `the Delivery step ${dnode} has Attach survey`);
   await page.selectOption('#f-survey', { index: 1 });

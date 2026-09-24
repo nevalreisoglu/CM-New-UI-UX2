@@ -160,7 +160,29 @@ read.
 
 ## 7. Journeys
 
-The **Journey Builder** is a canvas of typed steps — entry, delivery, timer,
+**Journey Builder opens on a list, like Campaign.** Campaign and journey are
+equal top-level entities, and an operator with fifty journeys has to be able to
+search them. The **Journey List** uses the campaign list's components: a search
+by name or ID, status chips (Draft · Active · Paused · Ended), **Advanced
+filters** (program, trigger type, channel used in a delivery step, owner,
+datamart, updated date range), and per row the journey with its program, its
+status, a **validation indicator** (the journey's checks — entry, exits,
+reachability, content, active offers — as a small bar with the unresolved items
+in the tooltip, the way the campaign list shows readiness), the trigger with its
+event or segment, steps, version, customers inside, entered, converted and
+conversion rate, and the last update with its owner. **Open** goes to the
+canvas; **More** holds Monitor, Execution report, Copy and Pause / Resume (for
+approvers and admins).
+
+**A new journey starts on a creation screen**, the same centred one as a
+campaign: a name, a description and **what starts it** as three cards — *When
+something happens* (an event), *When someone enters a segment*, *On a schedule*
+— each revealing its one follow-up field. **Start building** creates a Draft
+with the entry step on the canvas; *Start from a template* opens a copy of an
+existing journey. On the canvas, **‹ Journey list** goes back, and the journey
+dropdown stays as a quick switcher.
+
+The **Journey Builder** canvas of typed steps — entry, delivery, timer,
 wait, condition, offer, NBO, parallel, external call, exit — colour-coded by
 type, connected by edges you draw from a step's out port. Delivery steps are
 owned by the journey, with their content written in the step.
@@ -341,7 +363,11 @@ redesign adds what it lacked.
 - **One scope bar** — period (last 7, 30 or 90 days), a searchable campaign
   picker, channel and campaign status, with Reset — filters every tab and stays
   put when you switch tabs.
-- **Four tabs.** *Deliveries* is one row per execution: campaign, status,
+- **Campaigns and journeys.** Journey Delivery steps produce rows too. The
+  first column is the **Source** — a Campaign or Journey chip with the object's
+  name — the scope bar has a **Source** filter (All · Campaigns · Journeys),
+  and the picker lists campaigns and journeys. Journey rows link to the journey.
+- **Four tabs.** *Deliveries* is one row per execution: source, status,
   channel, delivery type, execution date, targeted, delivered, eliminated,
   control group, delivery status. *Eliminations* shows who was removed and by
   which rule, with a breakdown by rule above the grid that uses the same reasons
