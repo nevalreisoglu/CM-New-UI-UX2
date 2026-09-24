@@ -1163,7 +1163,7 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
                 <div class="grow"></div>
                 <button class="btn sm outline" id="btn-report">Execution report</button>
               </div>
-              <div class="ctool evbar simbar" title="Demo only — not part of the product">
+              <div class="ctool evbar simbar" data-tour="j-sim" title="Demo only — not part of the product">
                 <span class="simtag">⚗ Simulation · demo only</span>
                 <label for="ev-name" style="color:var(--ink-2)">event</label><select id="ev-name"></select>
                 <label for="ev-cust" style="color:var(--ink-2)">for</label><select id="ev-cust"></select>
@@ -1530,8 +1530,10 @@ page** to just go there.
 
 Items tick themselves off when you do the real thing, not when you watch the
 tour. Saving a segment ticks "Create a segment"; submitting a campaign ticks
-"Submit a campaign for approval". Journey and Program items are marked *coming
-soon* — those tours are not built yet.
+"Submit a campaign for approval"; a journey you built that passes validation
+and has a delivery ticks "Build a journey"; a program you created with at least
+one member ticks "Group work in a program"; opening a program's **Timeline**
+ticks "Follow a program".
 
 ### What a tour looks like
 
@@ -1567,6 +1569,14 @@ leave the tour (it asks first).
 | Review and approve a campaign | Approver | From "Needs attention" to the approval step and the decision. |
 | Read the dashboard | Everyone | Period, headline KPIs, Live now, Needs attention, funnel and eliminations, control-group uplift. |
 | Admin setup | Admin | The five Parameters screens. |
+| Build your first journey | Marketer, Admin | Fifteen steps: a balance-low journey from *Create your journey* to the canvas — an SMS delivery, a Wait for event with an *accepted* branch to the goal and a *timeout* branch to a push reminder — then Validate, Activate, a test event in the simulation strip and Journey Monitor. |
+| Group work in a program | Marketer, Admin | Nine steps: a *Q4 Retention push* program with its owner, period, a goal (5,000 conversions) and a contact cap; save it, add members, read the timeline and the goal progress. |
+| Follow a program | CMO / Executive, Approver | Four read-only steps: the dashboard, the program list, a program's goal progress and its timeline. Nothing to edit. |
+
+The journey and program tours are interactive like the campaign tour: each step
+moves on when you do it, and **Do it for me** does it with sample data. After a
+reload the draft journey or program is gone (nothing is saved), so **Continue**
+picks up from *New journey* or *New program*.
 
 ### Turning it off
 
@@ -3077,7 +3087,7 @@ function buildPalette(){
   const p=document.getElementById('palette');
   Object.entries(NODE_META).filter(([t])=>t!=='entry').forEach(([t,m])=>{
     const b=document.createElement('button'); b.style.setProperty('--c',`var(--t-${t}-i)`); b.style.setProperty('--bg2',`var(--t-${t})`);
-    b.innerHTML=`<i>${m.ic}</i><span>${m.k}</span>`; b.title=m.k;
+    b.innerHTML=`<i>${m.ic}</i><span>${m.k}</span>`; b.title=m.k; b.dataset.tour='pal-'+t;
     b.addEventListener('pointerdown',e=>{ if(e.button===0) window.paletteDown(b,t,e); });
     b.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); addNode(t,{connect:true}); } });
     p.appendChild(b);
@@ -4151,7 +4161,7 @@ function renderPrgDetail(card){
   const tabs=[['overview','Overview'],['timeline','Timeline'],['members',`Members (${cs.length+js.length})`],['settings','Settings']];
   let body='';
   if(prgTab==='overview'){ const avg=st.rows.length?st.rows.reduce((t,r)=>t+r.rate,0)/st.rows.length:0; const att=[]; cs.filter(c=>c.status==='Pending approval').forEach(c=>att.push(['info',`<b>${esc(c.name)}</b> is waiting for approval`,c.id])); st.rows.filter(r=>r.c.status==='Active'&&r.rate<avg*0.6).forEach(r=>att.push(['bad',`<b>${esc(r.c.name)}</b> converts at ${pct1(r.conv,r.del)} — below the program average ${pct1(avg,1)}`,r.c.id])); cs.filter(c=>c.status==='Active'&&(new Date(c.end)-new Date(TODAY))/864e5<=7).forEach(c=>att.push(['warn',`<b>${esc(c.name)}</b> ends on ${c.end.slice(0,10)}`,c.id])); cs.filter(c=>c.status==='Draft').forEach(c=>att.push(['info',`<b>${esc(c.name)}</b> is still a draft (readiness ${campReady(c).done}/${campReady(c).total})`,c.id]));
-    body=`<div class="db-hd" style="padding-top:12px"><div class="tile"><div class="l">Delivered</div><div class="v">${fmtN(st.del)}</div><div class="d"><span>${fmtN(st.sent)} sent · ${cs.length} campaigns</span></div></div><div class="tile"><div class="l">Opened</div><div class="v">${pct1(st.opened,st.del)}</div><div class="d"><span>${fmtN(st.opened)}</span></div></div><div class="tile"><div class="l">Clicked</div><div class="v">${pct1(st.clicked,st.opened)}</div><div class="d"><span>${fmtN(st.clicked)} of opened</span></div></div><div class="tile"><div class="l">Conversions</div><div class="v">${fmtN(st.conv)}</div><div class="d"><span>${pct1(st.conv,st.del)} of delivered</span></div></div><div class="tile ${st.prog!==null&&st.prog<50?'warn':''}"><div class="l">Goal progress</div><div class="v">${st.prog===null?'—':st.prog+'%'}</div><div class="d"><span>${p.goal&&p.goal.target?`target ${p.goal.metric==='Conversion rate'?p.goal.target+'%':fmtN(p.goal.target)+' '+p.goal.metric.toLowerCase()} · ${Math.max(0,Math.round((new Date(p.end)-new Date(TODAY))/864e5))} days left`:'set a target in Settings'}</span></div></div><div class="tile"><div class="l">Incremental (vs control group)</div><div class="v">${fmtN(st.incr)}</div><div class="d"><span>${st.rows.filter(r=>r.hasCG).length} of ${st.rows.length} campaigns have a control group</span></div></div></div>
+    body=`<div class="db-hd" style="padding-top:12px"><div class="tile"><div class="l">Delivered</div><div class="v">${fmtN(st.del)}</div><div class="d"><span>${fmtN(st.sent)} sent · ${cs.length} campaigns</span></div></div><div class="tile"><div class="l">Opened</div><div class="v">${pct1(st.opened,st.del)}</div><div class="d"><span>${fmtN(st.opened)}</span></div></div><div class="tile"><div class="l">Clicked</div><div class="v">${pct1(st.clicked,st.opened)}</div><div class="d"><span>${fmtN(st.clicked)} of opened</span></div></div><div class="tile"><div class="l">Conversions</div><div class="v">${fmtN(st.conv)}</div><div class="d"><span>${pct1(st.conv,st.del)} of delivered</span></div></div><div class="tile ${st.prog!==null&&st.prog<50?'warn':''}" data-tour="prg-goal"><div class="l">Goal progress</div><div class="v">${st.prog===null?'—':st.prog+'%'}</div><div class="d"><span>${p.goal&&p.goal.target?`target ${p.goal.metric==='Conversion rate'?p.goal.target+'%':fmtN(p.goal.target)+' '+p.goal.metric.toLowerCase()} · ${Math.max(0,Math.round((new Date(p.end)-new Date(TODAY))/864e5))} days left`:'set a target in Settings'}</span></div></div><div class="tile"><div class="l">Incremental (vs control group)</div><div class="v">${fmtN(st.incr)}</div><div class="d"><span>${st.rows.filter(r=>r.hasCG).length} of ${st.rows.length} campaigns have a control group</span></div></div></div>
     <div class="db-grid" style="padding-top:8px"><div class="db-p w8"><div class="ph">By campaign <small>— roll-up over the program period</small></div><div class="pb" style="padding:0"><table class="tbl"><thead><tr><th>Campaign</th><th>Status</th><th>Channels</th><th>Delivered</th><th>Conv.</th><th>Rate</th><th style="width:22%"></th></tr></thead><tbody>${st.rows.sort((a,b)=>b.conv-a.conv).map(r=>`<tr class="row" data-camp="${r.c.id}"><td><span class="lnk">${esc(r.c.name)}</span> <small style="color:var(--ink-3)">${r.c.id}</small></td><td>${statusPill(r.c.status)}</td><td>${(r.c.channels||[]).map(ch=>`<span class="chip">${chName(ch)}</span>`).join(' ')}</td><td class="num">${fmtN(r.del)}</td><td class="num">${fmtN(r.conv)}</td><td class="num">${pct1(r.conv,r.del)}</td><td><div style="height:8px;border-radius:4px;background:var(--surface-2)"><div style="height:8px;border-radius:4px;background:var(--green);width:${Math.round(100*r.del/Math.max(1,st.rows[0].del))}%"></div></div></td></tr>`).join('')||'<tr><td colspan="7" class="empty">No campaign with sends yet.</td></tr>'}</tbody></table></div></div>
       <div class="db-p"><div class="ph">Needs attention</div><div class="pb"><ul class="att">${att.map(([k,t,id])=>`<li class="${k}" data-camp="${id}"><i></i><div>${t}</div></li>`).join('')||'<li class="info"><i></i><div>Nothing needs attention in this program.</div></li>'}</ul>${p.cap&&p.cap.n?`<div class="note" style="margin-top:8px">Program rule: at most <b>${p.cap.n}</b> contact${p.cap.n>1?'s':''} per customer per ${p.cap.per} across all campaigns of this program — applied on top of the global communication rules.</div>`:''}</div></div></div>`; }
   else if(prgTab==='timeline'){ const a=new Date(p.start), b=new Date(p.end); const w=Math.max(1,b-a); const px=d=>Math.min(100,Math.max(0,100*(new Date(d)-a)/w)); const months=[]; for(let d=new Date(a.getFullYear(),a.getMonth(),1); d<=b; d.setMonth(d.getMonth()+1)) months.push(new Date(d)); const items=[...cs.map(c=>({k:'c',id:c.id,name:c.name,s:c.start.slice(0,10),e:c.end.slice(0,10),st:c.status,sub:(c.channels||[]).map(chName).join(', ')+' · '+planSchedText(c)})),...js.map(j=>({k:'j',id:j.id,name:j.name,s:p.start,e:p.end,st:j.status,sub:'journey · '+j.status}))].sort((x,y)=>x.s.localeCompare(y.s));
@@ -5512,6 +5522,25 @@ function tourCampStep(n){ if(campMode!=='detail') return; campStep=n; tourRerend
 const SAMPLE_TEXT='Hi {{FIRST_NAME}}, your {{PLAN}} ends on {{PACKAGE_EXPIRY_DATE}}. Renew today and get +10% data.';
 const renewalOffer=()=>(OFFERS.find(o=>/renew|top-up|bonus/i.test(o.name))||OFFERS[0]).id;
 
+/* Journey and program tours (decision X7): the same engine, the same rules — a step advances when the
+   user really does it, and every waiting step has a sample so the tour runs end to end on its own. */
+const SEED_J_IDS=new Set(JOURNEYS.map(j=>j.id)), SEED_PRG_IDS=new Set(PROGRAMS.map(p=>p.id));
+const newJourneys=()=>JOURNEYS.filter(j=>!SEED_J_IDS.has(j.id)), newPrograms=()=>PROGRAMS.filter(p=>!SEED_PRG_IDS.has(p.id));
+const tourJ=()=>newJourneys().slice(-1)[0]||null;
+const tourJNodes=t=>{ const j=tourJ(); return j?j.nodes.filter(n=>n.type===t):[]; };
+function tourJOpen(){ const j=tourJ(); if(!j) return null; if(jMode!=='canvas'||curJ!==j.id) jOpen(j.id);
+  const sp=document.getElementById('jsplit'); if(sp&&sp.classList.contains('info-closed')) document.getElementById('btn-info').click(); return j; }
+function tourJSelect(id){ selNode=id; renderCanvas(); renderNodePanel(); }
+function tourJNid(j){ let k=1; while(j.nodes.some(n=>n.id==='t'+k)) k++; return 't'+k; }
+const J_TOUR_TEXT='Your balance is low. Top up now and get +1 GB.';
+const tourPrgDraft=()=>prgMode==='detail'&&prgDraft&&!SEED_PRG_IDS.has(prgDraft.id)?prgDraft:null;
+const tourPrgSaved=()=>{ const d=tourPrgDraft(); return d?PROGRAMS.find(x=>x.id===d.id)||null:null; };
+const prgMembers=p=>prgCamps(p).length+(p.journeys||[]).length;
+function tourPrgTab(t){ if(prgMode==='detail'&&prgTab!==t){ prgTab=t; renderPrograms(); } }
+/* clicks the tours listen for without touching the screens themselves */
+document.addEventListener('click',e=>{ const t=e.target&&e.target.closest&&e.target.closest('#btn-validate,[data-trig="event"],#prg-card [data-tab="timeline"]'); if(!t) return;
+  if(t.id==='btn-validate') tourFlags.jValidated=true; else if(t.dataset.trig) tourFlags.jTrigPicked=true; else tourFlags.prgTimeline=true; },true);
+
 const TOURS={
 'first-campaign':{
   name:'Create your first campaign', mins:3, roles:['marketer','admin'],
@@ -5687,6 +5716,149 @@ const TOURS={
     advance:'next'},
    {id:'tpl', target:'.nav button[data-view="content"]', placement:'right',
     title:'Templates are designs', body:'Templates live under Administration because they are design, not copy. A template is a layout with named slots; the words that go in the slots are written inside each campaign or journey delivery.',
+    advance:'next'}
+  ]},
+
+'first-journey':{
+  name:'Build your first journey', mins:3, roles:['marketer','admin'],
+  blurb:'A balance-low journey: an SMS nudge, a wait for the top-up, a push reminder on timeout.',
+  resume:step=>step>1?{step:1,note:'The prototype does not keep a journey across a reload, so we will pick up from <b>New journey</b>.'}:null,
+  steps:[
+   {id:'nav', target:'.nav button[data-view="journeys"]', placement:'right',
+    title:'Open Journey Builder', body:'Journeys react to what a customer does, step by step over time. A campaign sends once; a journey <b>follows the customer</b>.<br><br>We’ll build one for Felix’s story: a prepaid customer whose balance is running low.',
+    advance:{until:()=>curView==='journeys'&&jMode==='list'},
+    sample:()=>jToList()},
+   {id:'new', view:'journeys', before:()=>{ if(jMode==='canvas') jToList(); }, target:'#jl-new', placement:'left',
+    title:'Start a new journey', body:'This opens <b>Create your journey</b> — the same short first screen as a campaign.',
+    advance:{until:()=>jMode==='create'},
+    sample:()=>jCreate()},
+   {id:'name', view:'journeys', before:()=>{ if(jMode!=='create') jCreate(); }, target:'#jc-name', placement:'bottom',
+    title:'Name it', body:'A name you will recognise in the list — what it reacts to and what it does.',
+    advance:{until:()=>jMode==='create'&&jcc&&jcc.name.trim().length>=3},
+    sample:()=>{ jcc.name='Balance low — top-up nudge'; renderJCreate(document.getElementById('jl-card')); }},
+   {id:'trigger', view:'journeys', before:()=>{ tourFlags.jTrigPicked=false; if(jMode!=='create') jCreate(); }, target:'#jl-card .cc-trig', placement:'bottom',
+    title:'What starts it?', body:'An event, a customer entering a segment, or a schedule. Pick <b>When something happens</b> — the balance-low signal from BSS is an event.',
+    advance:{until:()=>jMode==='create'&&jcc&&jcc.trig==='event'&&tourFlags.jTrigPicked},
+    sample:()=>{ const b=document.querySelector('#jl-card [data-trig="event"]'); if(b) b.click(); }},
+   {id:'event', view:'journeys', target:'#jc-ev', placement:'bottom',
+    title:'The event that lets a customer in', body:'<code>balance_low</code> arrives from BSS when a prepaid balance drops under the threshold. It is already chosen — any event in the list could start a journey.',
+    advance:{until:()=>jMode==='create'&&jcc&&jcc.trig==='event'&&jcc.ev==='balance_low'},
+    sample:()=>{ jcc.trig='event'; jcc.ev='balance_low'; renderJCreate(document.getElementById('jl-card')); }},
+   {id:'start', view:'journeys', target:'#jc-start', placement:'top',
+    title:'Start building', body:'Creates the journey as a <b>Draft</b> and opens the canvas with the entry step already in place.',
+    advance:{until:()=>jMode==='canvas'&&!!tourJ()&&curJ===tourJ().id},
+    sample:()=>{ if(!jcc.name.trim()) jcc.name='Balance low — top-up nudge'; const b=document.getElementById('jc-start'); if(b) b.click(); }},
+   {id:'orient', view:'journeys', before:()=>tourJOpen(), target:null,
+    title:'Find your way around', body:'The <b>palette</b> on the left holds the step types. The <b>canvas</b> in the middle is the journey — the entry step is already there, linked to a placeholder Exit. The <b>panel</b> on the right shows the selected step’s details.<br><br>Steps connect through the <b>orange ports</b>: drag from a step’s right-hand port to the next step.',
+    advance:'next'},
+   {id:'delivery', view:'journeys', before:()=>{ const j=tourJOpen(); if(j&&!tourJNodes('delivery').length) tourJSelect(j.nodes[0].id); }, target:'#palette [data-tour="pal-delivery"]', placement:'right',
+    title:'Add a message', body:'The entry step is selected. Click <b>Delivery</b> and it is placed right after it.',
+    advance:{until:()=>tourJNodes('delivery').length>0},
+    sample:()=>{ const j=tourJOpen(); if(!j) return; const e=j.nodes[0]; tourJSelect(e.id); addNode('delivery',{connect:true}); const d=tourJNodes('delivery')[0]; if(d){ d.x=e.x+251; d.y=e.y; } const ex=j.nodes.find(n=>n.type==='exit'); if(ex){ ex.x=e.x+251*4; ex.y=e.y; } renderCanvas(); fitView(); }},
+   {id:'content', view:'journeys', target:'#jp-body', placement:'left',
+    before:()=>{ const j=tourJOpen(), d=tourJNodes('delivery')[0]; if(!j||!d) return;
+      /* the placeholder link from the entry straight to Exit is replaced by the delivery */
+      const e=j.nodes[0]; if(e.next.some(x=>(typeof x==='string'?x:x.to)===d.id)) e.next=e.next.filter(x=>{ const m=node(j,typeof x==='string'?x:x.to); return !(m&&m.type==='exit'); });
+      tourJSelect(d.id); if(tourFlags.jText0===undefined||tourFlags.jTextFor!==d.id){ tourFlags.jText0=d.cfg.text; tourFlags.jTextFor=d.id; } },
+    title:'Channel, template and the journey’s own text', body:'Pick the <b>channel</b> and a <b>template</b> (the design), then write the text — it belongs to this journey. There is no schedule here: <b>timing comes from the step before</b>. Write your own message, or use <i>“Your balance is low. Top up now and get +1 GB.”</i>',
+    advance:{until:()=>{ const d=tourJNodes('delivery')[0]; return !!(d&&d.cfg.channel&&d.cfg.content&&String(d.cfg.text||'').trim()&&d.cfg.text!==tourFlags.jText0); }},
+    sample:()=>{ const d=tourJNodes('delivery')[0]; if(!d) return; d.cfg.channel='sms'; d.cfg.content=contentsFor('sms')[0]; d.cfg.text=J_TOUR_TEXT; d.label='Top-up nudge SMS'; renderCanvas(); renderNodePanel(); }},
+   {id:'wait', view:'journeys', before:()=>{ const d=tourJNodes('delivery')[0]; tourJOpen(); if(d&&!tourJNodes('wait').length) tourJSelect(d.id); }, target:'#palette [data-tour="pal-wait"]', placement:'right',
+    title:'Wait for the customer', body:'With the delivery selected, click <b>Wait for event</b>. It holds the customer until they respond — here <code>offer_accepted</code> — or until the timeout, and each outcome gets its own branch.',
+    advance:{until:()=>{ const w=tourJNodes('wait')[0]; return !!(w&&w.cfg.event&&w.cfg.timeout); }},
+    sample:()=>{ const j=tourJOpen(), d=tourJNodes('delivery')[0]; if(!j||!d) return; tourJSelect(d.id); addNode('wait',{connect:true}); const w=tourJNodes('wait')[0]; if(w){ w.cfg.event='offer_accepted'; w.cfg.timeout='1 day'; w.label='Topped up?'; w.x=d.x+251; w.y=d.y; } renderCanvas(); renderNodePanel(); fitView(); }},
+   {id:'branches', view:'journeys', before:()=>tourJOpen(), placement:'bottom',
+    /* palette and canvas both: a branch is drawn to steps outside the Wait step, and the reminder comes from the palette */
+    target:'#jb',
+    title:'Two ways out', body:'The <b>accepted</b> branch goes to <b>Exit / goal</b>. The <b>timeout</b> branch sends a <b>push reminder</b>, then exits. Drag from the Wait step’s orange port to the Exit and name it <i>accepted</i>; with the Wait step selected, click <b>Delivery</b> for the reminder.',
+    advance:{until:()=>{ const w=tourJNodes('wait')[0]; return !!(w&&w.next.length>=2); }},
+    sample:()=>{ const j=tourJOpen(), w=tourJNodes('wait')[0]; if(!j||!w) return; const x0=j.nodes[0].x, y0=j.nodes[0].y;
+      let ex=j.nodes.find(n=>n.type==='exit'&&!j.nodes.some(m=>m.type==='delivery'&&m.next.some(x=>(typeof x==='string'?x:x.to)===n.id)));
+      if(!ex){ ex={id:tourJNid(j),type:'exit',x:0,y:0,label:'Exit',cfg:{action:'End journey (no action)'},next:[]}; j.nodes.push(ex); }
+      ex.label='Goal reached'; ex.x=x0+251*3; ex.y=y0-175;
+      const r={id:tourJNid(j),type:'delivery',x:x0+251*3,y:y0+175,label:'Reminder push',cfg:Object.assign({channel:'push',content:contentsFor('push')[0],variant:'Single content',stopAfter:'1 channel',controlGroup:'off'},jPlanDefaults()),next:[]}; j.nodes.push(r); jPlanEnsure(r); r.cfg.text='Still low on balance? Top up in the app — +1 GB is waiting.';
+      const ex2={id:tourJNid(j),type:'exit',x:x0+251*4,y:y0+175,label:'Exit',cfg:{action:'Apply invitation policy 20 days'},next:[]}; j.nodes.push(ex2);
+      w.next=[{to:ex.id,label:'accepted'},{to:r.id,label:'timeout'}]; r.next=[ex2.id]; selNode=w.id; renderCanvas(); renderNodePanel(); fitView(); }},
+   {id:'validate', view:'journeys', before:()=>{ tourFlags.jValidated=false; tourJOpen(); }, target:'#btn-validate', placement:'bottom',
+    title:'Validate', body:'Checks that the entry has its event, every step is reachable and complete, and every path ends in an exit.',
+    advance:{until:()=>{ const j=tourJ(); if(!j||!tourFlags.jValidated) return false; const r=jValidate(j); return r.done===r.total; }},
+    sample:()=>{ const b=document.getElementById('btn-validate'); if(b) b.click(); }},
+   {id:'activate', view:'journeys', before:()=>tourJOpen(), target:'#btn-activate', placement:'left',
+    title:'Activate', body:'A Draft ignores every event. <b>Activate</b> starts listening for <code>balance_low</code> — this is the journey’s own activation path in the prototype; there is no separate approval step for journeys yet. Pause and Resume sit with approvers and admins.',
+    advance:{until:()=>{ const j=tourJ(); return !!(j&&j.status==='Active'); }},
+    sample:()=>{ const b=document.getElementById('btn-activate'); if(b) b.click(); }},
+   {id:'sim', view:'journeys', before:()=>{ tourJOpen(); if(typeof evName!=='undefined') evName.value='balance_low'; }, target:'[data-tour="j-sim"]', placement:'bottom',
+    title:'Try it — demo only', body:'This dashed strip is <b>not part of the product</b>: it moves a simulated clock. <b>Send event</b> <code>balance_low</code> for a test customer and watch them enter and get the SMS; then <b>Advance 1 day</b> to fire the timeout and the push reminder.',
+    advance:{until:()=>{ const j=tourJ(); return !!(j&&sim[j.id]&&Object.keys(sim[j.id].parts).length>0); }},
+    sample:()=>{ const x=excludedCids(); const c=CUSTOMERS.find(k=>!x.has(k.cid))||CUSTOMERS[0]; evName.value='balance_low'; evCust.value=c.id; sendEvent('balance_low',c.id); }},
+   {id:'monitor', target:'.nav button[data-view="monitor"]', placement:'right',
+    title:'Follow it in Journey Monitor', body:'Journey Monitor shows how many customers are at each step, who converted, and every event that was rejected by re-entry or concurrency rules. Open it from here, or from <b>More › Monitor</b> on the journey list.',
+    advance:'next'}
+  ]},
+
+'first-program':{
+  name:'Group work in a program', mins:2, roles:['marketer','admin'],
+  blurb:'A Q4 retention initiative: a goal, a contact cap, and the campaigns and journeys that serve it.',
+  resume:step=>step>1?{step:1,note:'The prototype does not keep a program across a reload, so we will pick up from <b>New program</b>.'}:null,
+  steps:[
+   {id:'nav', target:'.nav button[data-view="programs"]', placement:'right',
+    title:'Open Program', body:'A program is a business initiative, not a folder: a <b>goal</b>, a <b>period</b>, an <b>owner</b>, and the campaigns and journeys that serve it.',
+    advance:{until:()=>curView==='programs'},
+    sample:()=>showView('programs')},
+   {id:'new', view:'programs', before:()=>{ if(prgMode!=='list'&&!tourPrgDraft()){ prgMode='list'; renderPrograms(); } }, target:'#prg-new', placement:'left',
+    title:'Start one', body:'A new program opens on its <b>Settings</b>.',
+    advance:{until:()=>!!tourPrgDraft()},
+    sample:()=>prgOpen(null)},
+   {id:'basics', view:'programs', before:()=>{ if(!tourPrgDraft()) prgOpen(null); tourPrgTab('settings'); }, target:'#prg-card input[data-pk="name"]', placement:'bottom',
+    title:'Name, owner and period', body:'Name the initiative; the owner is you by default, and the period is when its members may send. We’ll call it <i>Q4 Retention push</i>.',
+    advance:{until:()=>{ const p=tourPrgDraft(); return !!(p&&p.name.trim().length>=3&&p.start&&p.end); }},
+    sample:()=>{ const p=tourPrgDraft(); if(!p) return; p.name='Q4 Retention push'; p.owner=DEMO_USERS.me; p.start='2026-09-01'; p.end='2026-12-31'; p.category='Retention'; renderPrograms(); }},
+   {id:'goal', view:'programs', before:()=>tourPrgTab('settings'), placement:'bottom',
+    target:()=>{ const s=document.querySelector('#prg-card [data-pg="metric"]'); return s?s.closest('.fld'):null; },
+    title:'The goal', body:'Pick the metric the program is judged on and a target — say <b>5,000 conversions</b>. Progress shows on the program list, the Overview and the dashboard.',
+    advance:{until:()=>{ const p=tourPrgDraft(); return !!(p&&p.goal&&+p.goal.target>0); }},
+    sample:()=>{ const p=tourPrgDraft(); if(!p) return; p.goal={metric:'Conversions',target:'5000'}; renderPrograms(); }},
+   {id:'cap', view:'programs', before:()=>tourPrgTab('settings'), placement:'top',
+    target:()=>{ const s=document.querySelector('#prg-card [data-pc="n"]'); return s?s.closest('.fld'):null; },
+    title:'Contact cap', body:'Protects customers from overlap: at most <b>N contacts per customer per week</b> across all the program’s campaigns, on top of the global rules. Two per week is a good start.',
+    advance:{until:()=>{ const p=tourPrgDraft(); return !!(p&&p.cap&&+p.cap.n>0); }},
+    sample:()=>{ const p=tourPrgDraft(); if(!p) return; p.cap={n:2,per:'week'}; renderPrograms(); }},
+   {id:'save', view:'programs', before:()=>tourPrgTab('settings'), target:'#prg-save', placement:'top',
+    title:'Save it first', body:'Save the program — members can be added once it exists.',
+    advance:{until:()=>!!tourPrgSaved()},
+    sample:()=>{ const b=document.getElementById('prg-save'); if(b) b.click(); }},
+   {id:'members', view:'programs', before:()=>tourPrgTab('members'), placement:'top',
+    /* once the picker is open it is the thing to use, so the spotlight moves onto it */
+    target:()=>{ const pk=document.getElementById('prg-picker'); return pk&&!pk.hidden?pk:document.getElementById('prg-pick'); },
+    title:'Add members', body:'<b>+ Add members</b> lists campaigns and journeys — no IDs needed, search by name. Tick what serves this program and add it.',
+    advance:{until:()=>{ const p=tourPrgSaved(); return !!(p&&prgMembers(p)>0); }},
+    sample:()=>{ const d=tourPrgDraft(), p=tourPrgSaved(); if(!d||!p) return;
+      CAMPAIGNS.filter(c=>c.status==='Active'&&(!c.program||c.program==='— none')).slice(0,2).forEach(c=>c.program=p.name);
+      const j=tourJ(); if(j){ p.journeys=[...new Set([...(p.journeys||[]),j.id])]; d.journeys=p.journeys.slice(); }
+      toast('Members added',`${prgMembers(p)} added to ${p.name}.`); renderPrograms(); }},
+   {id:'timeline', view:'programs', before:()=>tourPrgTab('timeline'), target:'#prg-card .gantt', placement:'top',
+    title:'Everything on one timeline', body:'Each member is a bar over the program period; the <b>orange line is today</b>. When more campaigns run at once than the cap allows, a warning appears above the chart — that is where customers would be contacted too often.',
+    advance:'next'},
+   {id:'overview', view:'programs', before:()=>tourPrgTab('overview'), target:'#prg-card [data-tour="prg-goal"]', placement:'bottom',
+    title:'Goal progress', body:'The Overview rolls results up across every member — delivered, conversions, control-group uplift — and measures them against the goal you set.',
+    advance:'next'}
+  ]},
+
+'follow-program':{
+  name:'Follow a program', mins:1, roles:['cmo','approver'],
+  blurb:'Read an initiative’s goal progress and its timeline. Nothing to edit.',
+  steps:[
+   {id:'dash', view:'dashboard', target:'#db-card .db-hd', placement:'bottom',
+    title:'Results start here', body:'The dashboard adds everything up. A <b>program</b> answers the next question: how is one initiative doing against its own goal?',
+    advance:'next'},
+   {id:'list', view:'programs', before:()=>{ if(prgMode!=='list'){ prgMode='list'; renderPrograms(); } }, target:'#prg-card table', placement:'top',
+    title:'The programs', body:'Every initiative with its period, owner and goal progress. Open one to see how it is doing.',
+    advance:'next'},
+   {id:'goal', view:'programs', before:()=>{ const p=PROGRAMS.find(x=>x.goal&&x.goal.target)||PROGRAMS[0]; if(prgMode!=='detail'||!prgDraft||prgDraft.id!==p.id) prgOpen(p.id); tourPrgTab('overview'); }, target:'#prg-card [data-tour="prg-goal"]', placement:'bottom',
+    title:'Goal progress', body:'How far the program is towards its target, and how many days are left. The tiles beside it roll up every member campaign.',
+    advance:'next'},
+   {id:'timeline', view:'programs', before:()=>{ tourPrgTab('timeline'); tourFlags.prgTimeline=true; }, target:'#prg-card .gantt', placement:'top',
+    title:'The timeline', body:'Every campaign and journey of the program over its period; the orange line is today. Overlaps are where the program’s contact cap protects customers.',
     advance:'next'}
   ]}
 };
@@ -5949,9 +6121,12 @@ const START_CHECKS={
   'rule-defaults':()=>!!tourFlags.rulesTouched,
   'channels':()=>!!tourFlags.channelsTouched,
   'templates':()=>visited('content'),
-  'users-roles':()=>false
+  'users-roles':()=>false,
+  'build-journey':()=>newJourneys().some(j=>j.nodes.some(n=>n.type==='delivery')&&(r=>r.done===r.total)(jValidate(j))),
+  'group-program':()=>newPrograms().some(p=>prgMembers(p)>0),
+  'follow-program':()=>!!tourFlags.prgTimeline||tourDone('follow-program')
 };
-const tourFlags={rulesTouched:false,channelsTouched:false};
+var tourFlags={rulesTouched:false,channelsTouched:false,jValidated:false,jTrigPicked:false,prgTimeline:false};
 const START_LISTS={
   marketer:[
    ['Learn the basics',[
@@ -5961,15 +6136,16 @@ const START_LISTS={
     ['first-campaign','Create your first campaign','Target, offer, content, rules, schedule — end to end.','first-campaign','campaigns'],
     ['submit-approval','Submit a campaign for approval','You prepare it; an approver activates it.','first-campaign','campaigns']]],
    ['Go further',[
-    ['journey','Build a journey','Multi-step flows over time.',null,'journeys',true],
-    ['programs','Group work in a program','Give campaigns and journeys a shared goal.',null,'programs',true]]]
+    ['build-journey','Build a journey','A flow that follows the customer over time — event, message, wait, reminder.','first-journey','journeys'],
+    ['group-program','Group work in a program','Give campaigns and journeys a shared goal and a contact cap.','first-program','programs']]]
   ],
   approver:[
    ['Learn the basics',[
     ['explore-dashboard','Explore the dashboard','Your queue starts in "Needs attention".','read-dashboard','dashboard']]],
    ['Your job',[
     ['approve-campaign','Review and approve a campaign','Read it, then approve or reject with a comment.','approve-campaign','campaigns'],
-    ['reports','Follow results in Reports','What happened after you said yes.',null,'reports']]]
+    ['reports','Follow results in Reports','What happened after you said yes.',null,'reports'],
+    ['follow-program','Follow a program','Goal progress and the timeline of one initiative.','follow-program','programs']]]
   ],
   admin:[
    ['Audience & content',[
@@ -5985,7 +6161,7 @@ const START_LISTS={
   cmo:[
    ['Read the numbers',[
     ['explore-dashboard','Read the dashboard','KPIs, funnel and control-group uplift.','read-dashboard','dashboard'],
-    ['programs','Program results','Outcomes rolled up per initiative.',null,'programs'],
+    ['follow-program','Follow a program','Goal progress and the timeline of one initiative.','follow-program','programs'],
     ['reports','Reports','Per-campaign and per-journey detail.',null,'reports']]]
   ]
 };
@@ -6072,11 +6248,12 @@ function tourResume(){
      visit is gone and the tour has to go back to the step that creates one.
      The saved-draft branch is kept for when persistence exists. */
   const saved=id==='first-campaign'?newCampaigns()[0]:null;
-  const restart=id==='first-campaign'&&!saved&&rec.step>3;
-  const step=restart?2:rec.step;
+  const hook=TOURS[id].resume?TOURS[id].resume(rec.step):null;
+  const restart=hook?true:id==='first-campaign'&&!saved&&rec.step>3;
+  const step=hook?hook.step:restart?2:rec.step;
   card.innerHTML=`<h4>Continue where you left off?</h4>
     <p><b>${esc(TOURS[id].name)}</b> — you stopped at step ${rec.step+1} of ${TOURS[id].steps.length}.</p>
-    ${restart?'<p style="color:rgba(255,255,255,.7)">The prototype does not keep drafts across a reload, so we will pick up from <b>New campaign</b>.</p>':''}
+    ${restart?`<p style="color:rgba(255,255,255,.7)">${hook?hook.note:'The prototype does not keep drafts across a reload, so we will pick up from <b>New campaign</b>.'}</p>`:''}
     <div class="tc-foot"><button class="txt" data-drop>Start over</button><span class="tc-grow"></span><button class="txt" data-no>Not now</button><button data-yes>Continue</button></div>`;
   document.body.append(wrap,card);
   const close=()=>{ wrap.remove(); card.remove(); };
