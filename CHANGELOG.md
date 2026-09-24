@@ -2,6 +2,9 @@
 
 Version numbers follow the published artifact versions.
 
+## v48 — 24 Sept 2026
+**Light chrome** (decision V7). The left menu, top bar and footer drop the solid navy / lilac fill for a translucent lilac wash over the page (menu 8 %, bars 14 %, active row 22 % with the orange bar), with dark ink text and white controls. No colour token changed value; `--bar-bg`, `--nav-bg`, `--nav-hover`, `--nav-active` and `--chrome-line` are new. The brand audit now composites translucent backgrounds before measuring.
+
 ## v47 — 24 Sept 2026
 **Marketer dashboard strip** (decisions D11, D12). The Marketer preset's headline tiles are the state of the marketer's work instead of portfolio totals: **Needs your action** (drafts, rejected, without content, ending within 7 days), **Waiting for approval** (oldest wait), **Going out this week** (scheduled sends, next one named), **Live**, **Top campaign** (best conversion rate; flags campaigns below average). Every tile opens what it counts. Campaign performance — where opened and clicked live, per campaign — is now the marketer's first panel. Ops and Executive strips are unchanged. `tests/specs/dashboard.spec.js` guards the three presets.
 

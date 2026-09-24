@@ -53,10 +53,10 @@ the values changed.
 
 | Token | Value | Where it is used |
 | --- | --- | --- |
-| `--brand-navy` | `#242441` | left menu, mail preview header, code blocks, phone bezel |
-| `--brand-lilac` | `#5D5D8D` | top bar, footer, active menu row, Gantt "done" bars |
-| `--brand-lilac-line` | `#4E4E7A` | 1px border under the header, above the footer |
-| `--brand-nav-hover` | `#2E2E52` | menu item hover |
+| `--brand-navy` | `#242441` | menu text and icons, mail preview header, code blocks, phone bezel |
+| `--brand-lilac` | `#5D5D8D` | the chrome wash (`--bar-bg` .14, `--nav-bg` .08, `--nav-hover` .12, `--nav-active` .22 — all this colour at a lower alpha), Gantt "done" bars |
+| `--brand-lilac-line` | `#4E4E7A` | kept for compatibility; the chrome borders are `--chrome-line` (lilac at .28) |
+| `--brand-nav-hover` | `#2E2E52` | kept for compatibility; menu hover is `--nav-hover` |
 | `--sec` | `#F58220` | active-row left bar, KPI tile accents, node badge, current node glow, logo mark |
 | `--sec-light` | `#F9AA56` | assistant borders, parameter chips, avatar gradient |
 | `--sec-ink` | `#9E560D` | text on orange tints — header strips, table headers, stepper |
@@ -80,9 +80,11 @@ the values changed.
 brand families — turquoise, lilac, orange and grey washes with dark ink. Every
 tint/ink pair measures ≥ 4.5:1; the lowest is `--t-offer` at 4.58:1.
 
-**Dark-surface text** is solid rather than translucent white, so it can be
-measured: menu items `#D6D6E4` (10.4:1 on navy), group captions and the menu
-footnote `#9595B0` (5.13:1), menu icons `#BFBFD4`.
+**Chrome text** (v48) is dark ink on the lilac wash: menu items `--ink`
+(≥ 11:1), group captions, the menu footnote and the footer `--ink-2` (6.4:1 on
+the bars, 7.0:1 on the menu). `--ink-3` does not reach AA on the bars (3.9:1),
+so it is not used there. The audit composites the wash over the page before it
+measures.
 
 ---
 

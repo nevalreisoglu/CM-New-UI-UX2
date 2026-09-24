@@ -30,23 +30,28 @@ const probe = () => {
      above or below their bar, so the bar is their DOM parent and not their
      visual background. */
   const overlaps = (a, b) => !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom);
+  /* translucent surfaces (the menu and the bars are a lilac wash) are composited
+     over whatever opaque background sits under them */
+  const layers = [];
+  const composite = (base) => layers.reduceRight((acc, [c, a]) => c.map((v, i) => Math.round(a * v + (1 - a) * acc[i])), base);
   const bgOf = (el) => {
     const box = el.getBoundingClientRect();
-    let n = el;
+    let n = el; layers.length = 0;
     while (n && n !== document.documentElement) {
       const cs = getComputedStyle(n), c = parse(cs.backgroundColor);
+      if (c.length === 4 && c[3] > 0.02 && c[3] <= 0.92 && (n === el || overlaps(box, n.getBoundingClientRect()))) layers.push([c.slice(0, 3), c[3]]);
       /* a gradient surface (the e-mail hero, the self-care banner) counts as its
          darkest-to-text stop: every stop is returned and the worst ratio wins */
       if (/gradient/.test(cs.backgroundImage) && (n === el || overlaps(box, n.getBoundingClientRect()))) {
         const stops = (cs.backgroundImage.match(/rgba?\([^)]+\)/g) || []).map(parse).filter((x) => x[3] === undefined || x[3] > 0.92);
-        if (stops.length) return stops.map((x) => x.slice(0, 3));
+        if (stops.length) return stops.map((x) => composite(x.slice(0, 3)));
       }
       if (c.length >= 3 && (c[3] === undefined || c[3] > 0.92)) {
-        if (n === el || overlaps(box, n.getBoundingClientRect())) return c.slice(0, 3);
+        if (n === el || overlaps(box, n.getBoundingClientRect())) return composite(c.slice(0, 3));
       }
       n = n.parentElement;
     }
-    return [255, 255, 255];
+    return composite([255, 255, 255]);
   };
   const out = [];
   document.querySelectorAll('body *').forEach((el) => {

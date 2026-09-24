@@ -63,7 +63,7 @@ Status: **Settled** = do not reopen without an explicit ask · **Open** = still 
 | # | Decision | Why | Status |
 |---|---|---|---|
 | V1 | The **Etya brand kit** is the palette: Primary `#242441` / `#5D5D8D`, Secondary orange `#F58220` / `#F9AA56`, Complimentary turquoise `#00B5CB` / `#37DBDF`, Greys `#DFE1DF` / `#EBECEB`. Roboto. | Doğukan's brand kit, adopted in Toplantı 4. | Settled |
-| V2 | **Header and footer use Primary Light** `#5D5D8D`; the left menu is Primary Dark with a lilac active row and an orange left bar. | Decided with the kit; the white header read as unfinished. | Settled |
+| V2 | **Header and footer use Primary Light** `#5D5D8D`; the left menu is Primary Dark with a lilac active row and an orange left bar. | Decided with the kit; the white header read as unfinished. | Superseded by V7 |
 | V3 | **Primary buttons are turquoise** (`#00879A`, hover `#00707E`, white text). Green buttons are gone. | Toplantı 4. The bright `#00B5CB` fails contrast with white text (2.5:1) — never use it as a button background. | Settled |
 | V4 | **Orange is an accent and tint, not a text background**: bars, 3px markers, icon accents, and tinted surfaces with `#B3610F` text. | Contrast. | Settled |
 | V5 | Stronger typography and visible boxes: clear section headings, card header strips, bordered panels. | Earlier versions read as flat and low-contrast. | Settled |
@@ -124,4 +124,12 @@ Source: owner review of the Marketer preset on 24 Sept 2026 — "the cards on th
 |---|---|---|---|
 | D11 | **The Marketer strip is the state of the marketer's work, not portfolio totals**: Needs your action (drafts, rejected, without content, ending within 7 days) · Waiting for approval (with the oldest wait) · Going out this week (scheduled sends, the next one named) · Live · Top campaign (best conversion rate, with how many campaigns are below average). Every tile opens what it counts; Top campaign opens that campaign's detail. Colour only above zero, always with a word (D10). Supersedes D8 for the Marketer preset; the Ops and Executive strips are unchanged. | Customers reached, Conversions and Conversion rate summed over every campaign are the same noise D1/D2 removed from the executive strip, and a 2.3 % rate averaged over Info and Offer campaigns means nothing. A marketer's morning questions are "what is waiting on me, what is stuck, what goes out today, is anything underperforming". | Settled |
 | D12 | **Opened and clicked stay per campaign, and stay visible.** The customer likes them; they are meaningful per campaign, meaningless summed. They live in Campaign performance (count and rate of delivered), in the campaign detail funnel, in Reports and in Operation analysis › Deliveries — not in any headline strip. For the marketer, **Campaign performance is the first panel** under the strip, above Live now. | Keeps D2 and answers the customer's ask in the same move: the table is where opened/clicked make sense, so the marketer lands on it. | Settled |
+
+## Chrome surfaces (24 Sept 2026, v48)
+
+Source: owner review on 24 Sept 2026, with Murat's competitor benchmark — "the full dark fill on the left menu and the top/bottom bars tires the eye and keeps pulling attention to the left; competitors no longer use solid dark chrome".
+
+| # | Decision | Why | Status |
+|---|---|---|---|
+| V7 | **The menu and the bars are a translucent lilac wash, not a solid dark block.** Top bar and footer: `rgba(93,93,141,.14)` over the page; left menu: `.08`; hover `.12`; active row `.22` with the orange left bar and navy semibold text. All chrome text is dark ink (`--ink`, `--ink-2`); controls on the bars (role picker, language, ?, User manual) sit on white. Supersedes V2. The brand colours are unchanged — the same lilac at a lower alpha. | The dark menu was the heaviest element on every screen and competed with the content. A light wash keeps the brand present, lets the content lead, and is where the benchmark and the Agentic AI screens are. `--ink-3` fails on the bars (3.9:1), so captions there use `--ink-2` (6.4:1+). | Settled |
 
