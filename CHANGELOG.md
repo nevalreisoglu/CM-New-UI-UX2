@@ -2,6 +2,9 @@
 
 Version numbers follow the published artifact versions.
 
+## v53 — 24 Sept 2026
+**User manual brought up to date** with v45–v52. The role table lists what each role actually sees (Getting started, Journey Monitor for executives, approvers without Segments and Surveys, Decision API for admins; Offers and Policies hidden). The campaign list, Targeting (Include / Exclude), Channel & content (cards, placeholder chips, Attach survey, Send test, Variants), Communication rules (override, Use it / Log it), Schedule, Approval, Segments (Preview rows, Save & new, exclusion lists), Journey Builder toolbar and panel, Journey Monitor, Reports, Operation analysis's Source filter and journey links, and the Parameters page now match the screens. Dashboard presets per role are stated. Re-embedded in `index.html`.
+
 ## v52 — 24 Sept 2026
 **Journey list and "Create your journey"** (decisions J1, J2, O12).
 - **Journey Builder opens on a Journey List** built from the campaign list's components: search, status chips, Advanced filters (program, trigger type, delivery channel, owner, datamart, updated range), a validation indicator per row, trigger with its event or segment, steps, version, inside / entered / converted / conversion rate, updated and owner; Open plus Monitor · Execution report · Copy · Pause / Resume.

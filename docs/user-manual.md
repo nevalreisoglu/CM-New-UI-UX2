@@ -10,7 +10,9 @@ saved between reloads.**
 
 ## Getting around
 
-**The top bar** carries the menu burger, the **Role view** picker and your name.
+**The top bar** carries the menu burger, the product name, **User manual**,
+the **?** help button, the **Role view** picker and your name. The menu and the
+top and bottom bars are a light lilac wash, so the page content leads.
 
 **The left menu** is grouped: Home · Plan & build · Audience & content · Operate
 · Administration. The burger collapses it to an icon rail; the labels move into
@@ -22,15 +24,18 @@ tooltips, so nothing becomes unidentifiable.
 
 | Role | Sees |
 | --- | --- |
-| Marketer | Dashboard, Program, Campaign, Journey Builder, Segments, Surveys, Reports, Operation analysis, Journey Monitor |
-| Approver | The same, minus audience, survey and content authoring, plus the approve/activate actions |
-| Admin | Everything, including Datamart, Parameters, Templates, Release & licences |
-| CMO / Executive | Dashboard, Program, Reports |
+| Marketer | Dashboard, Getting started, Program, Campaign, Journey Builder, Segments, Surveys, Reports, Operation analysis, Journey Monitor |
+| Approver | Dashboard, Getting started, Program, Campaign, Journey Builder, Reports, Operation analysis, Journey Monitor — no Segments or Surveys — plus the approve / activate and pause / resume actions |
+| Admin | Everything the marketer sees, plus Decision API, Datamart, Templates (design), Parameters and Release & licences |
+| CMO / Executive | Dashboard, Getting started, Program, Reports, Journey Monitor |
+
+*Offers* and *Policies* are hidden from every role for now; campaigns still
+pick offers in their Offer step.
 
 If you switch to a role that may not see the open page, you are moved to the
 first page it can.
 
-**Tooltips.** A small `?` beside a label explains the field. Hover it.
+**Tooltips.** A small **i** beside a label explains the field. Hover it.
 
 **? (help).** Top right: guided tours, Getting started, this manual, and the
 first-visit tips switch. See **Getting started and guided tours** below.
@@ -149,6 +154,7 @@ the screen reads as it would in production. The lists, targeting counts,
 journeys and Operation analysis show the small 30-customer demo set as it is —
 so a campaign that reaches 12 customers in Targeting shows tens of thousands
 delivered here. That is the scale, not a bug.
+
 As a **marketer** the strip is about your work, not totals:
 
 | Tile | Big number | Line under it |
@@ -160,8 +166,11 @@ As a **marketer** the strip is about your work, not totals:
 | Top campaign | the campaign with the best conversion rate | how many campaigns are below average |
 
 Click any tile to open the list behind it; **Top campaign** opens that
-campaign's detail in Campaign performance. Admins see Customers reached,
-Conversions, Conversion rate, **Waiting on you** and **Live**.
+campaign's detail in Campaign performance.
+
+The **admin** strip (the Ops preset) shows Customers reached, Conversions,
+Conversion rate, **Waiting on you** and **Live**. **Approvers** and **CMO /
+Executive** get the executive strip above.
 
 Delivered, opened and clicked are not in the strip — summed over every campaign
 they say nothing. They are per campaign, in **Campaign performance**, which for
@@ -185,7 +194,8 @@ conversions per day, funnel and eliminations, by channel, by category, top
 journeys and, for executives, control-group uplift.
 
 Hide a panel with the × in its header; hidden panels reappear as buttons at
-the bottom. The preset follows the role.
+the bottom. The preset follows the role: Marketer for marketers, Ops for
+admins, Executive for approvers and executives.
 
 ---
 
@@ -194,7 +204,7 @@ the bottom. The preset follows the role.
 A program is the business initiative campaigns and journeys belong to.
 
 1. **Program** in the menu → the list.
-2. **New program** (+) or click a row.
+2. **+ New program**, or click a row.
 3. **Overview** — goal progress, period, owner, rolled-up results of the members.
 4. **Timeline** — a Gantt of the members over the program period, with today
    marked.
@@ -207,8 +217,15 @@ A program is the business initiative campaigns and journeys belong to.
 
 ## Building a campaign
 
-**Campaign** in the menu → **+ New campaign**, or **Open** / **Continue** on a
-row. **Copy** on a row clones its settings into a new draft.
+**Campaign** in the menu opens the **Campaign List**: a search box, **Type**
+chips (All · Offer · Info), **Status** chips (All · Active · Draft · Pending
+approval · Expired) and **Advanced filters** for category, campaign brand (when
+the admin has turned it on), datamart, delivery status, created by and the
+start and end dates. Each row shows the campaign's readiness as a small bar.
+
+Row actions: **Open** (or **Continue** on a draft), **Copy** — clones the
+settings into a new draft — and **Results** for a campaign that has run, which
+opens Operation analysis filtered to it. **+ New campaign** starts a new one.
 
 ### Create your campaign
 
@@ -229,8 +246,8 @@ Below that, **Start from a template** opens a copy of one of your three most
 recent campaigns, and **Skip — go straight to the form** opens an empty editor.
 Everything chosen here can be changed in Info.
 
-The list has a search box, status chips, and **More filters** for type,
-category, program, brand and dates.
+In the editor, **‹ Campaign list** goes back, and **Results** (once the
+campaign has run) opens Operation analysis on its deliveries.
 
 ### The eight steps
 
@@ -269,12 +286,13 @@ turned them on in Parameters.
 
 #### 2 · Targeting
 
-Available segments on the left, your target on the right. Search or filter by
-group, then **›** to add. The audience count updates as you go. Exclusion lists
-are channel-scoped — excluding by SMS does not exclude by e-mail.
+Available segments on the left, your target on the right. Search by name, ID or
+group, or pick a group, then **Include** or **Exclude** a segment. The audience
+count updates as you go. Exclusion lists are channel-scoped — excluding by SMS
+does not exclude by e-mail.
 
-**New segment** here takes you to Segments; save it and come back, and it is in
-the list.
+**+ New segment…** here takes you to Segments; save it and come back, and it is
+in the list.
 
 #### 3 · Offer / NBO
 
@@ -283,32 +301,50 @@ Optionally attach a promo code. Skipped for Info campaigns.
 
 #### 4 · Channel & content
 
-One tab per channel you picked. For each:
+One card per channel you picked. For each:
 
 1. Choose a **template** (the design, with named slots).
-2. Fill the **slots** — subject, headline, body, CTA. The preview on the right
+2. Fill the **slots** — subject, headline, body, CTA. The preview beside them
    renders as you type: a phone for SMS and push, a mail frame for e-mail.
-3. `{{parameters}}` in yellow are personalisation tokens; click one to see what
-   it resolves to.
-4. **Copy content from campaign** pulls wording from another campaign.
+3. The placeholder chips (`{{FIRST_NAME}}` and the like) insert a
+   personalisation token where you last typed; in the preview they resolve to
+   a sample customer.
+4. **Copy content from campaign…** pulls wording from another campaign.
+5. **Attach survey** adds a survey to the message (not on telemarketing) — see
+   *Surveys* below.
+6. **Send test** sends the content to the test users (a toast in the
+   prototype).
 
-**A/B** and **Dynamic content** are independent switches — you can use either,
-both, or neither.
+Under **Variants**, **A/B test** and **Dynamic by column** are independent
+switches — you can use either, both, or neither. A/B adds a second set of
+slots and the share each variant gets.
 
 #### 5 · Communication rules
 
-Contact policies, frequency caps and quiet hours. Defaults come from Parameters;
-what you change here applies to this campaign.
+The rules come from Parameters and apply to every campaign: control group,
+channel cooldown, campaign-type overlap and the pre-sent period. Tick
+**Override elimination rules for this campaign** to change them here. Per rule,
+**Use it** removes the customer from this campaign's sends, and **Log it**
+records the send so later campaigns respect it. Consent and global exclusion
+lists always apply.
 
 #### 6 · Schedule
 
-When it runs — once, recurring, or on a trigger.
+- **Trigger** — **Run now** or **Schedule**.
+- **Recurrence** — Once, Daily, Weekly, Every 2 weeks or Monthly, with an end
+  date or a number of sends, the time of day and, for weekly, the days.
+- **Send time optimization** — let each customer receive it at the hour they
+  usually engage.
+
+All push channels of a campaign share one schedule.
 
 #### 7 · Approval
 
-Submit for approval as a marketer. As an **approver**, the same step offers
-**Approve & activate** or **Reject** with a note. The timeline shows who did
-what, when.
+As a marketer, pick the **approver** and **Submit for approval**; the campaign
+goes to *Pending approval*. As an **approver**, the same step shows a
+**Decision comment**, **Reject — back to Draft**, and **Approve & activate** at
+the bottom. The history underneath shows who did what, when. The person who
+builds a campaign is not the one who activates it.
 
 #### 8 · Summary
 
@@ -320,28 +356,32 @@ step.
 ## Segments
 
 **Segments** in the menu → the list → **+ New segment**, or click a row.
+**‹ Segments** goes back.
 
 The editor is a workbench:
 
 **Left — definition.** Name, description, group, and the source: a datamart
 query, an uploaded file, or SQL. In the query builder each filter is
-*column · operator · value*; add as many as you need and combine with **AND** or
-**OR**.
+*column · operator · value*; **+ Add filter** for more, combine them with
+**AND** or **OR**, **Clear filters** to start again. The column picker is
+grouped by attribute group and shows each column's label; a column the admin
+marked as a category offers a value list.
 
-**Right — audience.** Counts and charts that update as you change filters:
-distribution by the columns you filtered, reachability per channel.
+**Right — audience insight.** Counts and charts that update as you change
+filters: distribution by the columns you filtered, reachability per channel.
 
 **✦ Assistant** opens a dialog. Describe the audience in a sentence —
 *"prepaid customers in Kyiv or Odesa whose package expires in 2 days"* — and
 **Build filters** turns it into filters in the query builder, which you then
 review and edit. Close it with **Close** or **Esc**.
 
-**Search** pulls the matching customer rows and opens the result list. Counts
-update without it; rows need it, because pulling rows on every keystroke would
-be slow.
+**Preview rows** pulls the matching customer rows. Counts update without it;
+rows need it, because pulling rows on every keystroke would be slow.
 
-**Save** or **Save as new**. Exclusion lists are managed here too, scoped per
-channel; segment **groups** are set up in Parameters.
+**Use as an exclusion list** turns the segment into an exclusion list and asks
+for the channels it applies to. **Save**, **Save & new** (save and start
+another), **Save & close** or **Cancel**. Segment **groups** are set up in
+Parameters.
 
 ---
 
@@ -427,23 +467,35 @@ campaign list:
 
 The canvas. **‹ Journey list** at the top left goes back to the list; the
 **Journey** dropdown next to it switches to another journey without leaving the
-canvas.
+canvas; **+ New journey** starts another; **Execution report** opens the
+journey's execution log in a dialog.
 
-- **The palette** on the left holds the step types. Drag one onto the canvas, or
-  click it. The burger at the top of the palette collapses it to icons.
+- **The palette** on the left holds the step types — entry, delivery, timer,
+  wait, condition, offer, NBO, parallel, external call, exit. Drag one onto the
+  canvas, or click it. The burger at the top of the palette collapses it to
+  icons.
 - **Connect steps** by dragging from a step's orange out-port to the next step.
 - **Click a step** to open its panel on the right and configure it — for a
-  delivery step, that is where its channel, template and content live.
-- **The toolbar** has zoom, fit, auto-layout and direction. The right panel
-  collapses with its own toggle.
-- **Delete** a step with the × on it, or cut an edge with the marker on the line.
+  delivery step, that is where its channel, template, content and survey live.
+  The panel also has **Disable step** and **Delete step**.
+- **The toolbar** has help, zoom out / in, fit to view, undo, redo,
+  **Validate**, delete step, and the direction (horizontal or top to bottom).
+  The right panel collapses with its own toggle.
+- **Delete** a step with the × on it or the Delete key; remove a link by
+  clicking its label.
+- The right panel's **Journey Builder Info** holds the journey's name and
+  description, the selected step's details, and **Back** (to the list),
+  **Pause / Resume** and **Activate**. Entry, re-entry and goal settings are on
+  the entry step.
 
 ### Journey Monitor
 
-Per-customer state for the selected journey: participants and how they were
-admitted, who is active, deliveries and failures, goal reached, and events
-rejected by re-entry or concurrency rules. Below that, a funnel by step and a
-point-in-time participant list. **Report** opens the full execution log.
+Per-customer state for the selected journey: status, version and activation of
+every journey; participants and how they were admitted, who is active,
+deliveries and failures, goal reached, and events rejected by re-entry or
+concurrency rules. Below that, a funnel by step and a point-in-time participant
+list (**Show state as of**), with **Download CSV** (a toast in the prototype),
+and the execution log with **Clear**.
 
 ### The simulation strip — demo only
 
@@ -556,11 +608,18 @@ would. **Export sample (CSV)** always writes the masked values.
 
 ## Reports
 
-- **Reports** — campaign and journey results. **Export CSV** is disabled in the
-  prototype and says so.
+**Reports** in the menu (Operate) is the aggregated, chart-led view of results;
+the line at the top says so and **Operation analysis ›** takes you to the
+row-level one.
 
-*Offers* and *Policies* are hidden from the menu for every role for now. The
-screens are still in the prototype and can be brought back without rework.
+- Pick the **period** with the chips; the figures read through it.
+- The tiles show delivered, opened, clicked and converted, active campaigns
+  and campaigns waiting for approval, followed by the charts and the
+  **Campaigns** table (sent, delivered, open, click, conversions) with **Open**
+  per row.
+- Totals are at operator scale, like the dashboard — the *Demo figures at
+  operator scale* pill says so.
+- **+ Add panel**, **Ask the agent** and **Export** are concepts and disabled.
 
 ---
 
@@ -575,7 +634,8 @@ Delivery, Elimination, Promotion, Active Promotions and Survey Result screens.
 ### Read an operational report
 
 1. **Set the scope** on the bar at the top: the **period** (last 7, 30 or 90
-   days), a **campaign** (click *All campaigns* and type to search), a
+   days), the **source** (all, campaigns or journeys), a **campaign or
+   journey** (click *All campaigns and journeys* and type to search), a
    **channel** and a **campaign status**. The scope applies to every tab and
    stays when you switch tabs. **Reset** clears it.
 2. **Pick a tab**:
@@ -593,8 +653,9 @@ Delivery, Elimination, Promotion, Active Promotions and Survey Result screens.
 3. **Read the strip** of totals under the tabs — it follows the scope.
 4. **Click a row** to open the side panel with every field, the technical ids
    included, and **Open campaign ›**, **Open delivery** (the campaign's Channel
-   & content step) and **Open customer** (a concept). **Esc** or **×** closes
-   it.
+   & content step) and **Open customer** (a concept). On a journey row the
+   links are **Open journey ›** and **Open delivery** (the Delivery step on the
+   canvas). **Esc** or **×** closes it.
 
 From a campaign, **Results** (on the campaign list, or at the top of the
 editor) opens this page on Deliveries, already filtered to that campaign.
@@ -638,18 +699,25 @@ branching rule skipped.
 
 ## Administration (admin role)
 
-- **Templates** — the designs, per channel, with their named slots. Wording is
-  *not* here; it is written inside each delivery.
-- **Parameters**
-  - **Campaign form** — turn Objective, Description and Campaign Brand on or off
-    for this customer. Hidden fields keep their default value. Campaign Status
-    and Budget are gone for good.
-  - **Rule defaults** — the communication rules new campaigns start with.
-  - **Channels & senders** — the channel list and sender IDs.
-  - **Segment groups** — the groups segments are filed under.
-  - **Pre-sent period** — moved here from the campaign form.
+- **Templates (design)** — the designs, per channel, with their named slots,
+  and where each template is used. Wording is *not* here; it is written inside
+  each delivery.
+- **Parameters** — one page, top to bottom:
+  - **Segment Groups** — the groups segments are filed under; **+ New group**,
+    rename, and delete when a group is empty.
+  - **Campaign form** — turn Objective, Description and Campaign Brand
+    (multi-brand) on or off for this customer. Hidden fields keep their default
+    value. Campaign Status and Budget are gone for good.
+  - **Communication rule defaults** — the **campaign pre-sent period** (moved
+    here from the campaign form), the campaign-type overlap and the channel
+    cooldowns every campaign starts with.
+  - **Channels & senders** — per channel the sender profile, gateway, maximum
+    volume per day and receiver column.
 - **Datamart** — the data catalogue. See **Datamarts (admin)** above.
-- **Release & licences** — version and licence information.
+- **Release & licences** — version, environment and licence information, and
+  the role and permission presets.
+- **Decision API** (under Operate) — the endpoints channels call, each with a
+  sample request and response for a chosen customer and channel.
 
 ---
 
@@ -662,8 +730,10 @@ branching rule skipped.
   campaigns are in the approval loop: **2004** is waiting for approval and
   **2613** was sent back by the approver, so the dashboard and the approver
   tour have something to show. Every name, number and address is made up.
-- **Esc** closes any dialog: the manual, the report, new journey, the journey
-  list, the segment assistant and the Operation analysis side panel.
+- **Esc** closes any dialog: the manual, the execution report, the segment
+  assistant and the Operation analysis side panel.
+- *Offers* and *Policies* are hidden from the menu for every role for now. The
+  screens are still in the prototype and can be brought back without rework.
 - The prototype opens on the **Dashboard**.
 - Guided tours never block the page, and `?notour` in the URL turns off anything
   that would start on its own.
