@@ -896,6 +896,8 @@ body{font-size:14px;line-height:1.43}
 .ops-camplist{max-height:280px;overflow:auto;margin-top:6px;display:flex;flex-direction:column}
 .ops-camplist button{border:0;background:none;text-align:left;padding:6px 8px;border-radius:5px;font-size:12.5px;color:var(--ink)}
 .ops-camplist button:hover{background:var(--surface-2)}
+.ops-pgh{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:600;padding:8px 8px 3px}
+.chip.ops-src{font-size:10.5px;padding:0 5px;color:var(--ink-2)}
 .ops-camplist button.on{background:var(--sec-soft);color:var(--sec-ink);font-weight:600}
 .ops-tabs{margin:0 20px 10px}
 .ops-hd{padding-bottom:10px}
@@ -4092,8 +4094,13 @@ const ELIM_DESC={
   'Consent / opt-out':(c,ch)=>`No ${chName(ch)} marketing consent, or opted out`,
   'Channel cooldown':(c,ch)=>`Contacted on ${chName(ch)} within the ${RULE_DEFAULTS.cooldown[ch]||'1 day'} cooldown`,
   'Exclusion lists':(c,ch,ml)=>`On exclusion list ${ml}`,
-  'Type overlap':c=>`Already in a higher-priority ${c.category} campaign (Campaign Type overlap)`,
-  'Pre-sent period':c=>`Received this campaign within its ${c.presend} pre-sent period`};
+  'Type overlap':c=>c.kind==='journey'?'Already inside another journey (concurrency rule)':`Already in a higher-priority ${c.category} campaign (Campaign Type overlap)`,
+  'Pre-sent period':c=>c.kind==='journey'?`Received this journey's message within its ${c.presend} invitation policy`:`Received this campaign within its ${c.presend} pre-sent period`};
+/* a journey seen through Operation analysis: the same shape the grid reads from a campaign */
+const _opsJ={};
+function opsJObj(j){ return _opsJ[j.id]=_opsJ[j.id]||{id:j.id,name:j.name,kind:'journey',plans:[],category:'journey',get status(){ return j.status; },presend:`${(j.policy||{}).invitationDays||0} days`}; }
+const srcKind=c=>c.kind==='journey'?'Journey':'Campaign';
+const srcCell=c=>`<span class="chip ops-src">${srcKind(c)}</span> <span class="lnk">${esc(c.name)}</span> <small style="color:var(--ink-3)">${c.id}</small>`;
 
 /* One dated history of the last 90 days, built once. Each campaign's 90-day totals are the
    dashboard's (dbRows at 90 days), spread over executions on the days its period overlaps the window,
@@ -4125,6 +4132,16 @@ function opsData(){ if(OPS_DATA) return OPS_DATA;
         const code=pr[0].replace(/\d+$/,'').slice(0,4)+'-'+Math.floor(rnd()*36**4).toString(36).toUpperCase().padStart(4,'0');
         promos.push({_id:'PR-'+(prN++),ex,c,ch:x.ch,date,time,cust:cu,pcode:pr[0],code,result:ok?'Delivered':'Not delivered',until,st,redAt,op:'OP-'+(880000+prN)}); } });
   });
+  /* journey deliveries: one execution per Delivery step per day the journey has run, sized from its entry
+     audience, so "how many messages went out yesterday" has one answer across campaigns and journeys */
+  JOURNEYS.filter(j=>j.status==='Active'||j.status==='Paused').forEach(j=>{ const o=opsJObj(j), e=j.nodes[0].cfg, a=[j.created||from,from].sort().pop();
+    const ml=e.mode!=='Event only'?mlByLabel(e.segment):null, base=ml?Math.max(2,evalML(ml).count):6;
+    j.nodes.filter(n=>n.type==='delivery').forEach((n,ni)=>{ const ch=String(n.cfg.channel||'sms').startsWith('Preferred')?'push':(n.cfg.channel||'sms');
+      for(let d=a; d<=TODAY; d=dAdd(d,1)){ const targeted=Math.round(base*(0.3+rnd()*0.6)/(1+ni*0.5)); if(!targeted) continue;
+        const elim=Math.round(targeted*(0.1+rnd()*0.12)), sent=targeted-elim, del=Math.round(sent*(0.93+rnd()*0.05)), failed=Math.min(sent-del,rnd()<0.15?1:0);
+        const ex={_id:'EX-'+(exN++),ex:'EX-'+(exN-1),c:o,ch,date:d,time:'09:00',targeted,sent,del,elim,cg:0,failed,type:'Journey step · '+n.label,
+          dst:d===TODAY&&j.status==='Active'?'Running':failed>0?'Partly failed':'Completed',comm:`COM-${j.id}-${n.id}`,dp:`${j.id}/${n.id}`,dm:jDatamart(j)==='Event DataMart'?'DM-2':'DM-1',node:n.id};
+        ex._ml={incl:ml,excl:null}; execs.push(ex); } }); });
   /* eliminated customers: the whole history is split over the dashboard funnel's reasons and shares,
      interleaved so that every campaign and every slice of the period carries a representative mix */
   const E=execs.reduce((t,x)=>t+x.elim,0), cnt=alloc(E,ELIM_REASONS.map(q=>q[1])), seq=[];
@@ -4137,12 +4154,12 @@ function opsData(){ if(OPS_DATA) return OPS_DATA;
 }
 
 let opsTab='del', opsRange=30, opsDrawer=null, opsElimRule='', opsActiveOnly=false, opsReveal=false;
-const opsScope={camp:'',ch:'',st:''};
+const opsScope={src:'',camp:'',ch:'',st:''};
 let opsPop='', opsCampQ='', opsAdvDraft=null, opsViewName='';
 const opsViews=[];
 const OPS_TABS=[['del','Deliveries'],['elim','Eliminations'],['promo','Promotions'],['srv','Surveys']];
 const opsSince=()=>dAdd(TODAY,-(opsRange-1));
-const opsIn=(c,ch,date)=>date>=opsSince()&&date<=TODAY&&(!opsScope.camp||c.id===opsScope.camp)&&(!opsScope.ch||ch===opsScope.ch)&&(!opsScope.st||c.status===opsScope.st);
+const opsIn=(c,ch,date)=>date>=opsSince()&&date<=TODAY&&(!opsScope.src||(c.kind||'campaign')===opsScope.src)&&(!opsScope.camp||c.id===opsScope.camp)&&(!opsScope.ch||ch===opsScope.ch)&&(!opsScope.st||c.status===opsScope.st);
 const DST_CLS={Running:'acc','Partly failed':'bad',Completed:'ok'};
 const PST_CLS={Active:'acc',Redeemed:'ok',Expired:'',Cancelled:'bad'};
 const campCell=c=>`<span class="lnk">${esc(c.name)}</span> <small style="color:var(--ink-3)">${c.id}</small>`;
@@ -4152,7 +4169,7 @@ const opsRcpt=p=>{ const raw=p.ch==='email'?p.cust.row.EMAIL:p.cust.row.MSISDN; 
 /* the columns of each grid. tech: a technical id, hidden until asked for. hide: available, off by default */
 const OPS_COLS={
   del:[
-    {k:'camp',l:'Campaign',v:r=>r.c.name,h:r=>campCell(r.c)},
+    {k:'camp',l:'Source',v:r=>`${srcKind(r.c)} · ${r.c.name}`,h:r=>srcCell(r.c)},
     {k:'cst',l:'Status',v:r=>r.c.status,h:r=>statusPill(r.c.status)},
     {k:'ch',l:'Channel',v:r=>chName(r.ch)},
     {k:'type',l:'Delivery type',v:r=>r.type},
@@ -4164,26 +4181,26 @@ const OPS_COLS={
     {k:'cg',l:'Control group',num:1,v:r=>r.cg},
     {k:'failed',l:'Failed',num:1,hide:1,v:r=>r.failed},
     {k:'dst',l:'Delivery status',v:r=>r.dst,h:r=>`<span class="pill ${DST_CLS[r.dst]||''}">${r.dst}</span>`},
-    {k:'cid',l:'Campaign ID',tech:1,v:r=>r.c.id},
+    {k:'cid',l:'Source ID',tech:1,v:r=>r.c.id},
     {k:'comm',l:'Communication ID',tech:1,v:r=>r.comm},
     {k:'dp',l:'Delivery ID',tech:1,v:r=>r.dp},
     {k:'ex',l:'Execution ID',tech:1,v:r=>r.ex},
     {k:'dm',l:'Main DM ID',tech:1,v:r=>r.dm}],
   elim:[
-    {k:'camp',l:'Campaign',v:r=>r.c.name,h:r=>campCell(r.c)},
+    {k:'camp',l:'Source',v:r=>`${srcKind(r.c)} · ${r.c.name}`,h:r=>srcCell(r.c)},
     {k:'cust',l:'Customer',v:r=>r.cust.cid,h:r=>custCell(r.cust)},
     {k:'rule',l:'Rule',v:r=>r.rule,h:r=>`<span class="pill warn">${esc(r.rule)}</span>`},
     {k:'desc',l:'Rule description',hide:1,v:r=>r.desc},
     {k:'ch',l:'Channel',v:r=>chName(r.ch)},
     {k:'date',l:'Execution date',v:r=>r.date},
     {k:'ml',l:'Marketing list',v:r=>r.ml},
-    {k:'cid',l:'Campaign ID',tech:1,v:r=>r.c.id},
+    {k:'cid',l:'Source ID',tech:1,v:r=>r.c.id},
     {k:'comm',l:'Communication ID',tech:1,v:r=>r.ex.comm},
     {k:'dp',l:'Delivery ID',tech:1,v:r=>r.ex.dp},
     {k:'ex',l:'Execution ID',tech:1,v:r=>r.ex.ex},
     {k:'dm',l:'Main DM ID',tech:1,v:r=>r.ex.dm}],
   promo:[
-    {k:'camp',l:'Campaign',v:r=>r.c.name,h:r=>campCell(r.c)},
+    {k:'camp',l:'Source',v:r=>`${srcKind(r.c)} · ${r.c.name}`,h:r=>srcCell(r.c)},
     {k:'ch',l:'Channel',v:r=>chName(r.ch)},
     {k:'pcode',l:'Promotion code',v:r=>r.pcode,h:r=>`<span class="mono">${esc(r.pcode)}</span>`},
     {k:'code',l:'Promo code',v:r=>r.code,h:r=>`<span class="mono">${esc(r.code)}</span>`},
@@ -4193,7 +4210,7 @@ const OPS_COLS={
     {k:'sent',l:'Sent',v:r=>r.date+' '+r.time},
     {k:'until',l:'Active until',v:r=>r.until},
     {k:'pst',l:'Status',v:r=>r.st,h:r=>`<span class="pill ${PST_CLS[r.st]||''}">${r.st}</span>`},
-    {k:'cid',l:'Campaign ID',tech:1,v:r=>r.c.id},
+    {k:'cid',l:'Source ID',tech:1,v:r=>r.c.id},
     {k:'dm',l:'Main DM ID',tech:1,v:r=>r.ex.dm},
     {k:'op',l:'Operation ID',tech:1,v:r=>r.op},
     {k:'dp',l:'Delivery ID',tech:1,v:r=>r.ex.dp},
@@ -4283,7 +4300,7 @@ function opsBindGrid(card,tab,rows){ const g=opsGrid(tab), cols=OPS_COLS[tab], q
   const empt=card.querySelector('[data-opswiden]'); if(empt) empt.onclick=()=>{ opsRange=90; renderOpsan(); };
   const clr=card.querySelector('[data-opsclear]'); if(clr) clr.onclick=()=>{ opsResetScope(); renderOpsan(); };
 }
-function opsResetScope(){ opsRange=30; Object.assign(opsScope,{camp:'',ch:'',st:''}); opsElimRule=''; opsActiveOnly=false; Object.values(opsGs).forEach(g=>{ g.adv=[]; g.page=1; }); }
+function opsResetScope(){ opsRange=30; Object.assign(opsScope,{src:'',camp:'',ch:'',st:''}); opsElimRule=''; opsActiveOnly=false; Object.values(opsGs).forEach(g=>{ g.adv=[]; g.page=1; }); }
 /* an empty grid says what would appear and what to change */
 function opsEmpty(what){ const narrowed=opsScope.camp||opsScope.ch||opsScope.st||opsElimRule||opsActiveOnly||Object.values(opsGs).some(g=>g.adv.length);
   return `${what} ${opsRange<90?'Widen the period':''}${opsRange<90&&narrowed?' or ':''}${narrowed?'clear the filters':''}${opsRange<90||narrowed?'.':''}<div style="margin-top:10px;display:flex;gap:8px;justify-content:center">${opsRange<90?'<button class="btn sm outline" data-opswiden>Show the last 90 days</button>':''}${narrowed?'<button class="btn sm outline" data-opsclear>Clear filters</button>':''}</div>`; }
@@ -4295,13 +4312,16 @@ function opsOpenFor(cid){ opsResetScope(); opsScope.camp=cid; opsTab='del'; opsD
   opsRange=!last?30:dDiff(last,TODAY)<7?7:dDiff(last,TODAY)<30?30:90; showView('opsan'); }
 
 const opsTile=(l,v,sub,cls,title)=>`<div class="tile ${cls||''}"${title?` title="${esc(title)}"`:''}><div class="l">${l}</div><div class="v ${/^[\d.,%₴—\s]+$/.test(String(v))?'':'txt'}">${v}</div>${sub?`<div class="s">${sub}</div>`:''}</div>`;
-function opsCampLabel(){ const c=opsScope.camp&&CAMPAIGNS.find(x=>x.id===opsScope.camp); return c?`${c.id} · ${c.name}`:'All campaigns'; }
+const opsAllLabel=()=>opsScope.src==='journey'?'All journeys':opsScope.src==='campaign'?'All campaigns':'All campaigns and journeys';
+function opsCampLabel(){ const c=opsScope.camp&&(CAMPAIGNS.find(x=>x.id===opsScope.camp)||JOURNEYS.find(x=>x.id===opsScope.camp)); return c?`${c.id} · ${c.name}`:opsAllLabel(); }
 
 function renderOpsan(){ const card=document.getElementById('ops-card'); if(!card||curView!=='opsan') return;
   const D=opsData(), fmt=n=>Number(n).toLocaleString(), pct=(a,b)=>b?Math.round(1000*a/b)/10+'%':'—';
   setCrumb(OPS_TABS.find(t=>t[0]===opsTab)[1]);
   const inCh=[...new Set(D.execs.map(x=>x.ch))], inSt=[...new Set(D.execs.map(x=>x.c.status))];
-  const campList=CAMPAIGNS.filter(c=>!opsCampQ||(c.id+' '+c.name).toLowerCase().includes(opsCampQ.toLowerCase()));
+  const mq=c=>!opsCampQ||(c.id+' '+c.name).toLowerCase().includes(opsCampQ.toLowerCase());
+  const campList=opsScope.src==='journey'?[]:CAMPAIGNS.filter(mq), jrnList=opsScope.src==='campaign'?[]:JOURNEYS.filter(mq);
+  const objBtn=c=>`<button data-camp="${c.id}" class="${opsScope.camp===c.id?'on':''}"><span class="mono">${c.id}</span> ${esc(c.name)}</button>`;
   let tiles='', body='', rows=[];
   if(opsTab==='del'){ rows=opsSorted(opsApplyAdv(opsRows('del'),'del'),'del'); const T=k=>rows.reduce((t,r)=>t+r[k],0);
     tiles=opsTile('Targeted',fmt(T('targeted')),`${rows.length} executions`)+opsTile('Delivered',fmt(T('del')),`${pct(T('del'),T('sent'))} of ${fmt(T('sent'))} sent`)
@@ -4332,7 +4352,8 @@ function renderOpsan(){ const card=document.getElementById('ops-card'); if(!card
       <div class="chipbar"><span class="ops-lbl">PERIOD</span>${[7,30,90].map(n=>`<button class="fchip ${opsRange===n?'on':''}" data-opr="${n}">Last ${n} days</button>`).join('')}</div>
       <div class="dm-menu ops-camp"><button class="btn sm outline" id="ops-campbtn" aria-expanded="${opsPop==='camp'}" title="Campaign">${esc(opsCampLabel())} ▾</button>
         <div class="pop" ${opsPop==='camp'?'':'hidden'} style="left:0;right:auto;width:320px"><div class="search-in" style="min-width:0;max-width:none"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="ops-campq" placeholder="Search campaigns" value="${esc(opsCampQ)}" aria-label="Search campaigns"></div>
-          <div class="ops-camplist"><button data-camp="" class="${opsScope.camp?'':'on'}">All campaigns</button>${campList.map(c=>`<button data-camp="${c.id}" class="${opsScope.camp===c.id?'on':''}"><span class="mono">${c.id}</span> ${esc(c.name)}</button>`).join('')||'<div class="empty" style="padding:10px">No campaign matches.</div>'}</div></div></div>
+          <div class="ops-camplist"><button data-camp="" class="${opsScope.camp?'':'on'}">${opsAllLabel()}</button>${campList.length?`<div class="ops-pgh">Campaigns</div>${campList.map(objBtn).join('')}`:''}${jrnList.length?`<div class="ops-pgh">Journeys</div>${jrnList.map(objBtn).join('')}`:''}${campList.length||jrnList.length?'':'<div class="empty" style="padding:10px">Nothing matches.</div>'}</div></div></div>
+      <select id="ops-src" aria-label="Source"><option value="">All sources</option><option value="campaign" ${opsScope.src==='campaign'?'selected':''}>Campaigns</option><option value="journey" ${opsScope.src==='journey'?'selected':''}>Journeys</option></select>
       <select id="ops-ch" aria-label="Channel"><option value="">All channels</option>${inCh.map(k=>`<option value="${k}" ${opsScope.ch===k?'selected':''}>${chName(k)}</option>`).join('')}</select>
       <select id="ops-st" aria-label="Campaign status"><option value="">All campaign statuses</option>${inSt.map(s=>`<option ${opsScope.st===s?'selected':''}>${s}</option>`).join('')}</select>
       <button class="ops-reset" id="ops-reset">Reset</button>
@@ -4354,6 +4375,7 @@ function renderOpsan(){ const card=document.getElementById('ops-card'); if(!card
   const cp=card.querySelector('.ops-camp .pop'); if(cp) cp.onclick=e=>e.stopPropagation();
   const cq=q('#ops-campq'); if(cq) cq.oninput=()=>{ opsCampQ=cq.value; const v=cq.value; renderOpsan(); const i=card.querySelector('#ops-campq'); i.focus(); i.setSelectionRange(v.length,v.length); };
   card.querySelectorAll('[data-camp]').forEach(b=>b.onclick=()=>{ opsScope.camp=b.dataset.camp; opsCampQ=''; opsPop=''; Object.values(opsGs).forEach(g=>g.page=1); renderOpsan(); });
+  q('#ops-src').onchange=e=>{ opsScope.src=e.target.value; const c=opsScope.camp; if(c&&opsScope.src&&((opsScope.src==='journey')!==JOURNEYS.some(j=>j.id===c))) opsScope.camp=''; Object.values(opsGs).forEach(g=>g.page=1); renderOpsan(); };
   q('#ops-ch').onchange=e=>{ opsScope.ch=e.target.value; Object.values(opsGs).forEach(g=>g.page=1); renderOpsan(); };
   q('#ops-st').onchange=e=>{ opsScope.st=e.target.value; Object.values(opsGs).forEach(g=>g.page=1); renderOpsan(); };
   q('#ops-reset').onclick=()=>{ opsResetScope(); opsPop=''; renderOpsan(); };
@@ -4388,11 +4410,12 @@ function renderOpsDrawer(rows){ const dr=document.getElementById('ops-drawer'); 
       <div><div class="sec">Every field</div><dl class="kv ops-kv">${fields.concat(extra.filter(e=>!fields.some(f=>f[0]===e[0]))).map(([l,v,tech])=>`<dt>${esc(l)}${tech?' <span class="chip">id</span>':''}</dt><dd>${esc(typeof v==='number'?v.toLocaleString():v===''||v==null?'—':v)}</dd>`).join('')}</dl></div>
       ${opsTab==='promo'&&!(opsReveal&&ROLE==='admin')?'<div class="note">Recipient info is masked. An admin can reveal it with Show recipient details.</div>':''}
     </div>
-    <div class="df"><button class="btn sm primary" data-go="campaigns:${r.c.id}">Open campaign ›</button><button class="btn sm outline" id="ops-odel" title="Opens the campaign's Channel &amp; content step, where this delivery is defined">Open delivery</button><button class="btn sm outline" id="ops-ocust" title="Concept — customer 360 is outside this prototype">Open customer</button></div>`;
+    <div class="df">${r.c.kind==='journey'?`<button class="btn sm primary" data-go="journeys:${r.c.id}">Open journey ›</button><button class="btn sm outline" id="ops-odel" title="Opens the journey on the canvas with this Delivery step selected">Open delivery</button>`:`<button class="btn sm primary" data-go="campaigns:${r.c.id}">Open campaign ›</button><button class="btn sm outline" id="ops-odel" title="Opens the campaign's Channel &amp; content step, where this delivery is defined">Open delivery</button>`}<button class="btn sm outline" id="ops-ocust" title="Concept — customer 360 is outside this prototype">Open customer</button></div>`;
   dr.hidden=false;
   dr.querySelector('#ops-dclose').onclick=()=>{ opsDrawer=null; renderOpsan(); };
-  dr.querySelector('[data-go]').onclick=()=>{ opsDrawer=null; dr.hidden=true; showView('campaigns'); campOpen(r.c.id); };
-  dr.querySelector('#ops-odel').onclick=()=>{ opsDrawer=null; dr.hidden=true; showView('campaigns'); campOpen(r.c.id); campStep=3; renderCampaigns(); };
+  const jnode=r.node||(r.ex&&r.ex.node);
+  dr.querySelector('[data-go]').onclick=()=>{ opsDrawer=null; dr.hidden=true; if(r.c.kind==='journey'){ jOpen(r.c.id); return; } showView('campaigns'); campOpen(r.c.id); };
+  dr.querySelector('#ops-odel').onclick=()=>{ opsDrawer=null; dr.hidden=true; if(r.c.kind==='journey'){ jOpen(r.c.id,jnode); return; } showView('campaigns'); campOpen(r.c.id); campStep=3; renderCampaigns(); };
   dr.querySelector('#ops-ocust').onclick=()=>toast('Open customer',`${r.cust?r.cust.cid:'The customer'} — the customer 360 view is outside this prototype. In the product this opens the customer's contact history.`,'warn');
 }
 window.addEventListener('keydown',e=>{ if(e.key==='Escape'&&curView==='opsan'){ if(opsPop){ opsPop=''; renderOpsan(); } else if(opsDrawer){ opsDrawer=null; renderOpsan(); } } });
