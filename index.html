@@ -1814,10 +1814,37 @@ Surveys** on that survey. See *Operation analysis* below.
 
 ## Journeys
 
+### Find a journey
+
+**Journey Builder** in the menu opens the **Journey List** — it works like the
+campaign list:
+
+1. **Search** by name or journey ID, or narrow with the **status** chips.
+2. **Advanced filters** adds program, trigger type, a channel used in a
+   delivery step, owner, datamart and an updated date range.
+3. Read the row: status, **validation** (hover the bar for what is unresolved),
+   the trigger, steps and version, customers inside, entered, converted and the
+   conversion rate — counted by the simulation in the prototype.
+4. **Open** (or click the row) goes to the canvas. **More** holds **Monitor**,
+   **Execution report**, **Copy** and — for approvers and admins — **Pause** or
+   **Resume**.
+
+### Create a journey
+
+1. **+ New journey** opens *Create your journey*.
+2. Type the **name** (required) and, if you like, a description.
+3. Pick **what starts it**: *When something happens* (choose the event), *When
+   someone enters a segment* (choose the segment) or *On a schedule* (choose the
+   segment and when it runs).
+4. **Start building** creates a Draft and opens the canvas with the entry step
+   already placed. Or pick a journey under **Start from a template** to begin
+   from a copy.
+
 ### Journey Builder
 
-**Journey Builder** in the menu. Pick a journey from the dropdown, or
-**New journey**.
+The canvas. **‹ Journey list** at the top left goes back to the list; the
+**Journey** dropdown next to it switches to another journey without leaving the
+canvas.
 
 - **The palette** on the left holds the step types. Drag one onto the canvas, or
   click it. The burger at the top of the palette collapses it to icons.
@@ -1970,7 +1997,9 @@ Delivery, Elimination, Promotion, Active Promotions and Survey Result screens.
    stays when you switch tabs. **Reset** clears it.
 2. **Pick a tab**:
    - **Deliveries** — one row per execution: targeted, delivered, eliminated,
-     control group and the delivery status.
+     control group and the delivery status. Campaign and journey deliveries
+     are both here; the **Source** column says which, and the **Source**
+     filter on the scope bar shows just one kind.
    - **Eliminations** — who was removed before a send and by which rule. The
      bars above the grid split the total by rule, with the same rules and
      shares as the dashboard's funnel. **Click a bar** to see only that rule.

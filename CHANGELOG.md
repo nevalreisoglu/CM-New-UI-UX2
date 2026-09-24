@@ -2,6 +2,14 @@
 
 Version numbers follow the published artifact versions.
 
+## v52 — 24 Sept 2026
+**Journey list and "Create your journey"** (decisions J1, J2, O12).
+- **Journey Builder opens on a Journey List** built from the campaign list's components: search, status chips, Advanced filters (program, trigger type, delivery channel, owner, datamart, updated range), a validation indicator per row, trigger with its event or segment, steps, version, inside / entered / converted / conversion rate, updated and owner; Open plus Monitor · Execution report · Copy · Pause / Resume.
+- **Create your journey**: a centred screen like the campaign one — name, description, three trigger cards each revealing its follow-up field, Start building (a Draft with the entry step on the canvas), and a template strip.
+- The canvas gets **‹ Journey list**; the dropdown stays as a quick switcher; the journey-list modal, its *List* button and the create modal are gone. Breadcrumbs follow the list and the open journey.
+- **Operation analysis** shows journey deliveries: a Source column (Campaign / Journey), a Source filter, journeys in the picker, links to the journey.
+- Tests: `tests/jlist.js` (new); journey.spec, srv.js, ops.js, the screenshot spec and the brand audit follow the list.
+
 ## v51 — 24 Sept 2026
 **Offers and Policies hidden from every role** (decision X6). Their menu entries are hidden by one `HIDDEN_VIEWS` set in `applyRole()`; the pages, their render functions and their `data-roles` stay in the file, so taking a name out of the set brings a page back. The journey Offer step's *Open offer* link is hidden with it; the campaign Offer step is unchanged. The menu is two entries shorter.
 

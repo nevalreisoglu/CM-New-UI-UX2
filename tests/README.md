@@ -40,6 +40,7 @@ Node scripts (run with `node <name>.js`; an empty error list is the pass conditi
 | Script | What it walks |
 | --- | --- |
 | `ops.js` | Operation analysis: the scope bar, all four tabs, column chooser and technical ids, sort, resize, the advanced filter, CSV export, saved views, the row panel, empty states, masking, and **Results** from a campaign — at 1280 and 1440 px, menu open and collapsed. |
+| `jlist.js` | The Journey list: filters, row actions, open and return, *Create your journey*, and the layout at 1280 and 1440 px. |
 | `srv.js` | Surveys: creates a survey with all six question types, previews it, attaches it to a push and a pull channel and a journey step, and reads its results. |
 | `dm.js` | The Datamart catalogue. |
 | `tour.js` | The guided tours. |
