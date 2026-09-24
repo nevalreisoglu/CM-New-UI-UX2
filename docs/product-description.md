@@ -428,7 +428,8 @@ badge, in both the Journey Builder and the Journey Monitor:
 Buttons inside the strip are deliberately not styled as primary actions. The
 prototype runs three simulated days at load so the monitor is not empty.
 
-Also demo-only: 30 customers, 16 campaigns, 3 journeys of fixed sample data;
+Also demo-only: 30 customers, 18 campaigns (one waiting for approval, one
+sent back by the approver), 3 journeys of fixed sample data;
 test sends raise a toast instead of doing anything. Operation analysis exports
 a real CSV of its demo rows; Excel export and Open customer are concepts. The data names
 no real person: users come from one fictional list (the signed-in user is Ayşe
