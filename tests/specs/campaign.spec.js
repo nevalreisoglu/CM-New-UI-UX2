@@ -39,7 +39,9 @@ test.describe('campaign creation screen', () => {
 
     await expect(app.locator('#camp-card .stepper button.on')).toContainText('Info');
     await expect(app.locator('#camp-card input[data-k="name"]')).toHaveValue('Win-back by app card');
-    await expect(app.locator('#camp-card select[data-k="category"]')).toHaveValue('Win-back');
+    await expect(app.locator('#camp-card [data-goal="Winback"]')).toHaveClass(/on/);
+    // The goal carries type and category with it; the Info step does not ask for them again.
+    await expect(app.locator('#camp-card select[data-k="type"], #camp-card select[data-k="category"], #camp-card select[data-k="sub"]')).toHaveCount(0);
     await expect(app.locator('#camp-card .chgrp')).toHaveClass(/pull-on/);
   });
 
@@ -71,13 +73,13 @@ test.describe('campaign wizard', () => {
     const stepper = app.locator('#camp-card .stepper button');
 
     // An Offer campaign can use every step.
-    await app.locator('#camp-card select[data-k="type"]').selectOption('Offer');
+    await app.locator('#camp-card [data-goal="Retention"]').click();
     await expect(stepper).toHaveCount(STEPS.length);
     await expect(stepper.nth(2)).toBeEnabled();
     await expect(app.locator('#camp-card .stepper')).toContainText('Step 1 of 8');
 
     // An Info campaign has nothing to offer, so the step stays visible but dead.
-    await app.locator('#camp-card select[data-k="type"]').selectOption('Info');
+    await app.locator('#camp-card [data-goal="Informational"]').click();
     await expect(stepper).toHaveCount(STEPS.length);
     const offer = stepper.nth(2);
     await expect(offer).toContainText('Offer');
@@ -122,7 +124,7 @@ test.describe('campaign wizard', () => {
       'Set the ground rules', 'When will it go out?', 'Send it for approval', 'Ready to launch'];
     await app.locator('.nav button[data-view="campaigns"]').click();
     await app.locator('#camp-table tr.row').first().click();
-    await app.locator('#camp-card select[data-k="type"]').selectOption('Offer');
+    await app.locator('#camp-card [data-goal="Retention"]').click();
     const stepper = app.locator('#camp-card .stepper button');
     for (let i = 0; i < STEPS.length; i++) {
       await stepper.nth(i).click();

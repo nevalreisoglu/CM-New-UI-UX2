@@ -230,9 +230,10 @@ opens Operation analysis filtered to it. **+ New campaign** starts a new one.
 
 1. **Campaign name** — the cursor is already there. Required.
 2. **What is it for?** — pick one objective card: Acquisition, Upsell /
-   Cross-sell, Retention, Winback or Informational. Optional; it files the
-   campaign under the matching category, and Informational makes it an Info
-   campaign.
+   Cross-sell, Retention, Winback or Informational. The goal decides the
+   campaign type and category for you: Informational is an Info campaign (no
+   Offer step), the other four are Offer campaigns filed under their category.
+   You are not asked for type, category or sub-category again.
 3. **How will it reach people?** — **We send it** (push: SMS, e-mail, push,
    telemarketing) or **The customer sees it when they come** (pull: in-app,
    self-care, chatbot). You pick the exact channels in the Info step.
@@ -241,7 +242,7 @@ opens Operation analysis filtered to it. **+ New campaign** starts a new one.
 
 Below that, **Start from a template** opens a copy of one of your three most
 recent campaigns, and **Skip — go straight to the form** opens an empty editor.
-Everything chosen here can be changed in Info.
+The goal and the channels can still be changed in Info.
 
 In the editor, **‹ Campaign list** goes back, and **Results** (once the
 campaign has run) opens Operation analysis on its deliveries.
@@ -266,8 +267,9 @@ them?*, *Set the ground rules*, *When will it go out?*, *Send it for approval*,
 
 #### 1 · Info
 
-Name (required — Next will refuse without it), Campaign Type (Offer or Info),
-category and sub-category, start and end, control group, and program.
+Name (required — Next will refuse without it), the **Goal** you picked on the
+first screen (click another to change it; with *Skip* you pick it here), start
+and end, control group, and program.
 
 **Channels** are in two groups:
 

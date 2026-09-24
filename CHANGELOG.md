@@ -2,6 +2,9 @@
 
 Version numbers follow the published artifact versions.
 
+## v54 — 24 Sept 2026
+**The goal replaces Campaign Type, Category and Sub Category in Info** (decision C13). The objective picked on *Create your campaign* now sets all three (`CAMP_GOAL`; Acquisition files under Onboarding); the Info step shows it as one Goal chip row, changeable there. Summary shows Goal. The first-campaign tour's type step points at the goal. Tests: campaign.spec selects goals instead of the type select and checks the three selects are gone.
+
 ## v53 — 24 Sept 2026
 **User manual brought up to date** with v45–v52. The role table lists what each role actually sees (Getting started, Journey Monitor for executives, approvers without Segments and Surveys, Decision API for admins; Offers and Policies hidden). The campaign list, Targeting (Include / Exclude), Channel & content (cards, placeholder chips, Attach survey, Send test, Variants), Communication rules (override, Use it / Log it), Schedule, Approval, Segments (Preview rows, Save & new, exclusion lists), Journey Builder toolbar and panel, Journey Monitor, Reports, Operation analysis's Source filter and journey links, and the Parameters page now match the screens. Dashboard presets per role are stated. Re-embedded in `index.html`.
 

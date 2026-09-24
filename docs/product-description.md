@@ -72,9 +72,11 @@ campaign** opens *Create your campaign*: one centred column with the name, a
 row of objective cards (Acquisition, Upsell / Cross-sell, Retention, Winback,
 Informational) and the push-or-pull choice as two cards (*We send it* / *The
 customer sees it when they come*). **Start building** creates the draft and
-opens the editor on Info with the stepper. The choices only pre-fill: Upsell,
-Retention and Winback set the category, Informational makes it an Info
-campaign, Acquisition leaves the category to Info; push starts on SMS, pull on
+opens the editor on Info with the stepper. The goal is asked once and carries
+the campaign type, category and sub-category with it: Acquisition, Upsell /
+Cross-sell, Retention and Winback are Offer campaigns filed under Onboarding,
+Upsell, Retention and Win-back; Informational is an Info campaign. Info shows the
+goal as one row of chips instead of three selects. Push starts on SMS, pull on
 In-App, and the exact channels are picked in Info. Underneath, *Start from a
 template* offers a copy of one of the three most recent campaigns, and *Skip —
 go straight to the form* opens an empty editor for people who know what they
@@ -95,7 +97,7 @@ vanishes makes people wonder what they lost.
 
 Step by step:
 
-1. **Info** — name, type (Offer / Info), category, period, control group,
+1. **Info** — name, goal (which sets type and category), period, control group,
    program, and **channels**. Channels are grouped into **push** (SMS, MMS,
    e-mail, mobile/web push, telemarketing — we send) and **pull** (in-app card,
    self-care banner, chatbot — shown when the customer comes). A campaign uses
