@@ -78,7 +78,7 @@ Olgay Bey, then the customer.
    ```
    cd tests && npm install && npx playwright install chromium && npm run check
    ```
-   Also run `camp2.js`, `seg4.js`, `dash.js`, `prg.js`, `eml.js`, `ops.js`, `srv.js`, `jlist.js`. An empty error list is
+   Also run `camp2.js`, `seg4.js`, `dash.js`, `prg.js`, `eml.js`, `ops.js`, `srv.js`, `jlist.js`, `tour.js`, `tour-journey.js`, `tour-program.js`. An empty error list is
    the pass condition. Check 1280 px and 1440 px, menu open and collapsed.
 3. Commit in logical steps with a clear message; add a `CHANGELOG.md` entry per version.
 4. If a decision was made along the way, append it to `docs/decisions.md`.

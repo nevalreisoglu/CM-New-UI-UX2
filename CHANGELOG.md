@@ -2,6 +2,15 @@
 
 Version numbers follow the published artifact versions.
 
+## v57 — 24 Sept 2026
+**Guided tours for Journey and Program** (decision X7).
+- **Build your first journey** (marketer, admin; 15 steps): *Create your journey* with `balance_low` → the canvas → a Delivery with the journey's own SMS text → a Wait for event (`offer_accepted`, 1 day) → an *accepted* branch to the goal and a *timeout* branch to a push reminder → Validate → Activate → a test event in the simulation strip → Journey Monitor.
+- **Group work in a program** (marketer, admin; 9 steps): *Q4 Retention push* with owner, period, a 5,000-conversion goal and a 2-per-week contact cap → Save → members → Timeline → Overview.
+- **Follow a program** (CMO, approver; 4 read-only steps): dashboard → program list → goal progress → timeline.
+- Getting started: *Build a journey* and *Group work in a program* are live for marketers (no longer *coming soon*); *Follow a program* replaces *Program results* for the CMO and joins the approver's list. All three tick from app state. The ? menu lists the new tours with their status.
+- Same engine: one optional `resume(step)` hook lets a tour restart at *New journey* / *New program* after a reload. `data-tour` hooks on the palette buttons, the simulation strip and the program's goal tile.
+- Tests: `tests/tour-journey.js` and `tests/tour-program.js` — end to end with *Do it for me* / *Next*, by hand, resume, the ? menu, roles; screenshots in `tests/shots/`.
+
 ## v56 — 24 Sept 2026
 **Campaign readiness: ready to submit** (decisions C17–C20). The type rename, the goal chip and the connected stepper of the same brief shipped in v55.
 - **Ready to submit: n of 6** (5 for Information) replaces *readiness n/7*. Approval is no longer an item; the Approval step shows the approval state — grey not submitted, amber pending, green approved, red rejected.
