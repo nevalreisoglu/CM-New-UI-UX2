@@ -428,7 +428,8 @@ Demir in every role view), and sample customers have masked ids
 ## 10. Visual language
 
 One theme, Etiya commercial palette: navy primary, dark-orange accent, two
-greys. Bordered cards with tinted section headers, an 8-point spacing grid,
+greys. The menu and the bars are a light lilac wash with dark text, not a solid
+dark block, so the content leads and the brand stays present. Bordered cards with tinted section headers, an 8-point spacing grid,
 36px inputs, tabular numerals for anything countable. Orange is reserved for
 the primary action and the current step — it is never decoration.
 
