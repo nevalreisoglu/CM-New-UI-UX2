@@ -139,11 +139,23 @@ five tiles:
 Each tile has a small sparkline of the period, day by day, and the change
 against the previous period. Revenue and ROI say **BSS feed, demo**: in the
 prototype they are calculated from the conversions, not read from billing.
-Marketers and admins see Customers reached, Conversions, Conversion rate,
-**Waiting on you** and **Live** instead.
+As a **marketer** the strip is about your work, not totals:
+
+| Tile | Big number | Line under it |
+| --- | --- | --- |
+| Needs your action | campaigns waiting on you | how many are drafts, rejected, without content, or ending within 7 days |
+| Waiting for approval | campaigns in the approver's queue | how long the oldest has waited |
+| Going out this week | scheduled sends in the next 7 days | the next one, by name and time |
+| Live | active campaigns and journeys | how many end within 7 days |
+| Top campaign | the campaign with the best conversion rate | how many campaigns are below average |
+
+Click any tile to open the list behind it; **Top campaign** opens that
+campaign's detail in Campaign performance. Admins see Customers reached,
+Conversions, Conversion rate, **Waiting on you** and **Live**.
 
 Delivered, opened and clicked are not in the strip — summed over every campaign
-they say nothing. They are per campaign, in **Campaign performance**.
+they say nothing. They are per campaign, in **Campaign performance**, which for
+a marketer is the first panel under the strip.
 
 **Campaign performance** lists every campaign in the period: status, targeted,
 delivered, opened, clicked, conversions, conversion rate and revenue. Click a
