@@ -308,7 +308,9 @@ Items tick themselves off **from real application state wherever that can be
 observed** — a segment that was actually saved, a campaign that actually reached
 *Pending approval* — rather than from having sat through a tour. Watching a tour
 is not the same as having done the thing, and the checklist should not pretend
-otherwise. Journey and Program are listed but not yet built.
+otherwise. Building a journey counts once a journey you made passes validation
+with a delivery in it; grouping work, once a program you made has a member;
+following a program, once its Timeline was opened.
 
 **Guided tours** dim the page, cut a hole around one element and put a short
 explanation beside it, with a step counter and a progress bar. Two things make
@@ -325,9 +327,27 @@ them more than a slideshow:
   eight steps and honours their rules — on an Information campaign the Offer step is
   skipped, exactly as the editor skips it.
 
-Five tours ship: *Create your first campaign* (the important one — seventeen
+Eight tours ship: *Create your first campaign* (the important one — seventeen
 steps ending with a real campaign submitted for approval), *Create a segment*,
-*Review and approve a campaign*, *Read the dashboard*, and *Admin setup*.
+*Review and approve a campaign*, *Read the dashboard*, *Admin setup*, and one
+per remaining top-level object:
+
+- **Build your first journey** (marketer, admin) — Felix's balance-low story:
+  *Create your journey* with the `balance_low` event, a Delivery with the
+  journey's own SMS text, a Wait for event (`offer_accepted`, 1 day) whose
+  *accepted* branch reaches the goal and whose *timeout* branch sends a push
+  reminder, then Validate, Activate (the journey's existing activation path — a
+  Draft ignores events), a test event from the simulation strip, and Journey
+  Monitor.
+- **Group work in a program** (marketer, admin) — a *Q4 Retention push*
+  program with a goal and a contact cap, saved, given members, then read on its
+  timeline and Overview.
+- **Follow a program** (CMO, approver) — four read-only steps: dashboard,
+  program list, goal progress, timeline.
+
+Every top-level object therefore has its own first-run tour on the same engine,
+with the same rules: a step waits for the user to act, and every waiting step
+can be done for them.
 
 Progress is remembered per role, so a tour abandoned halfway offers to resume.
 A tour is written for one role; changing role stops it rather than walking

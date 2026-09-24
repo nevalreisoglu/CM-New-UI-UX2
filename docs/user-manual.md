@@ -68,8 +68,10 @@ page** to just go there.
 
 Items tick themselves off when you do the real thing, not when you watch the
 tour. Saving a segment ticks "Create a segment"; submitting a campaign ticks
-"Submit a campaign for approval". Journey and Program items are marked *coming
-soon* — those tours are not built yet.
+"Submit a campaign for approval"; a journey you built that passes validation
+and has a delivery ticks "Build a journey"; a program you created with at least
+one member ticks "Group work in a program"; opening a program's **Timeline**
+ticks "Follow a program".
 
 ### What a tour looks like
 
@@ -105,6 +107,14 @@ leave the tour (it asks first).
 | Review and approve a campaign | Approver | From "Needs attention" to the approval step and the decision. |
 | Read the dashboard | Everyone | Period, headline KPIs, Live now, Needs attention, funnel and eliminations, control-group uplift. |
 | Admin setup | Admin | The five Parameters screens. |
+| Build your first journey | Marketer, Admin | Fifteen steps: a balance-low journey from *Create your journey* to the canvas — an SMS delivery, a Wait for event with an *accepted* branch to the goal and a *timeout* branch to a push reminder — then Validate, Activate, a test event in the simulation strip and Journey Monitor. |
+| Group work in a program | Marketer, Admin | Nine steps: a *Q4 Retention push* program with its owner, period, a goal (5,000 conversions) and a contact cap; save it, add members, read the timeline and the goal progress. |
+| Follow a program | CMO / Executive, Approver | Four read-only steps: the dashboard, the program list, a program's goal progress and its timeline. Nothing to edit. |
+
+The journey and program tours are interactive like the campaign tour: each step
+moves on when you do it, and **Do it for me** does it with sample data. After a
+reload the draft journey or program is gone (nothing is saved), so **Continue**
+picks up from *New journey* or *New program*.
 
 ### Turning it off
 

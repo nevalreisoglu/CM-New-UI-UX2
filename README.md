@@ -39,6 +39,8 @@ tests/README.md                   how to run them and what they cover
 docs/brand.md                     palette, token map, type scale, contrast rules
 tools/embed-manual.js             copies the user manual into index.html
 tests/tour.js                     standalone regression run for the guided tours
+tests/tour-journey.js             the journey tour, end to end and by hand
+tests/tour-program.js             the program tours, end to end, by hand and per role
 tests/dm.js                       standalone regression run for the Datamart catalogue
 CHANGELOG.md
 ```
@@ -61,7 +63,7 @@ The guided tours have their own end-to-end run, which drives the whole campaign 
 `tests/shots/`:
 
 ```bash
-cd tests && node tour.js
+cd tests && node tour.js && node tour-journey.js && node tour-program.js
 ```
 
 The Datamart module has its own run, which documents a column and checks the segment builder picks it up:

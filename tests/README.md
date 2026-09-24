@@ -44,6 +44,8 @@ Node scripts (run with `node <name>.js`; an empty error list is the pass conditi
 | `srv.js` | Surveys: creates a survey with all six question types, previews it, attaches it to a push and a pull channel and a journey step, and reads its results. |
 | `dm.js` | The Datamart catalogue. |
 | `tour.js` | The guided tours. |
+| `tour-journey.js` | *Build your first journey*: end to end with Do it for me / Next (asserts a validated, active journey with a Delivery, a Wait with two branches and an Exit), by hand, Getting started, resume after a reload, the ? menu, a role change. |
+| `tour-program.js` | *Group work in a program* end to end and by hand (asserts a saved program with a goal, a cap and members), resume, and *Follow a program* for CMO and approver. |
 | `brand-audit.js` | AA contrast of every rendered text node on every page and a set of deep states. |
 
 ## Screenshots
