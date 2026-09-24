@@ -861,6 +861,18 @@ body{font-size:14px;line-height:1.43}
 .cc-sec>small{display:block;margin-top:8px;color:var(--ink-3);font-size:12px}
 .cc-obj{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
 .cc-reach{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cc-trig{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.jc-follow{margin-top:14px}.jc-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#jl-table .act{display:flex;gap:6px;align-items:flex-start}#jl-table .dm-menu .pop{width:190px}
+#jl-table th,#jl-table td{padding:9px 6px}
+#jl-table th:first-child,#jl-table td:first-child{padding-left:10px}
+#jl-table td .mini i{width:34px}
+#jl-table .dm-menu .pop{position:fixed;right:auto;top:auto}
+#jl-table th{white-space:normal;line-height:1.25;vertical-align:bottom}
+#jl-table td:first-child{min-width:150px}
+#jl-table td:nth-child(4){min-width:110px;max-width:140px}
+#jl-table td:nth-child(4) span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#jl-table td .mini{white-space:nowrap}
 .cc-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:12px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;font:inherit;color:var(--ink);min-width:0}
 .cc-card:hover{border-color:var(--brand-lilac)}
 .cc-card svg{width:22px;height:22px;stroke:var(--brand-lilac);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:4px}
@@ -1089,6 +1101,7 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
 
     <!-- JOURNEYS -->
     <section class="view active" id="view-journeys">
+      <div class="card" id="jl-card" style="display:flex;flex-direction:column;overflow:auto;flex:1;min-height:0"></div>
       <div class="split" id="jsplit" style="grid-template-columns:1fr 360px">
         <div class="card left">
           <div class="jb" id="jb">
@@ -1097,8 +1110,8 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
             </div>
             <div class="cright">
               <div class="ctool" style="background:var(--surface-2)">
-                <label for="jsel" style="color:var(--ink-2)">Journey</label>
-                <select id="jsel" class="btn sm outline" style="background:#fff"></select><button class="btn sm primary" id="btn-jnew" style="white-space:nowrap">+ New journey</button><button class="btn sm outline" id="btn-jlist">List</button>
+                <button class="btn sm outline" id="btn-jback" style="white-space:nowrap">‹ Journey list</button><label for="jsel" style="color:var(--ink-2)">Journey</label>
+                <select id="jsel" class="btn sm outline" style="background:#fff" title="Quick switch to another journey"></select><button class="btn sm primary" id="btn-jnew" style="white-space:nowrap">+ New journey</button>
                 <div class="meta" id="jmeta" style="display:flex;gap:6px;flex-wrap:wrap"></div>
                 <div class="grow"></div>
                 <button class="btn sm outline" id="btn-report">Execution report</button>
@@ -2058,31 +2071,6 @@ branching rule skipped.
       <div class="toolrow" style="justify-content:flex-end"><button class="btn sm outline" id="rep-csv">Export CSV</button><button class="btn dark" id="rep-close2">Close</button></div>
     </div>
   </div>
-  <div class="modal-bg" id="jnew-modal" hidden>
-    <div class="modal card" style="width:min(720px,94vw)">
-      <div class="ph"><h3 id="jnew-title">Create Journey</h3><span class="pill warn">proposed</span><button class="tog x" id="jnew-close" title="Close" aria-label="Close" style="margin-left:auto">×</button></div>
-      <div class="form2" style="overflow:auto">
-        <div class="fld span2"><label class="req">Name</label><input id="jn-name" placeholder="e.g. Package renewal — 2 days before expiry"></div>
-        <div class="fld span2"><label>Description</label><input id="jn-desc" placeholder="What this journey does"></div>
-        <div class="fld"><label>Start from</label><select id="jn-tpl"><option value="">Blank (Entry → Exit)</option><option value="renewal">Template · Package renewal (SMS → wait → push → exit)</option><option value="event">Template · Event-triggered (event → NBO → SMS → exit)</option></select></div>
-        <div class="fld"><label class="req">Entry mode</label><select id="jn-mode"></select></div>
-        <div class="fld"><label>Target audience (segment)</label><select id="jn-seg"></select></div>
-        <div class="fld"><label>Trigger event</label><select id="jn-ev"></select></div>
-        <div class="fld"><label>Goal event</label><select id="jn-goal"><option>offer_accepted</option><option>package_renewed</option><option>topup_completed</option><option>app_installed</option><option>day_30_reached</option></select></div>
-        <div class="fld"><label>Exit action on goal</label><select id="jn-goalact"></select></div>
-        <div class="fld"><div class="row"><div class="fld"><label>Re-entry after (days)</label><input id="jn-re" type="number" min="0" value="30"></div><div class="fld"><label>Max concurrent journeys</label><input id="jn-max" type="number" min="1" value="1"></div></div></div>
-        <div class="fld"><div class="row"><div class="fld"><label>Expires (days after entry)</label><input id="jn-exp" type="number" min="1" value="14"></div><div class="fld"><label>Invitation policy (days)</label><input id="jn-inv" type="number" min="0" value="45"></div></div></div>
-        <div class="note span2">The journey is created as <b>Draft · v1</b>. Build the flow on the canvas, then Activate — status, version and activation time appear in Journey Monitor.</div>
-      </div>
-      <div class="toolrow" style="justify-content:flex-end;border-top:1px solid var(--line-2)"><button class="btn dark" id="jnew-cancel">Cancel</button><button class="btn primary" id="jnew-create">Create journey</button></div>
-    </div>
-  </div>
-  <div class="modal-bg" id="jlist-modal" hidden>
-    <div class="modal card">
-      <div class="ph"><h3>Journey Builder List</h3><div class="grow"></div><button class="btn sm primary" id="jlist-new">+ New journey</button><button class="tog x" id="jlist-close" title="Close" aria-label="Close" style="margin-left:8px">×</button></div>
-      <div class="padx" style="overflow:auto;padding-top:8px"><table class="tbl" id="jlist-table"><thead><tr><th>Journey</th><th>Status</th><th>Version</th><th>Entry</th><th>Steps</th><th>Participants</th><th>Activated</th><th>Created</th><th></th></tr></thead><tbody></tbody></table></div>
-    </div>
-  </div>
   <footer class="footer"><div class="logo"><span class="mark"></span><span class="w"><b>ETIYA</b><small>Marketing Cloud</small></span></div><div class="c">2026 © ETIYA ALL RIGHTS RESERVED</div></footer>
 </div>
 
@@ -2190,7 +2178,7 @@ const CAMP_CATS={Retention:['Package renewal','Top-up','Assisted','Streaming'],U
 const CAMP_LABELS=['KYIVSTAR-DEMO','ETIYA','B2B','PARTNER'];
 /* meeting 3: optional Info fields are configuration (per customer / version); single-brand customers never see the brand field */
 const CAMP_CFG={objective:true,desc:false,multiBrand:false};
-const CAMP_STATUS_CLS={Active:'ok',Draft:'grey','Pending approval':'warn',Paused:'warn',Expired:'bad',Stopped:'bad',Rejected:'bad'};
+const CAMP_STATUS_CLS={Active:'ok',Draft:'grey','Pending approval':'warn',Paused:'warn',Expired:'bad',Stopped:'bad',Rejected:'bad',Ended:'grey'};
 const statusPill=st=>`<span class="pill ${CAMP_STATUS_CLS[st]||''}">${st}</span>`;
 const APPROVERS=[DEMO_USERS.approver,DEMO_USERS.approver2,'Marketing lead (any)'];
 /* tooltip helper — every field that needs explaining gets one (meeting 3) */
@@ -2339,7 +2327,7 @@ const SYSTEMS = ['CRM ticket API (REST)','Billing balance lookup (REST)','Networ
 const NBO_SOURCES=['Digital Twin NBO (API)','ECM offer rules (priority + eligibility)'];
 const NBO_SCOPES=['All active offers','Tag: Retention','Tag: Upsell','Tag: Mobile › Prepaid','Tag: Mobile › Postpaid'];
 const NBO_MIN=['no minimum','score ≥ 0.5','score ≥ 0.7'];
-const MODES = ['Segment + event','Segment only (scheduled)','Event only'];
+const MODES = ['Segment entry','Segment + event','Segment only (scheduled)','Event only'];
 const PRIO = ['none','+5 for 30 min after app open','+10 for 30 min after offer_liked','×1.5 for 7 days after accepted','set = Digital Twin nbo.rank'];
 const campLabel = id => { const c=CAMPAIGNS.find(c=>c.id===String(id).split(' ')[0].replace('CMP-','')); return c?`${c.id} · ${c.name}`:id; };
 const NODE_META = {
@@ -2924,7 +2912,7 @@ function renderOffers(){
     <div class="sec">Linked journeys</div>
     <div class="chips">${o.journeys.map(j=>`<button class="btn sm outline" data-j="${j}">${j}</button>`).join('')}</div>
     <div class="fld"><div class="row"><button class="btn dark" disabled>Back</button><button class="btn primary" disabled>Save</button></div></div>`;
-  body.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{ curJ=b.dataset.j; selNode=null; document.getElementById('jsel').value=curJ; showView('journeys'); });
+  body.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>jOpen(b.dataset.j));
 }
 
 /* ---------- POLICIES ---------- */
@@ -3014,13 +3002,11 @@ function navLabel(v){ const b=document.querySelector(`.nav button[data-view="${v
 function navGroup(v){ const b=document.querySelector(`.nav button[data-view="${v}"]`); const g=b&&document.querySelector(`.nav .grp[data-grp="${b.dataset.grp}"]`); return g?g.textContent.trim():''; }
 function setCrumb(detail){ const c=document.getElementById('crumb'); const parts=[navGroup(curView),navLabel(curView)]; if(detail) parts.push(detail); c.innerHTML=parts.map((p,i)=>i===parts.length-1?`<span class="cur">${p}</span>`:p).join('<b>›</b>'); }
 function showView(v){ curView=v; document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='view-'+v)); document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v)); setCrumb(); render(); if(typeof markSeen==='function') markSeen(v);
-  /* The canvas can only be measured once it is on screen, so fit it the first
-     time the builder is shown rather than at boot. Later visits keep the pan
-     and zoom the user left behind. */
-  if(v==='journeys'&&!jFitted){ jFitted=true; fitView(); setTimeout(fitView,200); } }
-function render(){ renderCanvas(); renderNodePanel(); renderOffers(); renderPolicies(); renderMonitor(); renderApi(); renderSegmentation(); renderCampaigns(); renderContent(); renderParameters(); renderReports(); renderDashboard(); renderPrograms(); renderDatamart(); renderStart(); renderOpsan(); renderSurveys(); }
+  /* The canvas can only be measured once it is on screen, so it is fitted when a
+     journey is first opened (jOpen), not at boot and not on the list. */ }
+function render(){ renderCanvas(); renderNodePanel(); renderOffers(); renderPolicies(); renderMonitor(); renderApi(); renderSegmentation(); renderCampaigns(); renderContent(); renderParameters(); renderReports(); renderDashboard(); renderPrograms(); renderDatamart(); renderStart(); renderOpsan(); renderSurveys(); renderJourneysView(); }
 
-document.querySelectorAll('.nav button[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+document.querySelectorAll('.nav button[data-view]').forEach(b=>b.onclick=()=>{ if(b.dataset.view==='journeys') jMode='list'; showView(b.dataset.view); });
 
 /* role view — pages and actions follow the signed-in role (persona decision from the UX meeting) */
 /* Pages kept in the code but hidden from every role (decision X6). Their render functions still run,
@@ -3063,7 +3049,7 @@ repModal=document.getElementById('rep-modal');
 document.getElementById('btn-report').onclick=()=>{ renderReport(); repModal.hidden=false; };
 document.getElementById('rep-close').onclick=document.getElementById('rep-close2').onclick=()=>{ repModal.hidden=true; };
 repModal.addEventListener('click',e=>{ if(e.target===repModal) repModal.hidden=true; });
-window.addEventListener('keydown',e=>{ if(e.key==='Escape'){ repModal.hidden=true; jnewModal.hidden=true; jlistModal.hidden=true; const nl=document.getElementById('seg-nl-modal'); if(nl) nl.hidden=true; } });
+window.addEventListener('keydown',e=>{ if(e.key==='Escape'){ repModal.hidden=true; const nl=document.getElementById('seg-nl-modal'); if(nl) nl.hidden=true; } });
 document.getElementById('rep-csv').onclick=()=>toast('Export','CSV export is not enabled in this environment.','warn');
 document.getElementById('btn-pal').onclick=()=>{ document.getElementById('jb').classList.toggle('pal-closed'); setTimeout(renderCanvas,160); };
 document.getElementById('btn-info').onclick=()=>{ document.getElementById('jsplit').classList.toggle('info-closed'); setTimeout(renderCanvas,160); };
@@ -3079,7 +3065,7 @@ document.getElementById('btn-clearlog').onclick=()=>{ log.length=0; renderMonito
 document.getElementById('btn-csv').onclick=()=>toast('Export','CSV export is not enabled in this environment — the participant list at the selected time would download here.','warn');
 document.getElementById('btn-validate').onclick=()=>{ const j=JOURNEYS.find(x=>x.id===curJ); const dangling=j.nodes.filter(n=>n.type!=='exit'&&n.next.length===0); if(dangling.length) toast('Validation',`${dangling.length} step(s) without an outgoing path: ${dangling.map(n=>n.label).join(', ')}.`,'warn'); else toast('Validation passed','Every path ends in an exit; the entry has a target audience or event; linked offers are Active.'); };
 document.getElementById('btn-del').onclick=()=>{ if(!selNode){ toast('Delete','Select a step first (click its header), then delete.','warn'); return; } deleteNode(selNode); };
-window.addEventListener('keydown',e=>{ if((e.key==='Delete'||e.key==='Backspace') && selNode && !e.target.closest('input,select,textarea') && document.getElementById('view-journeys').classList.contains('active')){ e.preventDefault(); deleteNode(selNode); } });
+window.addEventListener('keydown',e=>{ if((e.key==='Delete'||e.key==='Backspace') && selNode && jMode==='canvas' && !e.target.closest('input,select,textarea') && document.getElementById('view-journeys').classList.contains('active')){ e.preventDefault(); deleteNode(selNode); } });
 function activateJourney(j,validate){
   if(validate){ const dangling=j.nodes.filter(n=>n.type!=='exit'&&n.next.length===0); if(dangling.length){ toast('Cannot activate',`${dangling.length} step(s) have no outgoing path: ${dangling.map(n=>n.label).join(', ')}.`,'bad'); return; } }
   const wasPaused=j.status==='Paused'; const republish=j.status==='Active'; if(republish) j.version=(j.version||1)+1; j.status='Active';
@@ -3094,7 +3080,6 @@ function pauseJourney(j){ j.status='Paused'; addLog('warn',`${j.id}  paused · v
 document.getElementById('btn-activate').onclick=()=>activateJourney(JOURNEYS.find(x=>x.id===curJ),true);
 document.getElementById('btn-pause').onclick=()=>{ const j=JOURNEYS.find(x=>x.id===curJ); if(j.status==='Paused') activateJourney(j,false); else pauseJourney(j); };
 /* ---------- create / list journeys ---------- */
-const jnewModal=document.getElementById('jnew-modal'), jlistModal=document.getElementById('jlist-modal');
 function nextJourneyId(){ return 'JRN-'+(Math.max(...JOURNEYS.map(j=>parseInt(j.id.slice(4))||0))+1); }
 function initJourneySim(j){ const parts={}; if(j.nodes[0].cfg.mode!=='Event only'&&j.status==='Active') mlCustomers(j.nodes[0].cfg.segment).filter(c=>!excludedCids().has(c.cid)).forEach(c=>{ parts[c.id]={pos:nextIds(j.nodes[0]),status:'active',since:day,visited:new Set([j.nodes[0].id,...nextIds(j.nodes[0])]),opened:null,offers:[],timers:{}}; }); sim[j.id]={parts,history:[snapshot(parts)]}; }
 function registerJourney(j){ JOURNEYS.push(j); initJourneySim(j); jsel.add(new Option(`${j.id} · ${j.name}`,j.id)); msel.add(new Option(`${j.id} · ${j.name}`,j.id)); }
@@ -3112,30 +3097,152 @@ function journeyTemplate(tpl,mode,seg,ev){
     {id:'s4',type:'exit',x:806,y:245,label:'Exit',cfg:{action:EXITS[0]},next:[]}];
   return [E(53,245,['s2']),{id:'s2',type:'exit',x:555,y:245,label:'Exit',cfg:{action:'End journey (no action)'},next:[]}];
 }
-function openJnew(){ const g=id=>document.getElementById(id); g('jn-name').value=''; g('jn-desc').value=''; g('jn-tpl').value='';
-  g('jn-mode').innerHTML=MODES.map(m=>`<option>${m}</option>`).join(''); g('jn-seg').innerHTML=MLISTS_get().map(m=>`<option>${esc(m)}</option>`).join(''); g('jn-seg').value=MLISTS_get()[2]||MLISTS_get()[0];
-  g('jn-ev').innerHTML='<option value="">— none</option>'+BIZ_EVENTS.map(e=>`<option>${e}</option>`).join(''); g('jn-ev').value='package_expiring'; if(!g('jn-ev').value) g('jn-ev').value='balance_low';
-  g('jn-goalact').innerHTML=EXITS.map(e=>`<option>${esc(e)}</option>`).join('');
-  jlistModal.hidden=true; jnewModal.hidden=false; setTimeout(()=>g('jn-name').focus(),50); }
-document.getElementById('btn-jnew').onclick=openJnew; document.getElementById('jlist-new').onclick=openJnew;
-document.getElementById('jnew-close').onclick=document.getElementById('jnew-cancel').onclick=()=>{ jnewModal.hidden=true; };
-jnewModal.addEventListener('click',e=>{ if(e.target===jnewModal) jnewModal.hidden=true; });
-document.getElementById('jn-tpl').onchange=e=>{ const g=id=>document.getElementById(id); if(e.target.value==='event'){ g('jn-mode').value='Event only'; g('jn-seg').value='— (event only)'; } if(e.target.value==='renewal'){ g('jn-mode').value='Segment only (scheduled)'; const l=MLISTS_get().find(x=>x.startsWith('ML-2202')); if(l) g('jn-seg').value=l; } };
-document.getElementById('jnew-create').onclick=()=>{ const g=id=>document.getElementById(id).value; if(!g('jn-name').trim()){ toast('Name is required','Give the journey a name.','bad'); document.getElementById('jn-name').focus(); return; }
-  const mode=g('jn-mode'); const seg=mode==='Event only'?'— (event only)':g('jn-seg'); const ev=mode==='Segment only (scheduled)'?'':(g('jn-ev')||'balance_low');
-  if(mode!=='Event only'&&seg==='— (event only)'){ toast('Target audience required',`${mode} needs a segment — pick one or switch to Event only.`,'bad'); return; }
-  const j={id:nextJourneyId(),name:g('jn-name').trim(),desc:g('jn-desc').trim(),status:'Draft',version:1,created:TODAY,createdBy:DEMO_USERS.me,
-    entry:{segment:seg,events:ev?[ev]:[],reentryDays:+g('jn-re')||0,maxConcurrent:+g('jn-max')||1},exit:{goal:g('jn-goal'),goalAction:g('jn-goalact'),expireDays:+g('jn-exp')||14},policy:{invitationDays:+g('jn-inv')||0,communicationDays:1,region:'All'},nodes:journeyTemplate(g('jn-tpl'),mode,seg,ev)};
-  registerJourney(j); curJ=j.id; selNode=null; jsel.value=j.id; jnewModal.hidden=true; addLog('',`${j.id}  journey created · ${j.name} · Draft v1 · entry: ${mode}${mode!=='Event only'?' · '+seg.split(' · ')[0]:''}${ev?' · '+ev:''}`,{j:j.id,node:'e1',kind:'system'});
-  render(); fitView(); setTimeout(fitView,200); toast(`Created · ${j.id}`,`${j.name} is a Draft. Add steps from the palette, then Activate.`); };
-function renderJlist(){ document.querySelector('#jlist-table tbody').innerHTML=JOURNEYS.map(j=>{ const ps=Object.values((sim[j.id]||{parts:{}}).parts); const e=j.nodes[0].cfg; return `<tr class="row ${j.id===curJ?'sel':''}" data-j="${j.id}"><td><b>${j.id}</b> · ${esc(j.name)}<br><span style="color:var(--ink-3);font-size:11px">${esc(j.desc||'')}</span></td><td><span class="pill ${(CAMP_STATUS_CLS[j.status]||'')}">${j.status}</span></td><td class="num">v${j.version}</td><td>${esc(e.mode)}${e.mode!=='Event only'?' · '+esc(String(e.segment).split(' · ')[0]):''}${e.events?' · '+esc(e.events):''}</td><td class="num">${j.nodes.length}</td><td class="num">${ps.length}</td><td class="num">${j.activatedAt||'—'}</td><td class="num">${j.created||'—'}<br><span style="color:var(--ink-3)">${esc(j.createdBy||'')}</span></td><td style="white-space:nowrap"><button class="btn sm outline" data-open="${j.id}">Open</button> <button class="btn sm outline" data-copy="${j.id}">Copy</button> <button class="btn sm outline" data-del="${j.id}" ${j.status==='Active'?'disabled title="Pause first"':''}>Delete</button></td></tr>`; }).join('');
-  document.querySelectorAll('#jlist-table [data-open]').forEach(b=>b.onclick=()=>{ curJ=b.dataset.open; selNode=null; jsel.value=curJ; jlistModal.hidden=true; render(); fitView(); });
-  document.querySelectorAll('#jlist-table [data-copy]').forEach(b=>b.onclick=()=>{ const src=JOURNEYS.find(x=>x.id===b.dataset.copy); const j=JSON.parse(JSON.stringify(src)); j.id=nextJourneyId(); j.name=src.name+' (copy)'; j.status='Draft'; j.version=1; delete j.activatedAt; j.created=TODAY; j.createdBy=DEMO_USERS.me; registerJourney(j); curJ=j.id; selNode=null; jsel.value=j.id; jlistModal.hidden=true; render(); fitView(); toast(`Copied · ${j.id}`,`${j.name} created as Draft v1.`); });
-  document.querySelectorAll('#jlist-table [data-del]').forEach(b=>b.onclick=()=>{ const i=JOURNEYS.findIndex(x=>x.id===b.dataset.del); if(i<0) return; const j=JOURNEYS[i]; if(j.status==='Active'){ toast('Cannot delete','Pause the journey first.','bad'); return; } if(JOURNEYS.length===1){ toast('Cannot delete','At least one journey must remain.','bad'); return; } JOURNEYS.splice(i,1); delete sim[j.id]; [jsel,msel].forEach(sl=>{ for(let k=sl.options.length-1;k>=0;k--) if(sl.options[k].value===j.id) sl.remove(k); }); if(curJ===j.id){ curJ=JOURNEYS[0].id; jsel.value=curJ; selNode=null; } toast('Deleted',`${j.id} · ${j.name} removed.`,'warn'); renderJlist(); render(); });
+/* ---------- journey list + "Create your journey" ----------
+   Journey Builder opens on a list, like Campaign (decision J1): campaign and journey are equal
+   top-level entities and a journey estate has to be searchable. The canvas opens when a journey is
+   opened or created. Creation uses the same centred screen as campaigns (decision J2). */
+let jMode='list', jQ='', jStatusF='All', jAdv=false, jPage=1, jFitFor=null;
+const jFilter={program:'',trigger:'',channel:'',owner:'',datamart:'',from:'',to:''};
+const J_STATUSES=['Draft','Active','Paused','Ended'];
+function jTrigger(j){ const e=j.nodes[0].cfg, seg=String(e.segment||'').split(' · ').slice(1).join(' · ')||String(e.segment||''), ev=Array.isArray(e.events)?e.events.join(', '):String(e.events||'');
+  if(e.mode==='Event only') return {k:'Event',sub:ev||'no event set'};
+  if(e.mode==='Segment only (scheduled)') return {k:'Schedule',sub:`${seg}${e.schedule?' · '+e.schedule:''}`};
+  return {k:'Segment entry',sub:seg+(ev?' · '+ev:'')}; }
+const jChannels=j=>[...new Set(j.nodes.filter(n=>n.type==='delivery').flatMap(n=>String(n.cfg.channel||'').startsWith('Preferred')?['push','sms','email']:[n.cfg.channel]).filter(Boolean))];
+const jProgram=j=>(PROGRAMS.find(p=>(p.journeys||[]).includes(j.id))||{}).name||'';
+const jDatamart=j=>{ const e=j.nodes[0].cfg; if(e.mode==='Event only') return 'Event DataMart'; const m=mlByLabel(e.segment); return m&&m.dm==='Event'?'Event DataMart':'Main DataMart'; };
+function jStats(j){ const ps=Object.values((sim[j.id]||{parts:{}}).parts); const conv=ps.filter(p=>p.status==='converted').length; return {inside:ps.filter(p=>p.status==='active').length,entered:ps.length,conv}; }
+/* the journey's Validate result, shown per row the way the campaign list shows readiness */
+function jValidate(j){ const ids=new Set(j.nodes.map(n=>n.id)), e=j.nodes[0].cfg, seen=new Set(), stack=[j.nodes[0].id];
+  while(stack.length){ const id=stack.pop(); if(seen.has(id)) continue; seen.add(id); const n=node(j,id); if(n) nextIds(n).forEach(x=>ids.has(x)&&stack.push(x)); }
+  const dangling=j.nodes.filter(n=>n.type!=='exit'&&n.next.length===0), noContent=j.nodes.filter(n=>n.type==='delivery'&&!String(n.cfg.content||'').trim());
+  const badOffers=j.nodes.filter(n=>n.type==='offer'&&n.cfg.offer&&!(OFFERS.find(o=>o.id===String(n.cfg.offer).split(' ')[0])||{status:'Active'}).status.startsWith('Active'));
+  const items=[
+    {l:'Entry has an audience or an event',ok:e.mode==='Event only'?!!String(Array.isArray(e.events)?e.events.join(''):e.events||'').trim():!!e.segment&&e.segment!=='— (event only)'},
+    {l:'Every path ends in an exit',ok:!dangling.length,why:dangling.map(n=>n.label).join(', ')},
+    {l:'Every step is reachable from the entry',ok:seen.size===j.nodes.length,why:j.nodes.filter(n=>!seen.has(n.id)).map(n=>n.label).join(', ')},
+    {l:'Every delivery step has content',ok:!noContent.length,why:noContent.map(n=>n.label).join(', ')},
+    {l:'Linked offers are active',ok:!badOffers.length,why:badOffers.map(n=>n.label).join(', ')}];
+  return {items,done:items.filter(i=>i.ok).length,total:items.length}; }
+function jValidHtml(j){ const r=jValidate(j), pct=Math.round(100*r.done/r.total), miss=r.items.filter(i=>!i.ok);
+  return `<span class="mini" title="${esc(miss.length?miss.map(i=>'✕ '+i.l+(i.why?': '+i.why:'')).join(' · '):'Validation passed — every check is green')}"><i><b style="width:${pct}%"></b></i>${miss.length?'⚠ ':'✓ '}${r.done}/${r.total}</span>`; }
+const jCanAct=()=>ROLE==='approver'||ROLE==='admin';
+function jFiltered(){ const q=jQ.toLowerCase(), f=jFilter;
+  return JOURNEYS.filter(j=>(jStatusF==='All'||j.status===jStatusF)&&(!q||(j.id+' '+j.name).toLowerCase().includes(q))
+    &&(!f.program||jProgram(j)===f.program)&&(!f.trigger||jTrigger(j).k===f.trigger)&&(!f.channel||jChannels(j).includes(f.channel))
+    &&(!f.owner||j.createdBy===f.owner)&&(!f.datamart||jDatamart(j)===f.datamart)&&(!f.from||(j.updated||j.created)>=f.from)&&(!f.to||(j.updated||j.created)<=f.to)); }
+
+/* open a journey on the canvas; the first time a journey is shown it is fitted, later visits keep the pan and zoom */
+function jOpen(id,nodeId){ if(!JOURNEYS.some(j=>j.id===id)) return; curJ=id; selNode=nodeId||null; jsel.value=id; jMode='canvas';
+  if(curView!=='journeys') showView('journeys'); else render();
+  if(jFitFor!==id){ jFitFor=id; fitView(); setTimeout(fitView,200); } }
+function jToList(){ jMode='list'; if(curView!=='journeys') showView('journeys'); else render(); }
+function jCreate(){ jMode='create'; jcc={name:'',desc:'',trig:'event',ev:'balance_low',seg:(MLS.find(m=>!m.excl)?mlLabel(MLS.find(m=>!m.excl)):''),sched:'Daily · 10:00'}; if(curView!=='journeys') showView('journeys'); else render(); }
+function jCopy(id){ const src=JOURNEYS.find(x=>x.id===id); const j=JSON.parse(JSON.stringify(src)); j.id=nextJourneyId(); j.name=src.name+' (copy)'; j.status='Draft'; j.version=1; delete j.activatedAt; j.created=TODAY; j.updated=TODAY; j.createdBy=DEMO_USERS.me; registerJourney(j); toast(`Copied · ${j.id}`,`${j.name} created as Draft v1.`); jOpen(j.id); }
+
+function renderJourneysView(){ const lc=document.getElementById('jl-card'), sp=document.getElementById('jsplit'); if(!lc||!sp) return;
+  sp.hidden=jMode!=='canvas'; lc.hidden=jMode==='canvas';
+  if(curView==='journeys') setCrumb(jMode==='canvas'?curJ:jMode==='create'?'New journey':'');
+  if(jMode==='list') renderJList(lc); else if(jMode==='create') renderJCreate(lc); }
+
+function renderJList(card){ const f=jFilter, rows=jFiltered(); const per=8, pages=Math.max(1,Math.ceil(rows.length/per)); if(jPage>pages) jPage=pages; const page=rows.slice((jPage-1)*per,jPage*per);
+  const owners=[...new Set(JOURNEYS.map(j=>j.createdBy).filter(Boolean))], chans=[...new Set(JOURNEYS.flatMap(jChannels))];
+  const chip=(v)=>`<button class="fchip ${jStatusF===v?'on':''}" data-jst="${v}">${v}</button>`;
+  const sel=(k,label,opts)=>`<div class="fld"><label for="jf-${k}">${label}</label><select id="jf-${k}" data-jf="${k}"><option value="">Any</option>${opts.map(o=>{ const [v,l]=Array.isArray(o)?o:[o,o]; return `<option value="${esc(v)}" ${f[k]===v?'selected':''}>${esc(l)}</option>`; }).join('')}</select></div>`;
+  card.innerHTML=`<div class="card-h"><h2>Journey List</h2><div class="grow"></div><button class="btn primary sm" id="jl-new" style="white-space:nowrap">+ New journey</button>
+      <p>Journey = an entry (event, segment or schedule) + steps a customer moves through over time. Customers inside, entered and converted come from the journey simulation (day ${day}); in the product they are live.</p></div>
+    <div class="toolrow" style="gap:8px">
+      <div class="search-in"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="jl-q" placeholder="Search by name or journey ID" value="${esc(jQ)}" aria-label="Search journeys"></div>
+      <div class="chipbar"><span style="color:var(--ink-3);font-size:11px">STATUS</span>${chip('All')}${J_STATUSES.map(chip).join('')}</div>
+      <button class="btn sm outline" id="jl-adv">${jAdv?'Hide':'Advanced'} filters</button>
+      <span class="kpi"><b>${rows.length}</b> journeys</span>
+    </div>
+    ${jAdv?`<div class="adv">
+      ${sel('program','Program',PROGRAMS.map(p=>p.name))}
+      ${sel('trigger','Trigger type',['Event','Segment entry','Schedule'])}
+      ${sel('channel','Channel in a delivery step',chans.map(c=>[c,chName(c)]))}
+      ${sel('owner','Owner',owners)}
+      ${sel('datamart','Datamart',['Main DataMart','Event DataMart'])}
+      <div class="fld"><label for="jf-from">Updated from</label><input type="date" id="jf-from" data-jf="from" value="${f.from}"></div>
+      <div class="fld"><label for="jf-to">Updated to</label><input type="date" id="jf-to" data-jf="to" value="${f.to}"></div>
+    </div>`:''}
+    <div class="padx" style="overflow:auto">
+    <table class="tbl" id="jl-table"><thead><tr><th>Journey</th><th>Status</th><th>Validation</th><th>Trigger</th><th class="num">Steps</th><th class="num">Version</th><th class="num" title="Customers currently inside the journey">Inside</th><th class="num">Entered</th><th class="num" title="Customers who reached the journey's goal">Conv.</th><th class="num">Conv. rate</th><th>Updated · owner</th><th>Actions</th></tr></thead>
+    <tbody>${page.map(j=>{ const t=jTrigger(j), s=jStats(j), pg=jProgram(j), can=jCanAct(), pr=j.status==='Active'||j.status==='Paused';
+      return `<tr class="row ${j.id===curJ&&jMode==='list'?'':''}" data-jid="${j.id}"><td><span class="lnk">${esc(j.name)}</span><br><span style="color:var(--ink-3);font-size:11px"><span class="mono">${j.id}</span>${pg?' · <span class="chip" style="font-size:10.5px;padding:0 5px" title="Program">'+esc(pg)+'</span>':''}</span></td>
+        <td>${statusPill(j.status)}</td><td>${jValidHtml(j)}</td>
+        <td><b style="font-weight:500">${t.k}</b><br><span style="color:var(--ink-3);font-size:11px">${esc(t.sub)}</span></td>
+        <td class="num">${j.nodes.length}</td><td class="num">v${j.version||1}</td><td class="num">${s.inside}</td><td class="num">${s.entered}</td><td class="num">${s.conv}</td><td class="num">${s.entered?Math.round(1000*s.conv/s.entered)/10+'%':'—'}</td>
+        <td class="num" style="white-space:nowrap">${j.updated||j.created||'—'}<br><span style="color:var(--ink-3)" title="Owner">${esc(j.createdBy||'—')}</span></td>
+        <td><span class="act"><button class="btn sm outline" data-jopen="${j.id}">Open</button><span class="dm-menu"><button class="btn sm outline" data-jmore="${j.id}" aria-haspopup="true" title="More actions">More ▾</button>
+          <div class="pop" hidden><button data-jmon="${j.id}">Monitor</button><button data-jrep="${j.id}">Execution report</button><button data-jcopy="${j.id}">Copy</button>
+          ${pr?`<hr><button data-jpause="${j.id}" ${can?'':'disabled title="Only an approver or an admin can pause or resume a journey"'}>${j.status==='Paused'?'Resume':'Pause'}</button>`:''}</div></span></span></td></tr>`; }).join('')
+      ||`<tr><td colspan="12" class="empty">No journey matches that. Clear the filters, or start a new one — the canvas opens with the entry step in place.<div style="margin-top:10px;display:flex;gap:8px;justify-content:center"><button class="btn sm outline" id="jl-clear">Clear filters</button><button class="btn sm primary" id="jl-new2">+ New journey</button></div></td></tr>`}</tbody></table></div>
+    <div class="pager">${Array.from({length:pages},(_,i)=>`<button class="${i+1===jPage?'on':''}" data-jp="${i+1}">${i+1}</button>`).join('')}</div>`;
+  const q=s=>card.querySelector(s);
+  q('#jl-q').oninput=e=>{ jQ=e.target.value; jPage=1; const v=jQ; renderJList(card); const i=q('#jl-q'); i.focus(); i.setSelectionRange(v.length,v.length); };
+  card.querySelectorAll('[data-jst]').forEach(b=>b.onclick=()=>{ jStatusF=b.dataset.jst; jPage=1; renderJList(card); });
+  card.querySelectorAll('[data-jf]').forEach(el=>el.onchange=()=>{ jFilter[el.dataset.jf]=el.value; jPage=1; renderJList(card); });
+  q('#jl-adv').onclick=()=>{ jAdv=!jAdv; renderJList(card); };
+  q('#jl-new').onclick=jCreate; if(q('#jl-new2')) q('#jl-new2').onclick=jCreate;
+  if(q('#jl-clear')) q('#jl-clear').onclick=()=>{ jQ=''; jStatusF='All'; Object.keys(jFilter).forEach(k=>jFilter[k]=''); jPage=1; renderJList(card); };
+  card.querySelectorAll('#jl-table tr[data-jid]').forEach(tr=>tr.onclick=e=>{ if(e.target.closest('button,.pop')) return; jOpen(tr.dataset.jid); });
+  card.querySelectorAll('[data-jopen]').forEach(b=>b.onclick=()=>jOpen(b.dataset.jopen));
+  /* the menu is placed against the viewport, so the table's scroll box never clips it */
+  const place=(b,pop)=>{ const r=b.getBoundingClientRect(), h=pop.offsetHeight, w=pop.offsetWidth; pop.style.left=Math.max(8,r.right-w)+'px'; pop.style.top=(r.bottom+4+h>innerHeight-8?r.top-4-h:r.bottom+4)+'px'; };
+  card.querySelectorAll('[data-jmore]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const pop=b.nextElementSibling, was=!pop.hidden; card.querySelectorAll('.dm-menu .pop').forEach(p=>p.hidden=true); pop.hidden=was; if(!was) place(b,pop); });
+  const follow=()=>card.querySelectorAll('.dm-menu .pop:not([hidden])').forEach(p=>place(p.previousElementSibling,p));
+  const tw=card.querySelector('#jl-table'); if(tw) tw.parentElement.onscroll=follow; card.onscroll=follow;
+  card.querySelectorAll('[data-jmon]').forEach(b=>b.onclick=()=>{ msel.value=b.dataset.jmon; showView('monitor'); });
+  card.querySelectorAll('[data-jrep]').forEach(b=>b.onclick=()=>{ curJ=b.dataset.jrep; jsel.value=curJ; renderReport(); repModal.hidden=false; card.querySelectorAll('.dm-menu .pop').forEach(p=>p.hidden=true); });
+  card.querySelectorAll('[data-jcopy]').forEach(b=>b.onclick=()=>jCopy(b.dataset.jcopy));
+  card.querySelectorAll('[data-jpause]').forEach(b=>b.onclick=()=>{ const j=JOURNEYS.find(x=>x.id===b.dataset.jpause); if(!j||!jCanAct()) return; j.updated=TODAY; if(j.status==='Paused') activateJourney(j,false); else pauseJourney(j); });
+  card.querySelectorAll('[data-jp]').forEach(b=>b.onclick=()=>{ jPage=+b.dataset.jp; renderJList(card); });
 }
-document.getElementById('btn-jlist').onclick=document.getElementById('btn-back').onclick=()=>{ renderJlist(); jlistModal.hidden=false; };
-document.getElementById('jlist-close').onclick=()=>{ jlistModal.hidden=true; };
-jlistModal.addEventListener('click',e=>{ if(e.target===jlistModal) jlistModal.hidden=true; });
+document.addEventListener('click',e=>{ if(curView==='journeys'&&jMode==='list'&&!e.target.closest('.dm-menu')) document.querySelectorAll('#jl-card .dm-menu .pop').forEach(p=>p.hidden=true); });
+
+let jcc=null;
+const JC_TRIG=[
+  ['event','When something happens','An event arrives — balance low, package expiring, offer accepted.','<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>'],
+  ['segment','When someone enters a segment','A customer starts matching a segment and is taken in.','<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M16 11h5M18.5 8.5v5"/>'],
+  ['schedule','On a schedule','The journey runs for a segment at set times.','<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>']];
+const JC_SCHED=['Daily · 10:00','Weekly · Mon · 10:00','Monthly · 1st · 10:00'];
+function renderJCreate(card){ const c=jcc; const ic=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+  const segs=MLS.filter(m=>!m.excl).map(mlLabel), recent=[...JOURNEYS].sort((a,b)=>(b.updated||b.created||'').localeCompare(a.updated||a.created||'')).slice(0,3);
+  const segSel=`<div class="fld"><label for="jc-seg" class="req">Segment</label><select id="jc-seg">${segs.map(s=>`<option ${c.seg===s?'selected':''}>${esc(s)}</option>`).join('')}</select></div>`;
+  const follow=c.trig==='event'?`<div class="fld"><label for="jc-ev" class="req">Event</label><select id="jc-ev">${BIZ_EVENTS.map(e=>`<option ${c.ev===e?'selected':''}>${e}</option>`).join('')}</select></div>`
+    :c.trig==='segment'?segSel
+    :`<div class="jc-2">${segSel}<div class="fld"><label for="jc-sched" class="req">Runs</label><select id="jc-sched">${JC_SCHED.map(s=>`<option ${c.sched===s?'selected':''}>${s}</option>`).join('')}</select></div></div>`;
+  card.innerHTML=`<div class="cc-top"><button class="btn sm outline" id="jc-back">‹ Journey list</button></div>
+  <div class="cc">
+    <div class="cc-hd"><h2>Create your journey</h2><p>Name it and choose what starts it — you build the steps on the canvas next.</p></div>
+    <div class="fld cc-name"><label for="jc-name" class="req">Journey name</label><input id="jc-name" maxlength="100" value="${esc(c.name)}" placeholder="e.g. Package expiring — renewal nudge" autocomplete="off"></div>
+    <div class="fld"><label for="jc-desc">Description</label><input id="jc-desc" value="${esc(c.desc)}" placeholder="What this journey does, for your team"></div>
+    <div class="cc-sec"><div class="cc-l">What starts it?</div><div class="cc-trig">${JC_TRIG.map(([k,t,d,svg])=>`<button type="button" class="cc-card ${c.trig===k?'on':''}" data-trig="${k}" aria-pressed="${c.trig===k}">${ic(svg)}<b>${t}</b><span>${d}</span></button>`).join('')}</div>
+      <div class="jc-follow">${follow}</div></div>
+    <div class="cc-go"><button class="btn primary" id="jc-start">Start building</button></div>
+    <div class="cc-tpl"><div class="cc-l">Start from a template <small>— a copy of an existing journey</small></div>
+      <div class="cc-tpls">${recent.map(x=>`<button type="button" class="cc-t" data-jctpl="${x.id}"><b>${esc(x.name)}</b><span>${x.id} · ${jTrigger(x).k} · ${x.nodes.length} steps</span><em>Use a copy ›</em></button>`).join('')}</div></div>
+  </div>`;
+  const q=s=>card.querySelector(s), nm=q('#jc-name');
+  nm.oninput=()=>{ c.name=nm.value; }; nm.onkeydown=e=>{ if(e.key==='Enter') q('#jc-start').click(); };
+  q('#jc-desc').oninput=e=>{ c.desc=e.target.value; };
+  if(!card.contains(document.activeElement)) setTimeout(()=>{ if(jMode==='create'&&document.body.contains(nm)&&!document.querySelector('.tour-card')) nm.focus(); },0);
+  card.querySelectorAll('[data-trig]').forEach(b=>b.onclick=()=>{ c.trig=b.dataset.trig; renderJCreate(card); q('#jc-name')&&card.querySelector('#jc-name').blur(); });
+  ['ev','seg','sched'].forEach(k=>{ const el=q('#jc-'+k); if(el) el.onchange=()=>{ c[k]=el.value; }; });
+  q('#jc-back').onclick=jToList;
+  card.querySelectorAll('[data-jctpl]').forEach(b=>b.onclick=()=>jCopy(b.dataset.jctpl));
+  q('#jc-start').onclick=()=>{ if(!c.name.trim()){ toast('Name is required','Give the journey a name your team will recognise.','bad'); nm.focus(); return; }
+    const mode=c.trig==='event'?'Event only':c.trig==='segment'?'Segment entry':'Segment only (scheduled)';
+    const seg=c.trig==='event'?'— (event only)':c.seg, ev=c.trig==='event'?c.ev:'';
+    const j={id:nextJourneyId(),name:c.name.trim(),desc:c.desc.trim(),status:'Draft',version:1,created:TODAY,updated:TODAY,createdBy:DEMO_USERS.me,
+      entry:{segment:seg,events:ev?[ev]:[],reentryDays:30,maxConcurrent:1},exit:{goal:'offer_accepted',goalAction:EXITS[0],expireDays:14},policy:{invitationDays:45,communicationDays:1,region:'All'},nodes:journeyTemplate('',mode,seg,ev)};
+    if(c.trig==='schedule') j.nodes[0].cfg.schedule=c.sched;
+    registerJourney(j); addLog('',`${j.id}  journey created · ${j.name} · Draft v1 · entry: ${mode}${seg!=='— (event only)'?' · '+seg.split(' · ')[0]:''}${ev?' · '+ev:''}`,{j:j.id,node:'e1',kind:'system'});
+    jOpen(j.id,'e1'); toast(`Created · ${j.id}`,`${j.name} is a Draft with its entry step in place. Add steps from the palette, then Activate.`); };
+}
+document.getElementById('btn-jnew').onclick=jCreate;
+document.getElementById('btn-jback').onclick=document.getElementById('btn-back').onclick=jToList;
 document.getElementById('btn-offer-new').onclick=()=>toast('Create offer','Opens the same panel empty: catalog offering picker, activation parameters, priority, hierarchy, eligibility, content per channel and stage.','warn');
 
 /* ---------- CAMPAIGNS ---------- */
@@ -3795,7 +3902,7 @@ function renderPrgDetail(card){
   g('prg-back').onclick=g('prg-cancel').onclick=()=>{ prgMode='list'; renderPrograms(); };
   card.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{ prgTab=b.dataset.tab; renderPrograms(); });
   card.querySelectorAll('[data-camp]').forEach(el=>el.onclick=e=>{ if(e.target.tagName==='BUTTON') return; showView('campaigns'); campOpen(el.dataset.camp); });
-  card.querySelectorAll('[data-jrn]').forEach(el=>el.onclick=e=>{ if(e.target.tagName==='BUTTON') return; showView('journeys'); });
+  card.querySelectorAll('[data-jrn]').forEach(el=>el.onclick=e=>{ if(e.target.tagName==='BUTTON') return; jOpen(el.dataset.jrn); });
   card.querySelectorAll('[data-pk]').forEach(el=>{ if(el.type==='checkbox'&&el.dataset.pid) return; el.oninput=el.onchange=()=>{ p[el.dataset.pk]=el.type==='checkbox'?el.checked:el.value; }; });
   card.querySelectorAll('[data-pg]').forEach(el=>el.oninput=el.onchange=()=>{ p.goal[el.dataset.pg]=el.value; if(el.dataset.pg==='metric') renderPrograms(); });
   card.querySelectorAll('[data-pc]').forEach(el=>el.oninput=el.onchange=()=>{ p.cap[el.dataset.pc]=el.dataset.pc==='n'?+el.value:el.value; });
@@ -4745,7 +4852,7 @@ function dmTabOverview(body,d){
     }; el.onchange=h; if(el.type==='text') el.oninput=()=>{ d[el.dataset.dk]=el.value; }; });
   body.querySelectorAll('[data-go-seg]').forEach(b=>b.onclick=()=>{ showView('segmentation'); segLoad(b.dataset.goSeg); });
   body.querySelectorAll('[data-go-camp]').forEach(b=>b.onclick=()=>{ showView('campaigns'); campOpen(b.dataset.goCamp); });
-  body.querySelectorAll('[data-go-jrn]').forEach(b=>b.onclick=()=>{ curJ=b.dataset.goJrn; const s=document.getElementById('jsel'); if(s) s.value=curJ; showView('journeys'); });
+  body.querySelectorAll('[data-go-jrn]').forEach(b=>b.onclick=()=>jOpen(b.dataset.goJrn));
 }
 const dmUseList=(title,arr,fmt,kind)=>arr.length?`<div class="sec" style="padding-top:4px">${title} <span style="color:var(--ink-3);font-weight:400">${arr.length}</span></div>
   <div class="chips" style="gap:6px">${arr.map(x=>`<button class="btn sm outline" data-go-${kind}="${esc(x.id)}">${esc(fmt(x))}</button>`).join('')}</div>`:'';

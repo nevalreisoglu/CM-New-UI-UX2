@@ -22,7 +22,15 @@ const SHOTS = [
     await app.locator('#camp-card [data-obj="Retention"]').click();
     await app.locator('#cc-start').click();
   }],
-  ['journey-builder', 'admin', async (app) => app.locator('.nav button[data-view="journeys"]').click()],
+  ['journey-list', 'admin', async (app) => app.locator('.nav button[data-view="journeys"]').click()],
+  ['journey-create', 'marketer', async (app) => {
+    await app.locator('.nav button[data-view="journeys"]').click();
+    await app.locator('#jl-new').click();
+  }],
+  ['journey-builder', 'admin', async (app) => {
+    await app.locator('.nav button[data-view="journeys"]').click();
+    await app.locator('#jl-table [data-jopen="JRN-20"]').click();
+  }],
   ['journey-monitor', 'admin', async (app) => app.locator('.nav button[data-view="monitor"]').click()],
   ['segment-workbench', 'admin', async (app) => {
     await app.locator('.nav button[data-view="segmentation"]').click();
