@@ -792,6 +792,10 @@ body{font-size:14px;line-height:1.43}
 .db-hd .tile .d{font-size:11.5px;color:var(--ink-2);display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap;line-height:1.3}
 .db-hd .tile .d b{font-weight:600}.db-hd .tile .d b.up{color:var(--ok)}.db-hd .tile .d b.dn{color:var(--bad)}
 .db-hd .tile.warn{border-left-color:var(--orange)}
+.db-hd .tile[role=button]{cursor:pointer}
+.db-hd .tile[role=button]:hover{background:var(--surface-2)}
+.db-hd .tile.flag{border-left-color:var(--bad)}
+.db-hd .tile.flag .d b{color:var(--bad)}
 .db-hd .spark{display:block;width:100%;height:22px;margin:2px 0 3px}
 .db-hd .tile .s{font-size:12px;color:var(--ink);line-height:1.35;margin-bottom:2px}
 .spark polyline{fill:none;stroke:var(--brand-lilac);stroke-width:1.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
@@ -1524,11 +1528,23 @@ five tiles:
 Each tile has a small sparkline of the period, day by day, and the change
 against the previous period. Revenue and ROI say **BSS feed, demo**: in the
 prototype they are calculated from the conversions, not read from billing.
-Marketers and admins see Customers reached, Conversions, Conversion rate,
-**Waiting on you** and **Live** instead.
+As a **marketer** the strip is about your work, not totals:
+
+| Tile | Big number | Line under it |
+| --- | --- | --- |
+| Needs your action | campaigns waiting on you | how many are drafts, rejected, without content, or ending within 7 days |
+| Waiting for approval | campaigns in the approver's queue | how long the oldest has waited |
+| Going out this week | scheduled sends in the next 7 days | the next one, by name and time |
+| Live | active campaigns and journeys | how many end within 7 days |
+| Top campaign | the campaign with the best conversion rate | how many campaigns are below average |
+
+Click any tile to open the list behind it; **Top campaign** opens that
+campaign's detail in Campaign performance. Admins see Customers reached,
+Conversions, Conversion rate, **Waiting on you** and **Live**.
 
 Delivered, opened and clicked are not in the strip — summed over every campaign
-they say nothing. They are per campaign, in **Campaign performance**.
+they say nothing. They are per campaign, in **Campaign performance**, which for
+a marketer is the first panel under the strip.
 
 **Campaign performance** lists every campaign in the period: status, targeted,
 delivered, opened, clicked, conversions, conversion rate and revenue. Click a
@@ -3783,6 +3799,19 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
   const soon=active.filter(c=>{ const d=(new Date(c.end)-new Date(TODAY))/864e5; return d>=0&&d<=7; });
   const avgRate=rows.length?rows.reduce((t,r)=>t+r.rate,0)/rows.length:0; const under=rows.filter(r=>r.c.status==='Active'&&r.rate<avgRate*0.6).slice(0,3); const highElim=rows.filter(r=>r.elim/Math.max(1,r.targeted)>0.22).slice(0,2);
   const nextSend=active.map(c=>({c,t:planNext(c)})).filter(x=>x.t!=='immediately').sort((a,b)=>a.t.localeCompare(b.t))[0];
+  /* The marketer's strip is about the state of their work, not portfolio totals (decision D11):
+     what needs their hand, what is stuck at the approver, what goes out this week, what is live,
+     and which campaign leads. Opened / clicked stay per campaign, in Campaign performance. */
+  const rejected=drafts.filter(c=>{ const a=c.approvals||[]; return a.length&&a[a.length-1].act==='Rejected'; });
+  const noContent=drafts.filter(c=>!rejected.includes(c)&&(c.channels||[]).length&&(c.plans||[]).some(p=>!planFilled(p)));
+  const oldestWait=pending.length?Math.max(0,...pending.map(c=>Math.round((new Date(TODAY)-new Date(c.updated))/864e5))):0;
+  const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const weekSends=active.map(c=>{ const s=c.sched||defaultSched(); if(s.trigger==='Run now') return null; const end=(c.end||'').slice(0,10); let n=0, first=null;
+    for(let i=0;i<7;i++){ const d=dAdd(TODAY,i); if(end&&d>end) break; const hit=s.type==='Once'?s.date===d:s.type==='Weekly'?s.days.includes(DOW[new Date(d+'T00:00:00Z').getUTCDay()]):s.type==='Daily'?true:i===0; if(hit){ n++; if(!first) first=d+' '+s.time; } }
+    return n?{c,n,first}:null; }).filter(Boolean).sort((a,b)=>a.first.localeCompare(b.first));
+  const weekN=weekSends.reduce((t,x)=>t+x.n,0), firstSend=weekSends[0];
+  const whenTxt=dt=>{ const d=dt.slice(0,10), t=dt.slice(11); return (d===TODAY?'today':d===dAdd(TODAY,1)?'tomorrow':DOW[new Date(d+'T00:00:00Z').getUTCDay()]+' '+d.slice(5))+' '+t; };
+  const topCamp=[...rows].filter(r=>r.del>0).sort((a,b)=>b.rate-a.rate)[0];
   const days=Array.from({length:dbRange===7?7:14},(_,i)=>{ const d=new Date(TODAY); d.setDate(d.getDate()-(dbRange===7?6:13)+i); return d; }); const per=Math.max(1,Math.round(T('del')/(dbRange===7?7:dbRange))); const bars=days.map((d,i)=>Math.round(per*(0.55+((i*37+11)%50)/50))); const cbars=days.map((d,i)=>Math.round(bars[i]*(0.02+((i*13+5)%20)/400)));
   /* Headline strip: business outcome only (decision D1). Revenue and ROI are demo figures derived from the
      conversions — a BSS feed would supply them in the product, hence the note on both tiles. */
@@ -3791,6 +3820,7 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
   const revenue=conv*UNIT_REV, incrShare=conv?incr/conv:0, cost=T('sent')*COST_MSG, roi=cost?incr*UNIT_REV/cost:0, net=incr*UNIT_REV-cost;
   const prevRoi=(()=>{ const pc=prev('conv'), pcost=prev('sent')*COST_MSG; return pcost?pc*incrShare*UNIT_REV/pcost:0; })();
   const demoNote='<span style="font-weight:400;text-transform:none;letter-spacing:0">· BSS feed, demo</span>';
+  const mtile=(l,v,d,cls,go,title)=>`<div class="tile ${cls||''}" data-go="${go}" role="button" tabindex="0"${title?` title="${esc(title)}"`:''}><div class="l">${l}</div><div class="v">${v}</div><div class="d"><span>${d}</span></div></div>`;
   const tile=(l,v,sub,d,sp,title)=>`<div class="tile"${title?` title="${esc(title)}"`:''}><div class="l">${l}</div><div class="v">${v}</div>${spark(sp)}${sub?`<div class="s">${sub}</div>`:''}<div class="d">${d}</div></div>`;
   const cols=(vals,hiLast)=>`<div class="cols" style="height:96px">${vals.map((v,i)=>`<b class="${hiLast&&i===vals.length-1?'hi':''}" style="height:${Math.round(100*v/Math.max(1,...vals))}%" title="${days[i].toISOString().slice(0,10)}: ${fmt(v)}">${i%Math.ceil(vals.length/7)===0||i===vals.length-1?`<span>${days[i].toISOString().slice(5,10)}</span>`:''}${i===vals.length-1?`<em>${fmt(v)}</em>`:''}</b>`).join('')}</div><div style="height:14px"></div>`;
   const byKey=(fn,val)=>{ const m={}; rows.forEach(r=>{ const k=fn(r); if(!k) return; m[k]=m[k]||{del:0,conv:0,sent:0,n:0}; const x=m[k]; const share=val?val(r):1; x.del+=Math.round(r.del*share); x.conv+=Math.round(r.conv*share); x.sent+=Math.round(r.sent*share); x.n++; }); return Object.entries(m).sort((a,b)=>b[1].del-a[1].del); };
@@ -3824,7 +3854,7 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
   const liveC=(cls,st,ic,go,v,l,x,vs)=>`<div class="c ${cls}" data-go="${go}"><div class="ct"><i class="dot"></i><span class="st">${st}</span><svg viewBox="0 0 24 24" aria-hidden="true">${LIVE_IC[ic]}</svg></div><div class="v"${vs?` style="${vs}"`:''}>${v}</div><div class="l">${l}</div></div>`;
   const P=(k,title,cls,body,sub)=>dbHidden.has(k)?'':`<div class="db-p ${cls||''}" data-p="${k}"><div class="ph">${title}${sub?` <small>— ${sub}</small>`:''}<button class="x" title="Hide panel" data-hide="${k}">×</button></div><div class="pb">${body}</div></div>`;
   card.innerHTML=`<div class="card-h"><h2>Dashboard</h2><span class="pill acc">${preset} preset</span><span class="pill">as of ${TODAY}</span><div class="grow"></div>
-      <p>${exec?'Executive view: business outcome first, then what is live, then where to look. ':preset==='Marketer'?'Marketer view: your campaigns, what is waiting on you, how they perform. ':'Ops view: what is running, what failed, what is scheduled next. '}Every number opens the list behind it. Panels can be hidden and re-added; the layout is saved per user (concept).</p></div>
+      <p>${exec?'Executive view: business outcome first, then what is live, then where to look. ':preset==='Marketer'?'Marketer view: what needs your hand, what goes out this week, then how each campaign performs. ':'Ops view: what is running, what failed, what is scheduled next. '}Every number opens the list behind it. Panels can be hidden and re-added; the layout is saved per user (concept).</p></div>
     <div class="toolrow" style="padding-top:0;gap:8px"><div class="chipbar"><span style="color:var(--ink-3);font-size:11px">PERIOD</span>${[7,30,90].map(n=>`<button class="fchip ${dbRange===n?'on':''}" data-db="${n}">Last ${n} days</button>`).join('')}</div><div class="grow"></div><button class="btn sm outline" id="db-add">+ Add panel</button><button class="btn sm outline" disabled title="Concept — describe the panel you want">Ask the agent</button><button class="btn sm outline" disabled title="Concept">Save layout</button><button class="btn sm outline" disabled title="Concept">Export</button></div>
     <div class="db-hd">
       ${exec?`${tile('Campaigns',ran,`${ranActive} active · ${ran-ranActive} ended`,delta(ran,prevRan),campDays)}
@@ -3832,13 +3862,19 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
       ${tile(`Revenue ${demoNote}`,`₴ ${compact(revenue)}`,'attributed to campaigns',delta(revenue,prev('conv')*UNIT_REV),cbars.map(v=>v*UNIT_REV))}
       ${tile(`ROI ${demoNote}`,`${roi.toFixed(1)}x`,`${net<0?'−':'+'}₴ ${compact(Math.abs(net))} net contribution`,delta(roi,prevRoi),days.map((d,i)=>bars[i]?cbars[i]*incrShare*UNIT_REV/(bars[i]*COST_MSG):0),'ROI = incremental revenue ÷ sending cost')}
       ${tile('Incremental',fmt(incr),`vs control group · ${pct(incr,conv)} of total`,delta(incr,Math.round(incr*prev('conv')/Math.max(1,conv))),cbars.map(v=>v*incrShare))}`
+      :preset==='Marketer'?`${mtile('Needs your action',drafts.length+soon.length,[[drafts.length-rejected.length,'draft'],[rejected.length,'rejected'],[noContent.length,'without content'],[soon.length,'ending within 7 days']].filter(x=>x[0]).map(x=>`${x[0]} ${x[1]}`).join(' · ')||'nothing waiting on you',drafts.length+soon.length?'warn':'ok','campaigns:Draft','Drafts not yet submitted, campaigns sent back by the approver, and active campaigns that end within 7 days')}
+      ${mtile('Waiting for approval',pending.length,pending.length?`oldest waiting ${oldestWait} day${oldestWait===1?'':'s'}`:'nothing in the approver\'s queue',pending.length?'warn':'','campaigns:Pending approval')}
+      ${mtile('Going out this week',weekN,firstSend?`${weekSends.length} campaign${weekSends.length===1?'':'s'} · next: ${esc(firstSend.c.name)} · ${whenTxt(firstSend.first)}`:'no send scheduled in the next 7 days','','campaigns:Active','Scheduled sends in the next 7 days, across the active campaigns')}
+      ${mtile('Live',`${active.length} <span style="font-size:13px;color:var(--ink-2)">+ ${jlive.length} journeys</span>`,soon.length?`${soon.length} end${soon.length===1?'s':''} within 7 days`:'active campaigns and journeys','','campaigns:Active')}
+      ${topCamp?`<div class="tile ${under.length?'flag':''}" data-dbc="${topCamp.c.id}" role="button" tabindex="0" title="Best conversion rate in the period — opens its detail in Campaign performance"><div class="l">Top campaign</div><div class="v txt">${esc(topCamp.c.name)}</div><div class="s">${pct(topCamp.rate,1)} conversion rate</div><div class="d"><span>${under.length?`<b>${under.length} below average</b> — see Needs attention`:'every campaign is at or above the average'}</span></div></div>`:`<div class="tile"><div class="l">Top campaign</div><div class="v">—</div><div class="d"><span>no campaign has delivered in the last ${dbRange} days</span></div></div>`}`
       :`${tile('Customers reached',fmt(reached),'',delta(reached,Math.round(prev('del')*0.78)),bars.map(v=>v*0.78))}
       ${tile('Conversions',fmt(conv),'',delta(conv,prev('conv')),cbars)}
       ${tile('Conversion rate',pct(conv,T('del')),'',delta(conv/Math.max(1,T('del')),prev('conv')/Math.max(1,prev('del'))),cbars.map((v,i)=>v/Math.max(1,bars[i])))}
-      <div class="tile warn"><div class="l">Waiting on you</div><div class="v">${preset==='Marketer'?drafts.length:pending.length}</div><div class="d"><span>${preset==='Marketer'?'draft campaigns not yet submitted':'campaigns waiting for approval'}</span></div></div>
+      <div class="tile warn"><div class="l">Waiting on you</div><div class="v">${pending.length}</div><div class="d"><span>campaigns waiting for approval</span></div></div>
       <div class="tile"><div class="l">Live</div><div class="v">${active.length} <span style="font-size:13px;color:var(--ink-2)">+ ${jlive.length} journeys</span></div><div class="d"><span>active campaigns and journeys</span></div></div>`}
     </div>
     <div class="db-grid">
+      ${preset==='Marketer'?P('top','Campaign performance','w12',dbDetail?detailBody(dbDetail):perfTable,dbDetail?'one campaign':'every campaign in the period — opened and clicked are here, per campaign'):''}
       ${P('live','Live now','',`<div class="live">
         ${liveC('s-run','running','run','campaigns:Active',active.length,'active campaigns')}
         ${liveC('s-run','live','jrn','monitor',jlive.length,`journeys live · ${topJ.reduce((t,x)=>t+x.n,0)} customers inside`)}
@@ -3864,14 +3900,15 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
       ${P('chan','By channel','w6',`<table class="tbl"><thead><tr><th>Channel</th><th>Delivered</th><th>Conversions</th><th>Rate</th><th style="width:34%"></th></tr></thead><tbody>${chanRows.map(([n,x])=>`<tr><td><b>${n}</b> <span class="chip">${x.kind}</span></td><td class="num">${fmt(x.del)}</td><td class="num">${fmt(x.conv)}</td><td class="num">${pct(x.conv,x.del)}</td><td><div style="height:8px;border-radius:4px;background:var(--surface-2)"><div style="height:8px;border-radius:4px;background:var(--green);width:${Math.round(100*x.del/Math.max(1,chanRows[0][1].del))}%"></div></div></td></tr>`).join('')}</tbody></table>`)}
       ${P('cat','By category','w6',`${catRows.map(([k,x])=>`<div class="hbar" title="${esc(k)}"><span class="lb">${esc(k)}</span><span class="tr"><i style="width:${Math.round(100*x.del/Math.max(1,catRows[0][1].del))}%"></i></span><span class="n">${pct(x.conv,x.del)}</span></div>`).join('')}<small style="color:var(--ink-3)">bar = delivered · number = conversion rate</small>`,'programmes')}
       ${P('jrn','Top journeys','w6',`<table class="tbl"><tbody>${topJ.map(x=>`<tr class="row" data-go="monitor"><td><span class="lnk">${esc(x.j.name)}</span><br><small style="color:var(--ink-3)">${x.j.id} · ${x.n} customers inside</small></td><td class="num"><b>${x.conv}</b><br><small style="color:var(--ink-3)">goal reached</small></td></tr>`).join('')||'<tr><td class="empty">No journey data.</td></tr>'}</tbody></table>`,'by goal reached')}
-      ${P('top','Campaign performance','w12',dbDetail?detailBody(dbDetail):perfTable,dbDetail?'one campaign':'every campaign in the period')}
+      ${preset==='Marketer'?'':P('top','Campaign performance','w12',dbDetail?detailBody(dbDetail):perfTable,dbDetail?'one campaign':'every campaign in the period')}
       ${exec?P('cg','Control group uplift','w12',`<table class="tbl"><thead><tr><th>Campaign</th><th>Control group</th><th>Campaign conv. rate</th><th>Control conv. rate</th><th>Uplift</th><th>Incremental conversions</th><th style="width:26%"></th></tr></thead><tbody>${cgRows.map(r=>`<tr class="row" data-go="campaigns:${r.c.id}"><td><span class="lnk">${esc(r.c.name)}</span> <small style="color:var(--ink-3)">${r.c.id}</small></td><td>${esc(r.c.cg)}</td><td class="num">${pct(r.rate,1)}</td><td class="num">${pct(r.cgRate,1)}</td><td class="num"><b>${r.cgRate?'×'+(Math.round(10*r.rate/r.cgRate)/10):'—'}</b></td><td class="num">${fmt(r.incr)}</td><td><div style="height:8px;border-radius:4px;background:var(--surface-2)"><div style="height:8px;border-radius:4px;background:var(--orange);width:${Math.round(100*r.incr/Math.max(1,cgRows[0].incr))}%"></div></div></td></tr>`).join('')||'<tr><td colspan="7" class="empty">No campaign with a control group in the period.</td></tr>'}</tbody></table><small style="color:var(--ink-3)">Uplift = campaign conversion rate ÷ control-group rate. Incremental = conversions the control group says would not have happened. Campaigns without a control group cannot show this — a reason to keep one.</small>`,'what the campaigns actually added'):''}
     </div>
     ${dbHidden.size?`<div class="db-add">Hidden panels: ${[...dbHidden].map(k=>`<button class="fchip" data-show="${k}">+ ${DB_PANELS.find(p=>p[0]===k)[1]}</button>`).join('')}</div>`:''}`;
   card.querySelectorAll('[data-db]').forEach(b=>b.onclick=()=>{ dbRange=+b.dataset.db; renderDashboard(); });
   card.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{ const k=b.dataset.sort; dbSort=dbSort.k===k?{k,dir:-dbSort.dir}:{k,dir:k==='name'||k==='status'?1:-1}; renderDashboard(); });
   const toPerf=()=>{ const el=card.querySelector('.db-p[data-p="top"]'); if(el) el.scrollIntoView({block:'nearest'}); };
-  card.querySelectorAll('[data-dbc]').forEach(tr=>tr.onclick=()=>{ dbCamp=tr.dataset.dbc; renderDashboard(); toPerf(); });
+  card.querySelectorAll('[data-dbc]').forEach(tr=>{ tr.onclick=()=>{ dbCamp=tr.dataset.dbc; renderDashboard(); toPerf(); }; if(tr.classList.contains('tile')) tr.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); tr.click(); } }; });
+  card.querySelectorAll('.db-hd .tile[data-go]').forEach(t=>t.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); t.click(); } });
   card.querySelectorAll('[data-dbclose]').forEach(b=>b.onclick=()=>{ dbCamp=null; renderDashboard(); toPerf(); });
   card.querySelectorAll('[data-hide]').forEach(b=>b.onclick=()=>{ dbHidden.add(b.dataset.hide); renderDashboard(); });
   card.querySelectorAll('[data-show]').forEach(b=>b.onclick=()=>{ dbHidden.delete(b.dataset.show); renderDashboard(); });
@@ -5155,7 +5192,7 @@ const TOURS={
     title:'Start with the period', body:'Every number and every "vs previous" delta on this page is read through this window. Change it first, then read.',
     advance:'next'},
    {id:'kpi', view:'dashboard', target:'#db-card .db-hd', placement:'bottom',
-    title:'The headline numbers', body:'Only business outcomes live up here: campaigns run, <b>conversions</b>, revenue, ROI and <b>incremental</b> — conversions above what the control group did anyway. Delivered, opened and clicked are per campaign, in <b>Campaign performance</b> below.',
+    title:'The headline numbers', body:'The strip follows your role. An executive sees business outcomes — campaigns run, <b>conversions</b>, revenue, ROI and <b>incremental</b>. A marketer sees the state of their work — what <b>needs action</b>, what is waiting for approval, what goes out this week, what is live, and the top campaign. Delivered, opened and clicked are per campaign, in <b>Campaign performance</b>.',
     advance:'next'},
    {id:'live', view:'dashboard', target:'.db-p[data-p="live"]', placement:'right',
     title:'Live now', body:'What is running this minute — active campaigns, journeys, and how many customers are in them. Click a counter to open what it counts.',

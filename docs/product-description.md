@@ -185,10 +185,16 @@ Both carry a **simulation strip** (see §9).
     sparkline of the period's daily series and a delta against the previous
     period. Revenue and ROI are marked *BSS feed, demo*: in the prototype they
     are derived from the conversions (₴186 per conversion; ROI = incremental
-    revenue ÷ sending cost at ₴0.06 per message). The Marketer and Ops presets
-    show Customers reached, Conversions, Conversion rate, Waiting on you and
-    Live. No preset puts Delivered, Opened or Clicked totals in the strip: summed
-    across campaigns they are noise.
+    revenue ÷ sending cost at ₴0.06 per message). The **Marketer preset** shows
+    the state of the marketer's work instead: **Needs your action** (drafts,
+    rejected, without content, ending within 7 days), **Waiting for approval**
+    (with the oldest wait), **Going out this week** (scheduled sends, the next
+    one named), **Live**, and **Top campaign** (the best conversion rate, with
+    how many campaigns sit below average). Every tile opens what it counts. The
+    Ops preset shows Customers reached, Conversions, Conversion rate, Waiting on
+    you and Live. No preset puts Delivered, Opened or Clicked totals in the
+    strip: summed across campaigns they are noise — per campaign they are in
+    Campaign performance, which is the marketer's first panel.
   - **Campaign performance** — every campaign in the period with Status,
     Targeted, Delivered, Opened, Clicked (rates of delivered), Conversions,
     Conversion rate and Revenue, sortable by any column. Clicking a campaign

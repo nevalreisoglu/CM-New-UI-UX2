@@ -116,3 +116,12 @@ Two modules of the current product that the redesign had not carried over: the o
 | SV5 | **Survey results live in Operation analysis › Surveys**, not on a separate results page: response, response rate (of delivered with the survey), average score, completion, NPS with its trend, one chart per question, and the response grid with the full answer set in the side panel. | Same scope bar, same grid, same export — and the same place people already look for Survey Result today. | Settled |
 | SV6 | **Surveys are authored by marketers and admins**; approvers and executives do not see the Surveys page. Approvers see results in Operation analysis. | Same split as Segments: audience and content authoring is not approver work. | Settled |
 
+## Marketer dashboard strip (24 Sept 2026, v47)
+
+Source: owner review of the Marketer preset on 24 Sept 2026 — "the cards on the marketer tab are not meaningful".
+
+| # | Decision | Why | Status |
+|---|---|---|---|
+| D11 | **The Marketer strip is the state of the marketer's work, not portfolio totals**: Needs your action (drafts, rejected, without content, ending within 7 days) · Waiting for approval (with the oldest wait) · Going out this week (scheduled sends, the next one named) · Live · Top campaign (best conversion rate, with how many campaigns are below average). Every tile opens what it counts; Top campaign opens that campaign's detail. Colour only above zero, always with a word (D10). Supersedes D8 for the Marketer preset; the Ops and Executive strips are unchanged. | Customers reached, Conversions and Conversion rate summed over every campaign are the same noise D1/D2 removed from the executive strip, and a 2.3 % rate averaged over Info and Offer campaigns means nothing. A marketer's morning questions are "what is waiting on me, what is stuck, what goes out today, is anything underperforming". | Settled |
+| D12 | **Opened and clicked stay per campaign, and stay visible.** The customer likes them; they are meaningful per campaign, meaningless summed. They live in Campaign performance (count and rate of delivered), in the campaign detail funnel, in Reports and in Operation analysis › Deliveries — not in any headline strip. For the marketer, **Campaign performance is the first panel** under the strip, above Live now. | Keeps D2 and answers the customer's ask in the same move: the table is where opened/clicked make sense, so the marketer lands on it. | Settled |
+
