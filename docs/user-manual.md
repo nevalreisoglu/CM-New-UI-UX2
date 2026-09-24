@@ -29,9 +29,6 @@ tooltips, so nothing becomes unidentifiable.
 | Admin | Everything the marketer sees, plus Decision API, Datamart, Templates (design), Parameters and Release & licences |
 | CMO / Executive | Dashboard, Getting started, Program, Reports, Journey Monitor |
 
-*Offers* and *Policies* are hidden from every role for now; campaigns still
-pick offers in their Offer step.
-
 If you switch to a role that may not see the open page, you are moved to the
 first page it can.
 
