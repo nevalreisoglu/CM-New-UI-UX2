@@ -115,7 +115,7 @@ test.describe('campaign wizard', () => {
     await expect(step(0).locator('i')).toHaveText('✓');
     await expect(app.locator('#camp-card .stepper .sconn').first()).toHaveClass(/ok/);
     await expect(name).toBeFocused();
-    await expect(app.locator('#camp-card .stepper')).toContainText('readiness 1/7');
+    await expect(app.locator('#camp-card .stepper')).toContainText('Ready to submit: 1 of 6');
     // Clearing it turns it back.
     await name.fill('');
     await expect(step(0)).not.toHaveClass(/done/);
@@ -146,22 +146,81 @@ test.describe('campaign wizard', () => {
     await expect(app.locator('#camp-card .stepper button.on')).toContainText('Targeting');
   });
 
-  test('the readiness panel counts what is done and never blocks', async ({ app }) => {
+  test('readiness counts six things the maker does; the side panel is gone; approval is a state', async ({ app }) => {
     await openNewCampaign(app);
-    const ready = app.locator('#camp-ready');
-    await expect(ready).toBeVisible();
-    await expect(ready).toContainText('Readiness');
-    await expect(ready).toContainText('nothing here blocks saving');
-    await expect(ready.locator('li.ok')).toHaveCount(0);
+    await expect(app.locator('#camp-ready')).toHaveCount(0);
+    await expect(app.locator('#camp-card .stepper')).toContainText('Ready to submit: 0 of 6');
+    await pickGoal(app, 'Informational');
+    await expect(app.locator('#camp-card .stepper')).toContainText('Ready to submit: 0 of 5');
+    // The stepper tooltip says what is missing, in plain words.
+    await expect(app.locator('#camp-card .stepper button[data-step="0"]')).toHaveAttribute('title', /Give the campaign a name/);
+    await expect(app.locator('#camp-card .stepper button[data-step="3"]')).toHaveAttribute('title', /SMS: message is empty/);
 
-    // The panel refreshes when the step changes, not on every keystroke, so that
-    // typing in a field never steals focus.
-    await app.locator('#camp-card input[data-k="name"]').fill('Readiness check');
-    await app.locator('#camp-next').click();
+    // Approval is the approver's action: the step shows its state, never counted as an item.
+    await app.locator('#camp-back').click();
+    const approval = async (id) => { await app.locator('#camp-q').fill(id); await app.locator(`#camp-table tr.row[data-id="${id}"]`).click(); return app.locator('#camp-card .stepper button[data-step="6"]'); };
+    await expect(await approval('2004')).toHaveClass(/pend/);
+    await expect(app.locator('#camp-card .stepper')).toContainText('Ready to submit: 6 of 6');
+    await app.locator('#camp-back').click();
+    await expect(await approval('2613')).toHaveClass(/rej/);
+    await app.locator('#camp-back').click();
+    await expect(await approval('433')).toHaveClass(/done/);
+  });
 
-    await expect(ready.locator('li.ok')).toHaveCount(1);
-    await expect(ready.locator('li.ok')).toContainText('Name, period and channels');
-    await expect(ready).toContainText('1 of 7');
+  test('Communication rules and Schedule need an explicit choice; nothing is preselected', async ({ app }) => {
+    await openNewCampaign(app);
+    const step = (i) => app.locator(`#camp-card .stepper button[data-step="${i}"]`);
+    await step(4).click();
+    await expect(app.locator('#camp-rmode .tcard.on')).toHaveCount(0);
+    await expect(step(4)).not.toHaveClass(/done/);
+    await app.locator('#camp-rmode [data-rmode="standard"]').click();
+    await expect(step(4)).toHaveClass(/done/);
+    await expect(app.locator('#camp-card .stdrules')).toContainText('Pre-sent period');
+    await app.locator('#camp-rmode [data-rmode="custom"]').click();
+    await expect(app.locator('#camp-card [data-ck="override"]')).toBeVisible();
+
+    await step(5).click();
+    await expect(app.locator('#camp-strig .tcard.on')).toHaveCount(0);
+    await expect(step(5)).toHaveAttribute('title', /Choose Run now or Schedule/);
+    await app.locator('#camp-strig [data-strig="Schedule"]').click();
+    await expect(step(5)).toHaveClass(/done/);
+    await expect(app.locator('#camp-card [data-sk="time"]')).toBeVisible();
+  });
+
+  test('missing fields are marked only after leaving the step, and the target counts only added segments', async ({ app }) => {
+    await openNewCampaign(app);
+    const step = (i) => app.locator(`#camp-card .stepper button[data-step="${i}"]`);
+    await step(3).click();
+    await expect(app.locator('#camp-card .miss')).toHaveCount(0);
+    await step(1).click();
+    const kpi = app.locator('#camp-card .tg .box + .box .bh .kpi');
+    await expect(kpi).toContainText('includes 0 · excludes 0');
+    await expect(kpi).toContainText(/global exclusion lists? (is|are) applied at send, per channel/);
+    await step(3).click();
+    await expect(app.locator('#camp-card .fld.miss')).not.toHaveCount(0);
+  });
+
+  test('Summary lists what is missing; Submit opens the list instead of submitting; Save is never blocked', async ({ app }) => {
+    await openNewCampaign(app);
+    await app.locator('#camp-card input[data-k="name"]').fill('Submit check');
+    await app.locator('#camp-card .stepper button[data-step="7"]').click();
+    const b4 = app.locator('#camp-b4sub');
+    await expect(b4).toContainText('Before you can submit');
+    await expect(b4).toContainText('Choose Run now or Schedule');
+    await b4.locator('[data-goto="5"]').click();
+    await expect(app.locator('#camp-card .stepper button.on')).toContainText('Schedule');
+
+    await app.locator('#camp-card .stepper button[data-step="6"]').click();
+    await app.locator('#camp-activate').click();
+    const dlg = app.locator('#camp-miss-modal');
+    await expect(dlg).toBeVisible();
+    await expect(dlg).toContainText('Include at least one segment');
+    await expect(app.locator('#camp-card .stepper button[data-step="6"]')).not.toHaveClass(/pend/);
+    await app.keyboard.press('Escape');
+    await expect(dlg).toHaveCount(0);
+
+    await app.locator('#camp-save').click();
+    await expect(app.locator('#toast div').first()).toContainText('Saved');
   });
 
   test('every step opens with its marketing-toned heading; the stepper labels stay short', async ({ app }) => {
@@ -178,9 +237,11 @@ test.describe('campaign wizard', () => {
     }
   });
 
-  test('a readiness item jumps to its step', async ({ app }) => {
+  test('a missing item in Summary jumps to its step and field', async ({ app }) => {
     await openNewCampaign(app);
-    await app.locator('#camp-ready li[data-step="5"]').click();
-    await expect(app.locator('#camp-card .stepper button.on')).toContainText('Schedule');
+    await app.locator('#camp-card .stepper button[data-step="7"]').click();
+    await app.locator('#camp-b4sub [data-goto="0"]').first().click();
+    await expect(app.locator('#camp-card .stepper button.on')).toContainText('Info');
+    await expect(app.locator('#camp-card input[data-k="name"]')).toBeFocused();
   });
 });
