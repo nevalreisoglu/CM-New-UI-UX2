@@ -48,6 +48,9 @@ Olgay Bey, then the customer.
   `campReady()` (`campStepperHtml`, refreshed in place by `campStepSync`). Campaign types are
   `Offer` and `Information` (never "Info" — that is the step); the goal is a header chip
   (`#camp-goalchip`), not a form field.
+  Readiness is "ready to submit" (six items, five for Information); approval is a state
+  (`campApproval`), not an item. Rules and Schedule need an explicit choice (`rulesMode`,
+  `sched.trigger`), never a default. There is no readiness side panel.
 - **Templates vs content**: `SLOT_DEFS` / `TEMPLATES` define the *design* (admin-owned,
   slot structure per channel). `CONTENT_ITEMS` and the per-delivery slot values are the
   *text*. `tplFor` / `slotsFor` / `planPreviewHtml` bind them.

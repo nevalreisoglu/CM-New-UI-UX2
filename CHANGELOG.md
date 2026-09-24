@@ -2,6 +2,15 @@
 
 Version numbers follow the published artifact versions.
 
+## v56 — 24 Sept 2026
+**Campaign readiness: ready to submit** (decisions C17–C20). The type rename, the goal chip and the connected stepper of the same brief shipped in v55.
+- **Ready to submit: n of 6** (5 for Information) replaces *readiness n/7*. Approval is no longer an item; the Approval step shows the approval state — grey not submitted, amber pending, green approved, red rejected.
+- **Communication rules** and **Schedule** start with no option chosen: *Apply the standard rules* / *Customise for this campaign*, and *Run now* / *Schedule*. Ever-submitted demo campaigns keep their values.
+- **The readiness side panel is gone**; step content uses the width. A step's tooltip lists what is missing; empty required fields are marked once the step has been left; Summary opens with *Before you can submit* with links to the step and field; *Submit for approval* with anything missing opens that list as a dialog. Save is never blocked.
+- Content readiness checks every required slot (subject for e-mail, title for push and pull cards, the body everywhere) and variant B.
+- **Target audience** counts only the segments you added; global exclusion lists get their own line.
+- Tests: campaign.spec replaces the panel specs with readiness, explicit-choice, missing-marks, Summary/dialog and jump specs; the first-campaign tour's rules and schedule steps wait for the choice (and *Do it for me* makes it); the brand audit adds the rules, schedule, Summary and dialog states.
+
 ## v55 — 24 Sept 2026
 **Campaign editor: Information type, goal chip, connected stepper** (decisions C14–C16).
 - The campaign type **Info** is now **Information** everywhere it is shown — type chips, the list's Type filter, the editor header, Summary, tooltips, the readiness panel, Parameters' overlap rule. The **Info** step keeps its name. Demo data migrated.

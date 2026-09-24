@@ -218,7 +218,8 @@ A program is the business initiative campaigns and journeys belong to.
 chips (All · Offer · Information), **Status** chips (All · Active · Draft · Pending
 approval · Expired) and **Advanced filters** for category, campaign brand (when
 the admin has turned it on), datamart, delivery status, created by and the
-start and end dates. Each row shows the campaign's readiness as a small bar.
+start and end dates. Each row shows how ready the campaign is to submit as a
+small bar (hover it for what is missing).
 
 Row actions: **Open** (or **Continue** on a draft), **Copy** — clones the
 settings into a new draft — and **Results** for a campaign that has run, which
@@ -253,28 +254,45 @@ campaign has run) opens Operation analysis on its deliveries.
 `Info · Targeting · Offer · Channel & content · Communication rules · Schedule ·
 Approval · Summary`
 
-**You do not have to go in order.** Click any step in the stepper. The
-**readiness panel** on the right lists the seven parts of a complete campaign,
-ticks what is done, and jumps to any item you click. It never stops you saving —
-parts get done by different people on different days.
+**You do not have to go in order.** Click any step in the stepper. Nothing
+stops you saving — parts get done by different people on different days.
+
+**Ready to submit** counts the six things you complete before an approver can
+look at the campaign — five for an Information campaign, which has no offer:
+
+| Step | Done when |
+| --- | --- |
+| Info | the campaign has a name, a start and end, and at least one channel |
+| Targeting | at least one segment is included and the target has customers left |
+| Offer | an offer is added, or Next Best Offer is chosen |
+| Channel & content | every required slot of every channel is written — for variant B too when A/B is on |
+| Communication rules | you chose *Apply the standard rules* or *Customise* |
+| Schedule | you chose *Run now*, or *Schedule* with its date and time |
+
+Approval is not on the list: it is the approver's decision, not something you
+finish. The Approval step shows its **state** instead.
 
 **The stepper is one path**, with a line between the steps, and its colours
-follow the readiness panel rather than your clicks:
+follow that list rather than your clicks:
 
 | Looks like | Means |
 | --- | --- |
-| Green circle with ✓, green label, green line after it | the step's part of the readiness list is done (Summary: every part is done) |
+| Green circle with ✓, green label, green line after it | the step is done (Summary: everything is done) |
 | Orange highlight | the step you are on — with a ✓ inside if it is also done |
 | Amber outline and dot | you have been there, but it still needs something |
 | Grey circle with its number | not started |
+| Approval: grey · amber · green ✓ · red ✕ | not submitted · pending approval · approved · rejected |
 
-A step turns green the moment you fill what it needs, without leaving it, and
-goes back if you clear it. The colours never stop you clicking to another step.
-*Step n of 8 · readiness n/7* on the right says the same in words.
+**Hover a step** to see exactly what it still needs — *SMS: message is empty*,
+*Choose how the rules apply*, *Choose Run now or Schedule*. A step turns green
+the moment you fill what it needs, without leaving it, and goes back if you
+clear it. Empty required fields are marked in red once you have left the step
+(or tried to submit), never on first open. *Step n of 8 · Ready to submit: n of
+6* on the right says the same in words.
 
 An **Information** campaign has nothing to offer, so the Offer step leaves the
 path: the stepper shows seven steps and runs from Targeting straight to Channel
-& content.
+& content, and *Ready to submit* counts five.
 
 **The header** shows the status, the campaign type (**Offer** or
 **Information**) and the goal — **Goal: Retention**, for example. Click the goal
@@ -306,9 +324,12 @@ turned them on in Parameters.
 #### 2 · Targeting
 
 Available segments on the left, your target on the right. Search by name, ID or
-group, or pick a group, then **Include** or **Exclude** a segment. The audience
-count updates as you go. Exclusion lists are channel-scoped — excluding by SMS
-does not exclude by e-mail.
+group, or pick a group, then **Include** or **Exclude** a segment. The header of
+**Target audience** shows the customers left and how many segments you included
+and excluded; the global exclusion lists are on their own line underneath —
+*+ 4 global exclusion lists are applied at send, per channel* — because you did
+not add them. Exclusion lists are channel-scoped — excluding by SMS does not
+exclude by e-mail.
 
 **+ New segment…** here takes you to Segments; save it and come back, and it is
 in the list.
@@ -340,16 +361,23 @@ slots and the share each variant gets.
 
 #### 5 · Communication rules
 
-The rules come from Parameters and apply to every campaign: control group,
-channel cooldown, campaign-type overlap and the pre-sent period. Tick
-**Override elimination rules for this campaign** to change them here. Per rule,
+**Choose how the rules apply** — nothing is chosen for you, and the step is not
+done until you choose:
+
+- **Apply the standard rules** — the Parameters values, shown read-only: control
+  group, channel cooldown, campaign-type overlap and the pre-sent period.
+- **Customise for this campaign** — opens the rule table. Tick **Override
+  elimination rules for this campaign** to send to everyone in the target. Per rule,
 **Use it** removes the customer from this campaign's sends, and **Log it**
 records the send so later campaigns respect it. Consent and global exclusion
 lists always apply.
 
 #### 6 · Schedule
 
-- **Trigger** — **Run now** or **Schedule**.
+- **When should it go out?** — **Run now** (once, right after approval) or
+  **Schedule**. Neither is preselected, so nothing goes out by accident; the
+  step is done once you choose, and for *Schedule* once its date and time are
+  set.
 - **Recurrence** — Once, Daily, Weekly, Every 2 weeks or Monthly, with an end
   date or a number of sends, the time of day and, for weekly, the days.
 - **Send time optimization** — let each customer receive it at the hour they
@@ -365,10 +393,16 @@ goes to *Pending approval*. As an **approver**, the same step shows a
 the bottom. The history underneath shows who did what, when. The person who
 builds a campaign is not the one who activates it.
 
+If anything is still missing, **Submit for approval** does not submit: it opens
+**Before you can submit** with the list, and each item takes you to its step and
+field. **Save** and **Save & close** always work.
+
 #### 8 · Summary
 
-The whole campaign on one page. **Save**, **Save & close**, or go back to any
-step.
+The whole campaign on one page. At the top, **Before you can submit** lists
+everything still missing — click an item to go to its step and field — or reads
+**Ready to submit** when nothing is. **Save**, **Save & close**, or go back to
+any step.
 
 ---
 

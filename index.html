@@ -134,7 +134,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-v
 .panel .pb{padding:8px 20px 16px;display:flex;flex-direction:column;gap:12px}
 .fld{display:flex;flex-direction:column;gap:4px}
 .fld label{font-size:12px;color:var(--ink-2)}
-.fld label.req::after{content:" *";color:var(--bad)}
+.fld label.req::after,.h4 .req::after{content:" *";color:var(--bad)}
 .fld input,.fld select,.fld textarea{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:7px 10px;font-size:12.5px;width:100%}
 .fld input[readonly],.fld textarea[readonly]{background:var(--surface-2)}
 .fld textarea{min-height:64px;resize:vertical;font-family:var(--mono);font-size:11.5px}
@@ -314,6 +314,28 @@ pre.code{margin:0;background:var(--brand-navy);color:#E6E6F0;border-radius:6px;p
 .stepper button.todo i::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:#F9AA56;box-shadow:0 0 0 1.5px #fff}
 .stepper button.on.done{color:var(--sec-ink)}
 .stepper button.on.done i{background:var(--orange);border-color:var(--orange);color:#fff}
+.stepper button.pend i{border-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+.stepper button.rej{color:var(--bad)}
+.stepper button.rej i{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.stepper button.on.rej{color:var(--sec-ink)}
+/* required-but-empty marks: only after the step was left or a submit was tried */
+.fld.miss input,.fld.miss textarea,.fld.miss select{border-color:var(--bad)}
+.fld.miss::after{content:attr(data-miss);font-size:11.5px;color:var(--bad)}
+.miss:not(.fld){outline:2px solid var(--bad);outline-offset:2px;border-radius:8px}
+.miss-note{color:var(--bad);font-size:11.5px;padding:2px 20px 0}
+.flash{animation:flash 1.2s ease-out 1}
+@keyframes flash{0%{box-shadow:0 0 0 4px rgba(245,130,32,.55)}100%{box-shadow:0 0 0 4px rgba(245,130,32,0)}}
+.b4sub{margin:14px 20px 0;border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:6px;padding:10px 14px;background:#fff}
+.b4sub.ok{border-left-color:var(--ok)}
+.b4sub h3{font-size:14px;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.b4sub ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.b4sub li{font-size:13px;color:var(--ink)}
+.b4sub a{color:var(--acc);cursor:pointer;text-decoration:underline}
+.b4sub small{color:var(--ink-2)}
+.stdrules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 20px}
+.stdrules div{border:1px solid var(--line-2);border-radius:6px;padding:8px 10px;background:var(--surface-2)}
+.stdrules b{display:block;font-size:12px;color:var(--ink-2);font-weight:500}
+.stdrules span{font-size:13px;color:var(--ink)}
 .stepper .spos{flex:none;padding-left:10px;font-size:11.5px;line-height:15px;color:var(--ink-3);text-align:right;white-space:nowrap}
 .form2{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;padding:8px 20px 16px}
 .form2 .span2{grid-column:1/-1}
@@ -1658,7 +1680,8 @@ A program is the business initiative campaigns and journeys belong to.
 chips (All · Offer · Information), **Status** chips (All · Active · Draft · Pending
 approval · Expired) and **Advanced filters** for category, campaign brand (when
 the admin has turned it on), datamart, delivery status, created by and the
-start and end dates. Each row shows the campaign's readiness as a small bar.
+start and end dates. Each row shows how ready the campaign is to submit as a
+small bar (hover it for what is missing).
 
 Row actions: **Open** (or **Continue** on a draft), **Copy** — clones the
 settings into a new draft — and **Results** for a campaign that has run, which
@@ -1693,28 +1716,45 @@ campaign has run) opens Operation analysis on its deliveries.
 `Info · Targeting · Offer · Channel & content · Communication rules · Schedule ·
 Approval · Summary`
 
-**You do not have to go in order.** Click any step in the stepper. The
-**readiness panel** on the right lists the seven parts of a complete campaign,
-ticks what is done, and jumps to any item you click. It never stops you saving —
-parts get done by different people on different days.
+**You do not have to go in order.** Click any step in the stepper. Nothing
+stops you saving — parts get done by different people on different days.
+
+**Ready to submit** counts the six things you complete before an approver can
+look at the campaign — five for an Information campaign, which has no offer:
+
+| Step | Done when |
+| --- | --- |
+| Info | the campaign has a name, a start and end, and at least one channel |
+| Targeting | at least one segment is included and the target has customers left |
+| Offer | an offer is added, or Next Best Offer is chosen |
+| Channel & content | every required slot of every channel is written — for variant B too when A/B is on |
+| Communication rules | you chose *Apply the standard rules* or *Customise* |
+| Schedule | you chose *Run now*, or *Schedule* with its date and time |
+
+Approval is not on the list: it is the approver's decision, not something you
+finish. The Approval step shows its **state** instead.
 
 **The stepper is one path**, with a line between the steps, and its colours
-follow the readiness panel rather than your clicks:
+follow that list rather than your clicks:
 
 | Looks like | Means |
 | --- | --- |
-| Green circle with ✓, green label, green line after it | the step's part of the readiness list is done (Summary: every part is done) |
+| Green circle with ✓, green label, green line after it | the step is done (Summary: everything is done) |
 | Orange highlight | the step you are on — with a ✓ inside if it is also done |
 | Amber outline and dot | you have been there, but it still needs something |
 | Grey circle with its number | not started |
+| Approval: grey · amber · green ✓ · red ✕ | not submitted · pending approval · approved · rejected |
 
-A step turns green the moment you fill what it needs, without leaving it, and
-goes back if you clear it. The colours never stop you clicking to another step.
-*Step n of 8 · readiness n/7* on the right says the same in words.
+**Hover a step** to see exactly what it still needs — *SMS: message is empty*,
+*Choose how the rules apply*, *Choose Run now or Schedule*. A step turns green
+the moment you fill what it needs, without leaving it, and goes back if you
+clear it. Empty required fields are marked in red once you have left the step
+(or tried to submit), never on first open. *Step n of 8 · Ready to submit: n of
+6* on the right says the same in words.
 
 An **Information** campaign has nothing to offer, so the Offer step leaves the
 path: the stepper shows seven steps and runs from Targeting straight to Channel
-& content.
+& content, and *Ready to submit* counts five.
 
 **The header** shows the status, the campaign type (**Offer** or
 **Information**) and the goal — **Goal: Retention**, for example. Click the goal
@@ -1746,9 +1786,12 @@ turned them on in Parameters.
 #### 2 · Targeting
 
 Available segments on the left, your target on the right. Search by name, ID or
-group, or pick a group, then **Include** or **Exclude** a segment. The audience
-count updates as you go. Exclusion lists are channel-scoped — excluding by SMS
-does not exclude by e-mail.
+group, or pick a group, then **Include** or **Exclude** a segment. The header of
+**Target audience** shows the customers left and how many segments you included
+and excluded; the global exclusion lists are on their own line underneath —
+*+ 4 global exclusion lists are applied at send, per channel* — because you did
+not add them. Exclusion lists are channel-scoped — excluding by SMS does not
+exclude by e-mail.
 
 **+ New segment…** here takes you to Segments; save it and come back, and it is
 in the list.
@@ -1780,16 +1823,23 @@ slots and the share each variant gets.
 
 #### 5 · Communication rules
 
-The rules come from Parameters and apply to every campaign: control group,
-channel cooldown, campaign-type overlap and the pre-sent period. Tick
-**Override elimination rules for this campaign** to change them here. Per rule,
+**Choose how the rules apply** — nothing is chosen for you, and the step is not
+done until you choose:
+
+- **Apply the standard rules** — the Parameters values, shown read-only: control
+  group, channel cooldown, campaign-type overlap and the pre-sent period.
+- **Customise for this campaign** — opens the rule table. Tick **Override
+  elimination rules for this campaign** to send to everyone in the target. Per rule,
 **Use it** removes the customer from this campaign's sends, and **Log it**
 records the send so later campaigns respect it. Consent and global exclusion
 lists always apply.
 
 #### 6 · Schedule
 
-- **Trigger** — **Run now** or **Schedule**.
+- **When should it go out?** — **Run now** (once, right after approval) or
+  **Schedule**. Neither is preselected, so nothing goes out by accident; the
+  step is done once you choose, and for *Schedule* once its date and time are
+  set.
 - **Recurrence** — Once, Daily, Weekly, Every 2 weeks or Monthly, with an end
   date or a number of sends, the time of day and, for weekly, the days.
 - **Send time optimization** — let each customer receive it at the hour they
@@ -1805,10 +1855,16 @@ goes to *Pending approval*. As an **approver**, the same step shows a
 the bottom. The history underneath shows who did what, when. The person who
 builds a campaign is not the one who activates it.
 
+If anything is still missing, **Submit for approval** does not submit: it opens
+**Before you can submit** with the list, and each item takes you to its step and
+field. **Save** and **Save & close** always work.
+
 #### 8 · Summary
 
-The whole campaign on one page. **Save**, **Save & close**, or go back to any
-step.
+The whole campaign on one page. At the top, **Before you can submit** lists
+everything still missing — click an item to go to its step and field — or reads
+**Ready to submit** when nothing is. **Save**, **Save & close**, or go back to
+any step.
 
 ---
 
@@ -3393,8 +3449,8 @@ let campMode='list', campSel=null, campStep=0, campDraft=null, campAdv=false, ca
 const campFilter={q:'',type:'All',status:'All',category:'',label:'',datamart:'',createdBy:''};
 const campUsedBy=id=>JOURNEYS.filter(j=>j.nodes.some(n=>n.type==='delivery'&&String(n.cfg.campaign).startsWith(id+' '))).map(j=>j.id);
 const chanIcon={sms:'SMS',email:'Email',push:'Push',tm:'TM',wsc:'WSC',whatsapp:'WA',chatbot:'Bot',order:'Order'};
-function campBlank(){ const nid=String(Math.max(...CAMPAIGNS.map(c=>parseInt(c.id)||0))+1); return {id:nid,name:'',type:'Offer',goal:'',status:'Draft',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:'',created:TODAY,updated:TODAY,start:TODAY+'T00:00',end:'2026-09-30T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:1,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[],offers:[],channels:['sms'],contents:[],plans:[],eventDriven:false,promo:{code:'',kind:'Single code',valid:''},rules:null,sched:null,rulesSet:false,schedSet:false,sortCol:'',sortDir:'',approver:'',approvalNote:'',approvals:[]}; }
-function campCopy(id){ const src=CAMPAIGNS.find(x=>x.id===id); campOpen(null); Object.assign(campDraft,JSON.parse(JSON.stringify({type:src.type,goal:campGoal(src),label:src.label,category:src.category,sub:src.sub,cg:src.cg,presend:src.presend,program:src.program,objective:src.objective,desc:src.desc,lists:src.lists,strategy:src.strategy,offers:src.offers,channels:src.channels,contents:src.contents,plans:src.plans.map(p=>Object.assign({},p,{status:'Draft'})),eventDriven:src.eventDriven,promo:src.promo,rules:src.rules,sched:src.sched,rulesSet:src.rulesSet,schedSet:src.schedSet,priority:src.priority})),{name:src.name+' (copy)'}); renderCampaigns(); toast('Campaign copied',`Settings of ${src.id} copied into a new draft — rename and adjust.`); }
+function campBlank(){ const nid=String(Math.max(...CAMPAIGNS.map(c=>parseInt(c.id)||0))+1); return {id:nid,name:'',type:'Offer',goal:'',status:'Draft',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:'',created:TODAY,updated:TODAY,start:TODAY+'T00:00',end:'2026-09-30T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:1,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[],offers:[],channels:['sms'],contents:[],plans:[],eventDriven:false,promo:{code:'',kind:'Single code',valid:''},rules:null,sched:null,rulesMode:'',sortCol:'',sortDir:'',approver:'',approvalNote:'',approvals:[]}; }
+function campCopy(id){ const src=CAMPAIGNS.find(x=>x.id===id); campOpen(null); Object.assign(campDraft,JSON.parse(JSON.stringify({type:src.type,goal:campGoal(src),label:src.label,category:src.category,sub:src.sub,cg:src.cg,presend:src.presend,program:src.program,objective:src.objective,desc:src.desc,lists:src.lists,strategy:src.strategy,offers:src.offers,channels:src.channels,contents:src.contents,plans:src.plans.map(p=>Object.assign({},p,{status:'Draft'})),eventDriven:src.eventDriven,promo:src.promo,rules:src.rules,sched:src.sched,rulesMode:src.rulesMode,override:src.override,priority:src.priority})),{name:src.name+' (copy)'}); renderCampaigns(); toast('Campaign copied',`Settings of ${src.id} copied into a new draft — rename and adjust.`); }
 /* New campaign starts on a centred creation screen (decision C9): name, objective, push or pull, one CTA.
    The stepper appears only once the draft exists. campOpen(null) still goes straight to the form. */
 let ccObj='', ccReach='push';
@@ -3414,7 +3470,7 @@ const CC_OBJ=[
 const CC_REACH=[
   ['push','We send it','SMS, e-mail, push or a call — it goes out on a schedule.','<path d="M4 12l16-8-6 16-3-7z"/>','sms'],
   ['pull','The customer sees it when they come','In the app, on self-care or in the chatbot — nothing is sent.','<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 17h2"/>','inapp']];
-function campCreate(){ campVisited=new Set(); campMode='create'; campSel=null; campStep=0; campDraft=campBlank(); campSavedAt=''; ccObj=''; ccReach='push'; renderCampaigns(); }
+function campCreate(){ campVisited=new Set(); campLeft=new Set(); campLastStep=null; campSubmitTried=false; campMode='create'; campSel=null; campStep=0; campDraft=campBlank(); campSavedAt=''; ccObj=''; ccReach='push'; renderCampaigns(); }
 function renderCampCreate(card){ const c=campDraft; const ic=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
   const recent=[...CAMPAIGNS].sort((a,b)=>(b.updated||'').localeCompare(a.updated||'')).slice(0,3);
   card.innerHTML=`<div class="cc-top"><button class="btn sm outline" id="camp-back">‹ Campaign list</button></div>
@@ -3440,48 +3496,74 @@ function renderCampCreate(card){ const c=campDraft; const ic=d=>`<svg viewBox="0
     if(ccObj) campSetGoal(c,ccObj); c.channels=[CC_REACH.find(x=>x[0]===ccReach)[4]]; syncPlans(c);
     campMode='detail'; campStep=0; renderCampaigns(); };
 }
-function campOpen(id){ campVisited=new Set(); campMode='detail'; campSel=id; campStep=0; campDraft=id?JSON.parse(JSON.stringify(CAMPAIGNS.find(c=>c.id===id))):campBlank(); campSavedAt=''; renderCampaigns(); }
+function campOpen(id){ campVisited=new Set(); campLeft=new Set(); campLastStep=null; campSubmitTried=false; campMode='detail'; campSel=id; campStep=0; campDraft=id?JSON.parse(JSON.stringify(CAMPAIGNS.find(c=>c.id===id))):campBlank(); campSavedAt=''; renderCampaigns(); }
 let campSavedAt='', tgQ='', tgGrp='';
 /* readiness layer — "where am I, what is missing". Never blocks: parts can be done in any order, by different people, on different days. */
 const CAMP_STEPS=['Info','Targeting','Offer','Channel & content','Communication rules','Schedule','Approval','Summary'];
 /* one marketing-toned heading per step (decision C10); the stepper labels above stay short and unchanged */
 const CAMP_STEP_H=['Tell us about your campaign','Who will you reach?','What will you offer?','How will you reach them?','Set the ground rules','When will it go out?','Send it for approval','Ready to launch'];
 const campStepsFor=c=>CAMP_STEPS.map((s,i)=>({i,s,skip:i===2&&c.type!=='Offer'}));
+/* Readiness = "ready to submit" (decision C17): six items the maker completes, five for an
+   Information campaign. Approval is the approver's action, so it is a state (campApproval), not an item.
+   Each item carries what is missing, in plain words, with the step and field it lives in. */
+function campApproval(c){ if(c.status==='Pending approval') return 'Pending approval'; if(c.status==='Active'||c.status==='Expired') return 'Approved';
+  const last=[...(c.approvals||[])].reverse().find(h=>h.act==='Approved'||h.act==='Rejected'||h.act==='Submitted'); return last&&last.act==='Rejected'?'Rejected':'Not submitted'; }
 function campReady(c){
-  const a=campAudience(c); const chs=c.channels||[];
+  const a=campAudience(c); const chs=c.channels||[]; const s=c.sched||{};
+  const info=[]; if(!(c.name||'').trim()) info.push({t:'Give the campaign a name',step:0,sel:'[data-k="name"]'}); if(!c.start) info.push({t:'Set the start date',step:0,sel:'[data-k="start"]'}); if(!c.end) info.push({t:'Set the end date',step:0,sel:'[data-k="end"]'}); if(!chs.length) info.push({t:'Pick at least one channel',step:0,sel:'.chgrp'});
+  const tg=[]; if(!(c.lists||[]).some(l=>l.mode==='Include')) tg.push({t:'Include at least one segment',step:1,sel:'.tg .box + .box'}); else if(a.count!==null&&a.count<1) tg.push({t:'The target has no customers left after exclusions',step:1,sel:'.tg .box + .box'});
+  const of=[]; if(c.type==='Offer'&&c.strategy!=='NBO'&&!(c.offers||[]).length) of.push({t:'Add an offer, or choose Next Best Offer',step:2,sel:'.tcards'});
+  const ct=[]; if(!chs.length) ct.push({t:'Pick a channel in Info, then write its content',step:3}); else chs.forEach(ch=>{ const i=(c.plans||[]).findIndex(p=>p.ch===ch); ct.push(...(i<0?planMissing(planBlank(c,ch),-1).map(m=>({t:m.t,step:3})):planMissing(c.plans[i],i))); });
+  const ru=[]; if(!c.rulesMode) ru.push({t:'Choose how the rules apply',step:4,sel:'#camp-rmode'});
+  const sc=[]; if(!s.trigger) sc.push({t:'Choose Run now or Schedule',step:5,sel:'#camp-strig'}); else if(s.trigger==='Schedule'){ if(s.type==='Once'&&!s.date) sc.push({t:'Schedule: pick the date',step:5,sel:'[data-sk="date"]'}); if(!s.time) sc.push({t:'Schedule: set the time',step:5,sel:'[data-sk="time"]'}); if(s.type==='Weekly'&&!(s.days||[]).length) sc.push({t:'Schedule: pick at least one day',step:5,sel:'[data-day]'}); }
   const items=[
-    {k:'info',step:0,l:'Name, period and channels',ok:!!(c.name&&c.name.trim()&&c.start&&c.end&&chs.length)},
-    {k:'target',step:1,l:'Target audience (segments)',ok:(c.lists||[]).length>0},
-    {k:'offer',step:2,l:c.type==='Offer'?'Offer'+(c.promo&&c.promo.code?' · promo code':''):'Offer (Information campaign — skipped)',ok:c.type!=='Offer'||c.strategy==='NBO'||(c.offers||[]).length>0,na:c.type!=='Offer'},
-    {k:'content',step:3,l:chs.length?`Content for ${chs.map(ch=>PLAN_CHANNELS.find(x=>x[0]===ch)[1]).join(', ')}`:'Content per channel',ok:chs.length>0&&(c.plans||[]).length===chs.length&&c.plans.every(planReady)},
-    {k:'rules',step:4,l:'Communication rules reviewed',ok:!!c.rulesSet},
-    {k:'sched',step:5,l:c.schedSet?'Schedule · '+planSchedText(c):'Schedule',ok:!!c.schedSet},
-    {k:'approval',step:6,l:c.status==='Active'?'Approved & active':c.status==='Pending approval'?'Waiting for approval':'Approval & activation',ok:c.status==='Active'}
-  ];
-  const rel=items.filter(i=>!i.na); return {items,done:rel.filter(i=>i.ok).length,total:rel.length,audience:a};
+    {k:'info',step:0,l:'Name, period and channels',miss:info},
+    {k:'target',step:1,l:'Target audience',miss:tg},
+    {k:'offer',step:2,l:c.type==='Offer'?'Offer'+(c.promo&&c.promo.code?' · promo code':''):'Offer (Information campaign — skipped)',miss:of,na:c.type!=='Offer'},
+    {k:'content',step:3,l:'Content for every channel',miss:ct},
+    {k:'rules',step:4,l:c.rulesMode==='standard'?'Rules chosen · standard':c.rulesMode==='custom'?'Rules chosen · customised':'Rules chosen',miss:ru},
+    {k:'sched',step:5,l:s.trigger?'Schedule chosen · '+planSchedText(c):'Schedule chosen',miss:sc}
+  ]; items.forEach(it=>it.ok=!it.miss.length);
+  const rel=items.filter(i=>!i.na); return {items,done:rel.filter(i=>i.ok).length,total:rel.length,audience:a,missing:rel.flatMap(i=>i.miss),approval:campApproval(c)};
 }
-/* Stepper states follow campReady(), not clicks (decision C16): done = its readiness item is met
-   (Summary: every item met); todo = visited but not met; the current step keeps its orange highlight.
-   An Information campaign's Offer step stays in the DOM but hidden, so the path reads seven steps. */
-let campVisited=new Set();
-function campStepDone(c,i,r){ r=r||campReady(c); if(i===7) return r.done===r.total; const it=r.items.find(x=>x.step===i); return !!(it&&!it.na&&it.ok); }
+/* Stepper states follow campReady(), not clicks (decisions C16, C19): done = its readiness item is met
+   (Summary: every item met; Approval: approved); todo = visited but not met; the current step keeps its
+   orange highlight. Approval shows the approval state. An Information campaign's Offer step stays in the
+   DOM but hidden, so the path reads seven steps. */
+let campVisited=new Set(), campLeft=new Set(), campLastStep=null, campSubmitTried=false;
+function campStepDone(c,i,r){ r=r||campReady(c); if(i===7) return r.done===r.total; if(i===6) return r.approval==='Approved'; const it=r.items.find(x=>x.step===i); return !!(it&&!it.na&&it.ok); }
+function campStepTip(c,i,r){ if(i===6) return 'Approval: '+r.approval.toLowerCase(); const miss=i===7?r.missing:r.missing.filter(m=>m.step===i); return miss.length?'Still needed:\n'+miss.map(m=>'• '+m.t).join('\n'):(i===7?'Ready to submit':'Done'); }
 function campStepperHtml(c){ const steps=campStepsFor(c), r=campReady(c), visible=steps.filter(x=>!x.skip), pos=visible.findIndex(x=>x.i===campStep);
   let out='', prev=null;
   steps.forEach(st=>{
     if(st.skip){ out+=`<button data-step="${st.i}" disabled hidden title="Information campaign — no offer"><i>–</i>${st.s}</button>`; return; }
     if(prev!==null) out+=`<span class="sconn${campStepDone(c,prev,r)?' ok':''}" aria-hidden="true"></span>`;
-    const done=campStepDone(c,st.i,r), cur=st.i===campStep, todo=!done&&!cur&&campVisited.has(st.i);
-    const n=visible.findIndex(x=>x.i===st.i)+1;
-    out+=`<button class="${[cur?'on':'',done?'done':'',todo?'todo':''].filter(Boolean).join(' ')}" data-step="${st.i}" title="${done?'Done':todo?'Visited — still needs something':cur?'You are here':'Not started'}"><i>${done?'✓':n}</i>${st.s}</button>`;
+    const done=campStepDone(c,st.i,r), cur=st.i===campStep, n=visible.findIndex(x=>x.i===st.i)+1;
+    let cls, glyph=done?'✓':n;
+    if(st.i===6){ cls=r.approval==='Approved'?'done':r.approval==='Pending approval'?'pend':r.approval==='Rejected'?'rej':''; glyph=r.approval==='Approved'?'✓':r.approval==='Rejected'?'✕':n; }
+    else cls=done?'done':(!cur&&campVisited.has(st.i)?'todo':'');
+    out+=`<button class="${[cur?'on':'',cls].filter(Boolean).join(' ')}" data-step="${st.i}" title="${esc(campStepTip(c,st.i,r))}"><i>${glyph}</i>${st.s}</button>`;
     prev=st.i; });
-  return out+`<span class="spos">Step ${pos+1} of ${visible.length} ·<br>readiness ${r.done}/${r.total}</span>`; }
-/* Refresh the stepper and the readiness panel in place after an edit, so a step turns green
+  return out+`<span class="spos">Step ${pos+1} of ${visible.length} ·<br>Ready to submit: ${r.done} of ${r.total}</span>`; }
+/* Refresh the stepper and the missing-field marks in place after an edit, so a step turns green
    without leaving it; nothing else is re-rendered, so typing never loses focus. */
 function campStepSync(card){ const c=campDraft; if(!c||campMode!=='detail') return; const st=card.querySelector('.stepper'); if(!st) return;
-  st.innerHTML=campStepperHtml(c); campStepperBind(card);
-  const rp=card.querySelector('#camp-ready'); if(rp){ const t=document.createElement('div'); t.innerHTML=readyHtml(c); const nw=t.querySelector('#camp-ready'); if(nw){ rp.replaceWith(nw); campReadyBind(card); } } }
+  st.innerHTML=campStepperHtml(c); campStepperBind(card); campMarkMissing(card); }
 function campStepperBind(card){ card.querySelectorAll('.stepper button:not([disabled])').forEach(b=>b.onclick=()=>{ campStep=+b.dataset.step; renderCampDetail(card); }); }
-function campReadyBind(card){ const c=campDraft; card.querySelectorAll('#camp-ready li').forEach(li=>li.onclick=()=>{ const st=+li.dataset.step; campStep=(st===2&&c.type!=='Offer')?3:st; renderCampDetail(card); }); }
+/* Required-but-empty fields are marked only once the step has been left, or a submit was tried. */
+function campMarkMissing(card){ card.querySelectorAll('.miss').forEach(el=>{ el.classList.remove('miss'); el.removeAttribute('data-miss'); });
+  if(!(campLeft.has(campStep)||campSubmitTried)) return; const r=campReady(campDraft);
+  r.missing.filter(m=>m.step===campStep&&m.sel).forEach(m=>{ const el=card.querySelector(m.sel); if(!el) return; const f=el.closest('.fld')||el; f.classList.add('miss'); if(f.classList.contains('fld')) f.setAttribute('data-miss',m.t); }); }
+/* Go to the step (and field) a missing item lives in. */
+function campGoMissing(card,step,sel){ const c=campDraft; campStep=(step===2&&c.type!=='Offer')?3:step; renderCampDetail(card);
+  if(sel){ const el=card.querySelector(sel); if(el){ el.scrollIntoView({block:'center'}); const f=el.matches('input,textarea,select')?el:el.querySelector('input,textarea,select,button'); if(f) f.focus({preventScroll:true}); const box=el.closest('.fld')||el; box.classList.remove('flash'); void box.offsetWidth; box.classList.add('flash'); } } }
+function campMissingList(r){ return `<ul>${r.missing.map(m=>`<li><a data-goto="${m.step}" data-sel="${esc(m.sel||'')}">${esc(m.t)}</a> <small>· ${CAMP_STEPS[m.step]}</small></li>`).join('')}</ul>`; }
+function campBindGoto(root,card,after){ root.querySelectorAll('[data-goto]').forEach(a=>a.onclick=()=>{ if(after) after(); campGoMissing(card,+a.dataset.goto,a.dataset.sel); }); }
+function campMissModal(card){ const r=campReady(campDraft); let m=document.getElementById('camp-miss-modal'); if(m) m.remove();
+  m=document.createElement('div'); m.className='modal-bg'; m.id='camp-miss-modal';
+  m.innerHTML=`<div class="card modal" style="width:min(560px,92vw)" role="dialog" aria-modal="true" aria-labelledby="camp-miss-h"><div class="ph"><h3 id="camp-miss-h">Before you can submit</h3><div class="grow" style="flex:1"></div><button class="btn sm outline" id="camp-miss-close">Close</button></div><div class="b4sub" style="margin:12px 16px 16px"><p style="margin:0 0 8px;font-size:13px;color:var(--ink-2)">${r.missing.length} thing${r.missing.length===1?'':'s'} still need${r.missing.length===1?'s':''} doing. Click one to go there — your work is kept, and you can still save.</p>${campMissingList(r)}</div></div>`;
+  document.body.appendChild(m); const close=()=>{ m.remove(); document.removeEventListener('keydown',esc_); }; const esc_=e=>{ if(e.key==='Escape') close(); };
+  document.addEventListener('keydown',esc_); m.onclick=e=>{ if(e.target===m) close(); }; m.querySelector('#camp-miss-close').onclick=close; campBindGoto(m,card,close); m.querySelector('[data-goto]').focus(); }
 /* The goal is chosen once, on the creation screen; the editor shows it as a header chip that
    opens this popover (decision C15). Skip-created campaigns read "Set goal". */
 function campGoalPop(card,chip){ const c=campDraft; let pop=document.getElementById('camp-goalpop'); if(pop){ pop.remove(); chip.setAttribute('aria-expanded','false'); return; }
@@ -3492,8 +3574,8 @@ function campGoalPop(card,chip){ const c=campDraft; let pop=document.getElementB
   const close=e=>{ if(e.type==='keydown'&&e.key!=='Escape') return; if(e.type==='mousedown'&&(pop.contains(e.target)||chip.contains(e.target))) return; pop.remove(); chip.setAttribute('aria-expanded','false'); document.removeEventListener('mousedown',close,true); document.removeEventListener('keydown',close,true); };
   setTimeout(()=>{ document.addEventListener('mousedown',close,true); document.addEventListener('keydown',close,true); },0); }
 function readyHtml(c,compact){ const r=campReady(c); const pct=Math.round(100*r.done/r.total);
-  if(compact) return `<span class="mini" title="${r.items.filter(i=>!i.na&&!i.ok).map(i=>'missing: '+i.l).join(' · ')||'ready'}"><i><b style="width:${pct}%"></b></i>${r.done}/${r.total}</span>`;
-  return `<div class="ready" id="camp-ready"><div class="t">Readiness <span class="pill ${r.done===r.total?'ok':'warn'}" style="margin-left:auto">${r.done} of ${r.total}</span></div><div class="bar"><i style="width:${pct}%"></i></div><ul>${r.items.map(i=>`<li class="${i.ok?'ok':''} ${i.na?'na':''}" data-step="${i.step}"><b>${i.ok?'✓':''}</b>${i.l}</li>`).join('')}</ul><small style="color:var(--ink-3);font-size:11px">Click an item to jump there. Parts can be done in any order — nothing here blocks saving.</small></div>`; }
+  if(compact) return `<span class="mini" title="${esc(r.missing.map(m=>'missing: '+m.t).join(' · ')||'ready to submit')}"><i><b style="width:${pct}%"></b></i>${r.done}/${r.total}</span>`;
+  return readyHtml(c,true); }
 function renderCampaigns(){
   const card=document.getElementById('camp-card'); if(!card) return;
   if(campMode==='list'){ if(curView==='campaigns') setCrumb(); renderCampList(card); return; }
@@ -3519,16 +3601,22 @@ function planPreviewHtml(p,cust,variant){ let sl=variant==='B'?p.slotsB:p.slots;
 const PLAN_RULES=[['cg','Control group','from the campaign: size and method'],['cooldown','Channel cooldown','days between two sends on the same channel, any campaign'],['type','Campaign Type (overlap)','max. Information / Offer sends per day'],['presend','Campaign pre-sent','days between two sends of this same campaign to one customer (default from Parameters)']];
 const PLAN_STATUS_CLS={Draft:'warn','Waiting for approval':'warn',Scheduled:'acc',Running:'ok',Paused:'',Completed:'',Stopped:'bad'};
 const defaultRules=c=>({cg:{use:c.cg!=='No Control Group',log:true},cooldown:{use:true,log:true},type:{use:true,log:true},presend:{use:true,log:true}});
-const defaultSched=()=>({trigger:'Schedule',type:'Daily',time:'10:00',date:TODAY,count:'',days:['Mon','Wed','Fri'],sto:false});
+const defaultSched=()=>({trigger:'',type:'Daily',time:'10:00',date:TODAY,count:'',days:['Mon','Wed','Fri'],sto:false});
 function planContents(ch){ return tplFor(ch).filter(t=>t.status!=='Draft'||true); }
 function contentTextOf(id){ const it=CONTENT_ITEMS.find(x=>x.id===id); if(!it) return ''; return it.ch==='email'?[it.hero,it.lead,it.body].filter(Boolean).join('\n'):Object.values(it.variants)[0]||''; }
 function planBlank(c,ch){ return {id:'DP-'+c.id+'-'+ch.toUpperCase(),ch,content:tplDefault(ch),slots:slotsBlank(ch),slotsB:slotsBlank(ch),bodyAlt:'',text:'',ab:false,dynOn:false,contentB:tplDefault(ch),abSplit:20,dyn:'LANGUAGE',tests:[DEMO_USERS.me.split(' ')[0]+' (test MSISDN)'],status:'Draft'}; }
 const planFilled=p=>!!(p.content&&p.slots&&(p.slots.body||'').trim());
-const planReady=p=>planFilled(p)&&(!p.ab||(p.slotsB&&(p.slotsB.body||'').trim()));
+/* required slots per channel: the body everywhere, the subject of an e-mail, the title of push and pull cards */
+const SLOT_REQ={email:['subject','body'],push:['title','body'],webpush:['title','body'],inapp:['title','body'],wsc:['title','body'],banner:['title','body']};
+const slotReq=ch=>SLOT_REQ[ch]||['body'];
+function planMissing(p,i){ const out=[]; const lab=k=>((SLOT_DEFS[p.ch]||[]).find(d=>d[0]===k)||[k,k])[1];
+  const chk=(sl,v)=>slotReq(p.ch).forEach(k=>{ if(!String((sl||{})[k]||'').trim()) out.push({t:`${chName(p.ch)}${v==='B'?' (variant B)':''}: ${lab(k).toLowerCase()} is empty`,step:3,sel:`[data-slot="${k}"][data-pi="${i}"][data-v="${v}"]`}); });
+  if(!p.content) out.push({t:`${chName(p.ch)}: no template chosen`,step:3}); chk(p.slots,'A'); if(p.ab) chk(p.slotsB,'B'); return out; }
+const planReady=p=>planMissing(p,0).length===0;
 /* keep one plan per selected channel */
 function syncPlans(c){ c.plans=(c.plans||[]).filter(p=>(c.channels||[]).includes(p.ch)); (c.channels||[]).forEach(ch=>{ if(!c.plans.some(p=>p.ch===ch)) c.plans.push(planBlank(c,ch)); }); c.contents=[...new Set(c.plans.flatMap(p=>[p.content,p.contentB].filter(Boolean)))]; }
-function planSchedText(c){ const s=c.sched||defaultSched(); if(s.trigger==='Run now') return 'Run now · once'; if(s.type==='Once') return `Once · ${s.date} ${s.time}`; if(s.type==='Weekly') return `Weekly · ${s.days.join(', ')} · ${s.time}${s.count?' · '+s.count+' sends':''}`; return `${s.type} · ${s.time}${s.count?' · '+s.count+' sends':''}`; }
-function planNext(c){ const s=c.sched||defaultSched(); if(s.trigger==='Run now') return 'immediately'; return (s.type==='Once'?s.date:TODAY)+' '+s.time; }
+function planSchedText(c){ const s=c.sched||defaultSched(); if(!s.trigger) return 'Not chosen yet'; if(s.trigger==='Run now') return 'Run now · once'; if(s.type==='Once') return `Once · ${s.date} ${s.time}`; if(s.type==='Weekly') return `Weekly · ${s.days.join(', ')} · ${s.time}${s.count?' · '+s.count+' sends':''}`; return `${s.type} · ${s.time}${s.count?' · '+s.count+' sends':''}`; }
+function planNext(c){ const s=c.sched||defaultSched(); if(!s.trigger) return '—'; if(s.trigger==='Run now') return 'immediately'; return (s.type==='Once'?s.date:TODAY)+' '+s.time; }
 function rulesText(c){ if(c.override) return '<span class="pill bad">rules overridden</span>'; const r=c.rules||defaultRules(c); return PLAN_RULES.filter(([k])=>r[k].use).map(([k,l])=>`<span class="chip" title="${l}">${k==='cg'?'CG':k==='cooldown'?'cooldown':k==='type'?'overlap':'pre-sent'}${r[k].log?'':' · no log'}</span>`).join(' ')||'<span class="chip">none</span>'; }
 function campContentHtml(c){
   if(!(c.channels||[]).length) return `<div class="empty" style="padding:28px">No channel selected yet — pick the campaign's channels in the <b>Info</b> step, then write the content for each one here.</div>`;
@@ -3557,18 +3645,30 @@ function campContentHtml(c){
         <div class="fld span2"><div class="chips">${p.tests.map(t=>`<span class="chip">${esc(t)}</span>`).join('')}<button class="btn sm outline" data-ptest="${i}">Send test</button><small style="color:var(--ink-3);margin-left:6px">Sender, gateway and receiver column come from Parameters › Channels &amp; senders.</small></div></div>
       </div></div></div>`; }).join('')}`;
 }
-function campRulesHtml(c){ c.rules=c.rules||defaultRules(c);
-  return `<div style="padding:12px 20px 0">
+function campRulesHtml(c){ c.rules=c.rules||defaultRules(c); const m=c.rulesMode||'';
+  const std=[['Control group',c.cg],['Channel cooldown',(c.channels||[]).map(ch=>`${chName(ch)} ${RULE_DEFAULTS.cooldown[ch]||'—'}`).join(' · ')||'—'],['Campaign Type overlap',RULE_DEFAULTS.overlap],['Pre-sent period',RULE_DEFAULTS.presend]];
+  return `<div class="h4" style="padding-top:12px"><span class="req">How should the rules apply?</span> <span style="font-weight:400;color:var(--ink-2)">— required; nothing is chosen for you</span></div>
+    <div class="tcards" id="camp-rmode" role="radiogroup" aria-label="How should the rules apply?">
+      <button type="button" role="radio" aria-checked="${m==='standard'}" class="tcard ${m==='standard'?'on':''}" data-rmode="standard"><span class="ico">≡</span><span><b>Apply the standard rules</b><small>The communication rules from Parameters, as they are.</small></span>${m==='standard'?'<span class="chk">✔</span>':''}</button>
+      <button type="button" role="radio" aria-checked="${m==='custom'}" class="tcard ${m==='custom'?'on':''}" data-rmode="custom"><span class="ico">✎</span><span><b>Customise for this campaign</b><small>Switch rules on or off, log them, or override them.</small></span>${m==='custom'?'<span class="chk">✔</span>':''}</button>
+    </div>
+    ${m==='standard'?`<div class="stdrules">${std.map(([l,v])=>`<div><b>${l}</b><span>${esc(v)}</span></div>`).join('')}</div><div class="note" style="margin:10px 20px 0">Read-only — these come from Parameters › Communication rule defaults. Consent and global exclusion lists always apply.</div>`
+    :m==='custom'?`<div style="padding:4px 20px 0">
     <label class="ck" style="margin-bottom:8px"><input type="checkbox" data-ck="override" ${c.override?'checked':''}> Override elimination rules for this campaign ${tip(TIPS.override)} <span style="color:var(--ink-3)">— sends to everyone in the target; only for regulatory or service messages</span></label>
     <table class="tbl" style="${c.override?'opacity:.45':''}"><thead><tr><th>Rule</th><th>What it does</th><th>Parameter</th><th style="width:80px">Use it</th><th style="width:80px">Log it</th></tr></thead><tbody>
     ${PLAN_RULES.map(([k,l,d])=>`<tr><td><b>${l}</b> ${tip(d)}</td><td style="color:var(--ink-2)">${d}</td><td>${k==='cg'?esc(c.cg):k==='cooldown'?(c.channels||[]).map(ch=>`${chName(ch)} ${RULE_DEFAULTS.cooldown[ch]||'—'}`).join(' · ')||'—':k==='type'?RULE_DEFAULTS.overlap:RULE_DEFAULTS.presend}</td><td><input type="checkbox" data-rule="${k}" data-f="use" ${c.rules[k].use?'checked':''} ${c.override||(k==='cg'&&c.cg==='No Control Group')?'disabled':''}></td><td><input type="checkbox" data-rule="${k}" data-f="log" ${c.rules[k].log?'checked':''} ${c.override?'disabled':''}></td></tr>`).join('')}
     </tbody></table>
-    <div class="note" style="margin-top:10px">Consent and global exclusion lists always apply. <b>Use it</b> eliminates the customer for this campaign's sends; <b>Log it</b> records the send so later campaigns respect it. Cooldown, Campaign Type limits and the pre-sent period come from Parameters › Communication rule defaults — they are not asked per campaign. ${c.cg==='No Control Group'?'Control group is off for this campaign (Info step).':''}</div></div>`;
+    <div class="note" style="margin-top:10px">Consent and global exclusion lists always apply. <b>Use it</b> eliminates the customer for this campaign's sends; <b>Log it</b> records the send so later campaigns respect it. Cooldown, Campaign Type limits and the pre-sent period come from Parameters › Communication rule defaults — they are not asked per campaign. ${c.cg==='No Control Group'?'Control group is off for this campaign (Info step).':''}</div></div>`
+    :`<div class="empty" style="padding:18px 20px">Choose one to continue. The standard rules are what most campaigns use.</div>`}`;
 }
 function campSchedHtml(c){ const s=c.sched=c.sched||defaultSched();
-  return `<div class="form2" style="padding-top:12px">
-    <div class="fld"><label class="req">Trigger ${tip(TIPS.trigger)}</label><select data-sk="trigger"><option ${s.trigger==='Run now'?'selected':''}>Run now</option><option ${s.trigger==='Schedule'?'selected':''}>Schedule</option></select></div>
-    ${s.trigger==='Schedule'?`<div class="fld"><label>Recurrence</label><select data-sk="type">${['Once','Daily','Weekly','Every 2 weeks','Monthly'].map(x=>`<option ${s.type===x?'selected':''}>${x}</option>`).join('')}</select></div>
+  return `<div class="h4" style="padding-top:12px"><span class="req">When should it go out?</span> ${tip(TIPS.trigger)} <span style="font-weight:400;color:var(--ink-2)">— required; nothing is chosen for you, so nothing goes out by accident</span></div>
+    <div class="tcards" id="camp-strig" role="radiogroup" aria-label="When should it go out?">
+      <button type="button" role="radio" aria-checked="${s.trigger==='Run now'}" class="tcard ${s.trigger==='Run now'?'on':''}" data-strig="Run now"><span class="ico">▶</span><span><b>Run now</b><small>Once, right after approval.</small></span>${s.trigger==='Run now'?'<span class="chk">✔</span>':''}</button>
+      <button type="button" role="radio" aria-checked="${s.trigger==='Schedule'}" class="tcard ${s.trigger==='Schedule'?'on':''}" data-strig="Schedule"><span class="ico">◷</span><span><b>Schedule</b><small>A date and time, once or on repeat.</small></span>${s.trigger==='Schedule'?'<span class="chk">✔</span>':''}</button>
+    </div>
+    <div class="form2" style="padding-top:0">
+    ${!s.trigger?`<div class="empty span2" style="padding:6px 0 0">Choose one to continue.</div>`:s.trigger==='Schedule'?`<div class="fld"><label>Recurrence</label><select data-sk="type">${['Once','Daily','Weekly','Every 2 weeks','Monthly'].map(x=>`<option ${s.type===x?'selected':''}>${x}</option>`).join('')}</select></div>
       ${s.type==='Once'?`<div class="fld"><label class="req">Date</label><input type="date" data-sk="date" value="${s.date}"></div>`:`<div class="fld"><label>Send count <span style="color:var(--ink-3)">— empty = until campaign end (${c.end.slice(0,10)})</span></label><input type="number" min="1" data-sk="count" value="${esc(s.count)}" placeholder="e.g. 3"></div>`}
       <div class="fld"><label class="req">Time (local)</label><input type="time" data-sk="time" value="${s.time}"></div>
       ${s.type==='Weekly'?`<div class="fld span2"><label>Days <span style="color:var(--ink-3)">— up to the send count; cycles back to the first day</span></label><div class="chsel">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<button type="button" class="${s.days.includes(d)?'on':''}" data-day="${d}">${d}</button>`).join('')}</div></div>`:''}
@@ -3586,16 +3686,19 @@ function bindDelivery(card,c,step){
     card.querySelectorAll('[data-copyfrom]').forEach(el=>el.onchange=()=>{ if(!el.value) return; const i=+el.dataset.pi; const p=c.plans[i]; const src=CAMPAIGNS.find(x=>x.id===el.value); const q=(src.plans||[]).find(q=>q.ch===p.ch); if(!q) return; Object.assign(p,JSON.parse(JSON.stringify({content:q.content,slots:q.slots,slotsB:q.slotsB,bodyAlt:q.bodyAlt,ab:q.ab,dynOn:q.dynOn,dyn:q.dyn,abSplit:q.abSplit,text:q.text}))); syncPlans(c); rerender(); toast('Content copied',`${chName(p.ch)} content of campaign ${src.id} copied — edit it for this campaign.`); });
     card.querySelectorAll('[data-ptest]').forEach(b=>b.onclick=()=>{ const p=c.plans[+b.dataset.ptest]; toast('Test send',`${chName(p.ch)} content rendered for ${p.tests.join(', ')} — test delivery is not enabled in this environment.`,'warn'); });
   }
-  if(step===4){ c.rulesSet=true;
+  if(step===4){
+    card.querySelectorAll('[data-rmode]').forEach(b=>b.onclick=()=>{ c.rulesMode=b.dataset.rmode; if(c.rulesMode==='standard'){ c.rules=defaultRules(c); c.override=false; } rerender(); });
     card.querySelectorAll('[data-rule]').forEach(el=>el.onchange=()=>{ c.rules[el.dataset.rule][el.dataset.f]=el.checked; });
     card.querySelectorAll('[data-ck]').forEach(el=>el.onchange=()=>{ c[el.dataset.ck]=el.checked; rerender(); }); }
-  if(step===5){ c.schedSet=true;
+  if(step===5){
+    card.querySelectorAll('[data-strig]').forEach(b=>b.onclick=()=>{ c.sched.trigger=b.dataset.strig; rerender(); });
     card.querySelectorAll('[data-sk]').forEach(el=>{ const h=()=>{ const k=el.dataset.sk; c.sched[k]=el.type==='checkbox'?el.checked:el.value; if(k==='trigger'||k==='type') rerender(); }; el.oninput=el.onchange=h; });
     card.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{ const d=b.dataset.day; const i=c.sched.days.indexOf(d); if(i>=0) c.sched.days.splice(i,1); else c.sched.days.push(d); rerender(); }); }
 }
 /* seed: derive channels, plans, rules and schedule for the demo campaigns */
 CAMPAIGNS.forEach(c=>{ if(c.type==='Event'||c.type==='Survey') c.type='Information'; c.eventDriven=false; if(!c.plans){ c.plans=[]; (c.channels||[]).forEach(ch=>{ const cid=(c.contents||[]).find(id=>{ const it=CONTENT_ITEMS.find(x=>x.id===id); return it&&(it.ch===ch||(ch==='sms'&&it.ch==='isms')); })||''; const it=CONTENT_ITEMS.find(x=>x.id===cid); const sl=slotsBlank(ch); if(it){ if(ch==='email'){ Object.assign(sl,{subject:(it.subject||{}).A||'',preheader:it.preheader||'',headline:it.hero||'',lead:it.lead||'',body:it.body||'',cta:it.cta||''}); } else { sl.body=Object.values(it.variants||{})[0]||''; if('title' in sl) sl.title=it.title||''; if('cta' in sl) sl.cta=it.cta||''; } } const slB=Object.assign({},sl,it&&it.subject&&it.subject.B?{subject:it.subject.B}:{}); c.plans.push({id:`DP-${c.id}-${ch.toUpperCase()}`,ch,content:tplDefault(ch),slots:sl,slotsB:slB,bodyAlt:it&&it.variants&&it.variants.uk||'',text:sl.body,ab:!!(it&&it.subject&&it.subject.B),dynOn:!!(it&&it.dyn),contentB:tplDefault(ch),abSplit:20,dyn:it?it.dyn||'LANGUAGE':'LANGUAGE',tests:[DEMO_USERS.me.split(' ')[0]+' (test MSISDN)'],status:c.status==='Active'?'Running':c.status==='Expired'?'Completed':'Draft'}); }); }
-  c.rules=c.rules||defaultRules(c); c.sched=c.sched||Object.assign(defaultSched(),{type:c.eventDriven?'Once':'Daily',date:c.start.slice(0,10),sto:(c.channels||[]).includes('push')}); c.rulesSet=c.status!=='Draft'; c.schedSet=c.status!=='Draft'; c.promo=c.promo||{code:'',kind:'Single code',valid:''}; c.approver=c.approver||''; c.approvalNote=c.approvalNote||''; c.approvals=c.approvals||(c.status==='Active'||c.status==='Expired'?[{at:c.created+' 09:40',who:c.createdBy,act:'Submitted',note:'Ready for review.'},{at:c.created+' 11:05',who:DEMO_USERS.approver,act:'Approved',note:'OK — audience and offer checked.'}]:[]); });
+  c.rules=c.rules||defaultRules(c); const chosen=c.status!=='Draft'||(c.approvals||[]).length>0; /* submitted at least once: its rules and schedule were chosen then */
+  c.sched=c.sched||Object.assign(defaultSched(),{trigger:chosen?'Schedule':'',type:c.eventDriven?'Once':'Daily',date:c.start.slice(0,10),sto:(c.channels||[]).includes('push')}); c.rulesMode=c.rulesMode||(chosen?'standard':''); c.promo=c.promo||{code:'',kind:'Single code',valid:''}; c.approver=c.approver||''; c.approvalNote=c.approvalNote||''; c.approvals=c.approvals||(c.status==='Active'||c.status==='Expired'?[{at:c.created+' 09:40',who:c.createdBy,act:'Submitted',note:'Ready for review.'},{at:c.created+' 11:05',who:DEMO_USERS.approver,act:'Approved',note:'OK — audience and offer checked.'}]:[]); });
 function renderCampList(card){
   const f=campFilter; const q=f.q.toLowerCase();
   const rows=CAMPAIGNS.filter(c=>(f.type==='All'||c.type===f.type)&&(f.status==='All'||c.status===f.status)&&(!f.category||c.category===f.category)&&(!f.label||c.label===f.label)&&(!f.datamart||c.datamart===f.datamart)&&(!f.createdBy||c.createdBy.toLowerCase().includes(f.createdBy.toLowerCase()))&&(!q||c.name.toLowerCase().includes(q)||c.id.includes(q)));
@@ -3638,7 +3741,7 @@ function renderCampList(card){
 }
 function renderCampDetail(card){
   const c=campDraft; const gp=document.getElementById('camp-goalpop'); if(gp) gp.remove(); const steps=campStepsFor(c); if(c.type!=='Offer'&&campStep===2) campStep=3; campVisited.add(campStep);
-  if(campStep===4) c.rulesSet=true; if(campStep===5) c.schedSet=true; c.approvals=c.approvals||[];
+  c.approvals=c.approvals||[]; if(campLastStep!==null&&campLastStep!==campStep) campLeft.add(campLastStep); campLastStep=campStep;
   const a=campAudience(c);
   const sel=(k,label,opts,req)=>`<div class="fld"><label class="${req?'req':''}">${label}${TIPS[k]?tip(TIPS[k]):''}</label><select data-k="${k}">${opts.map(o=>`<option ${String(c[k])===String(o)?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`;
   const inp=(k,label,req,type,ro)=>`<div class="fld"><label class="${req?'req':''}">${label}${TIPS[k]?tip(TIPS[k]):''}</label><input data-k="${k}" type="${type||'text'}" value="${esc(c[k]||'')}" ${ro?'readonly':''}></div>`;
@@ -3669,7 +3772,7 @@ function renderCampDetail(card){
         <div class="list">${avail.map(m=>{ const used=c.lists.find(l=>l.id===m.id); return `<div class="it ${used?'used':''}"><div class="nm"><b>${esc(m.name)}</b>${m.excl?' <span class="pill warn">exclusion</span>':''}<small>${m.id} · ${esc(m.group)} · ${m.dm} DataMart · ${evalML(m).count} customers</small></div>${used?`<span class="chip">${used.mode}d</span>`:`<button class="btn sm outline" data-tgadd="${m.id}" data-mode="Include">Include</button><button class="btn sm outline" data-tgadd="${m.id}" data-mode="Exclude">Exclude</button>`}</div>`; }).join('')||'<div class="empty">No segment matches that search. Try a shorter word, or build a new segment.</div>'}</div>
         <div style="padding:8px 10px;border-top:1px solid var(--line-2);display:flex;align-items:center;gap:8px"><button class="btn sm outline" id="tg-newseg" style="white-space:nowrap">+ New segment…</button><small style="color:var(--ink-3)">Opens Segments; the new one appears here after saving.</small></div>
       </div>
-      <div class="box"><div class="bh">Target audience ${tip(TIPS.target)}<span class="kpi" style="margin-left:auto;font-weight:400"><b id="tg-count">${a.count===null?'—':a.count}</b> customers · includes ${a.inc} · excludes ${a.exc}</span></div>
+      <div class="box"><div class="bh">Target audience ${tip(TIPS.target)}<span class="kpi" style="margin-left:auto;font-weight:400;text-align:right"><b id="tg-count">${a.count===null?'—':a.count}</b> customers · includes ${c.lists.filter(l=>l.mode==='Include').length} · excludes ${c.lists.filter(l=>l.mode==='Exclude').length}${(()=>{ const g=MLS.filter(m=>m.excl&&m.status==='Active'&&exclApplies(m,c.channels)).length; return g?`<br><small style="color:var(--ink-2)">+ ${g} global exclusion list${g===1?' is':'s are'} applied at send, per channel</small>`:''; })()}</span></div>
         <div style="overflow:auto;flex:1"><table class="tbl" style="table-layout:fixed"><thead><tr><th style="width:30px">#</th><th>Segment</th><th style="width:76px">Rule</th><th style="width:54px">Count</th><th style="width:54px">So far</th><th style="width:78px"></th></tr></thead>
         <tbody>${c.lists.map((l,i)=>{ const m=MLS.find(x=>x.id===l.id); if(!m) return ''; const part=campAudience({type:c.type,eventDriven:c.eventDriven,channels:c.channels,lists:c.lists.slice(0,i+1)}); return `<tr><td class="num">${i+1}</td><td style="overflow:hidden"><b>${esc(m.name)}</b><br><small style="color:var(--ink-3)">${m.id} · ${esc(m.group)}${m.excl?' · exclusion list':''}</small></td><td><span class="pill ${l.mode==='Include'?'ok':'bad'}">${l.mode}</span></td><td class="num">${evalML(m).count}</td><td class="num">${part.count}</td><td><span class="act"><button class="btn sm outline" data-up="${i}" ${i===0?'disabled':''} title="Move up">↑</button><button class="btn sm outline" data-rm="${i}" title="Remove from target">×</button></span></td></tr>`; }).join('')||'<tr><td colspan="6" class="empty">No one to reach yet. Use <b>Include</b> on the left to add a segment.</td></tr>'}</tbody></table></div>
         <div style="padding:8px 10px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;border-top:1px solid var(--line-2)"><div class="fld" style="min-width:170px"><label>Prioritization column ${tip(TIPS.sortCol)}</label><select data-k="sortCol"><option value="">—</option>${DM_COLS.filter(x=>x.t==='num'||x.t==='date').map(x=>`<option ${c.sortCol===x.k?'selected':''}>${x.k}</option>`).join('')}</select></div><div class="fld" style="min-width:120px"><label>Sort</label><select data-k="sortDir"><option value="">—</option><option ${c.sortDir==='Ascending'?'selected':''}>Ascending</option><option ${c.sortDir==='Descending'?'selected':''}>Descending</option></select></div><div class="grow"></div><button class="btn primary sm" id="tg-calc">Calculate</button></div>
@@ -3689,12 +3792,12 @@ function renderCampDetail(card){
   else if(campStep===3){ syncPlans(c); body=campContentHtml(c); }
   else if(campStep===4){ body=campRulesHtml(c); }
   else if(campStep===5){ body=campSchedHtml(c); }
-  else if(campStep===6){ const r=campReady(c); const missing=r.items.filter(i=>!i.na&&!i.ok&&i.k!=='approval'); const hist=c.approvals||[]; const stage=c.status==='Active'?3:c.status==='Pending approval'?2:1; const sub=[...hist].reverse().find(h=>h.act==='Submitted'); const dec=[...hist].reverse().find(h=>h.act==='Approved'||h.act==='Rejected');
+  else if(campStep===6){ const r=campReady(c); const missing=r.items.filter(i=>!i.na&&!i.ok); const hist=c.approvals||[]; const stage=c.status==='Active'?3:c.status==='Pending approval'?2:1; const sub=[...hist].reverse().find(h=>h.act==='Submitted'); const dec=[...hist].reverse().find(h=>h.act==='Approved'||h.act==='Rejected');
     body=`<div class="apr">
       <div>
         <div class="h4" style="padding:0 0 8px">Approval flow</div>
         <ul class="tl">
-          <li class="${missing.length?'on':'ok'}"><i></i><div><b>Prepared by the marketer</b><br><small style="color:var(--ink-3)">${r.total-1-missing.length} of ${r.total-1} parts ready${missing.length?' · still missing: '+missing.map(i=>i.l.toLowerCase()).join(', '):''}</small></div></li>
+          <li class="${missing.length?'on':'ok'}"><i></i><div><b>Prepared by the marketer</b><br><small style="color:var(--ink-3)">Ready to submit: ${r.done} of ${r.total}${missing.length?' · still missing: '+missing.map(i=>i.l.toLowerCase()).join(', '):''}</small></div></li>
           <li class="${stage>=2?'ok':missing.length?'':'on'}"><i></i><div><b>Submitted for approval</b><br><small style="color:var(--ink-3)">${sub?`${sub.at} · ${esc(sub.who)}${sub.to?' → '+esc(sub.to):''}`:'The marketer submits from this step; nothing runs before approval.'}</small></div></li>
           <li class="${stage>=3?'ok':stage===2?'on':''}"><i></i><div><b>${c.status==='Rejected'?'Rejected — back to Draft':'Approved & activated'}</b><br><small style="color:var(--ink-3)">${dec?`${dec.at} · ${esc(dec.who)} · ${dec.act}${dec.note?' · “'+esc(dec.note)+'”':''}`:'The approver checks the summary and activates; deliveries are created per channel.'}</small></div></li>
         </ul>
@@ -3707,7 +3810,8 @@ function renderCampDetail(card){
         <div class="note" style="margin-top:10px">${ROLE==='marketer'?'Submit sends the campaign to the approver and locks it as <b>Pending approval</b>. Any later change goes through approval again.':ROLE==='approver'?'Approving activates the campaign: one delivery per channel with the schedule from the Schedule step. Rejecting returns it to Draft with your comment.':'Approvals are done by the approver role; this view is read-only.'}</div>
       </div>
     </div>`; }
-  else { const u=campUsedBy(c.id); body=`<div class="form2" style="padding-top:14px">
+  else { const u=campUsedBy(c.id); const rs=campReady(c); body=`<div class="b4sub${rs.missing.length?'':' ok'}" id="camp-b4sub">${rs.missing.length?`<h3>Before you can submit <span class="pill warn">${rs.missing.length} to do</span></h3>${campMissingList(rs)}`:`<h3><span class="pill ok">✓</span> Ready to submit</h3><small>Every part a marketer completes is done. Approval: ${rs.approval.toLowerCase()}.</small>`}</div>
+    <div class="form2" style="padding-top:14px">
       <dl class="kv"><dt>Campaign</dt><dd><b>${c.id}</b> · ${esc(c.name)||'<i>unnamed</i>'}</dd><dt>Type</dt><dd><span class="typechip ${c.type}">${c.type}</span> ${CAMP_CFG.multiBrand?`<span class="lbl-chip">${c.label}</span>`:''}</dd><dt>Goal</dt><dd>${esc(campGoal(c)||c.category)}</dd><dt>Period</dt><dd>${c.start.replace('T',' ')} → ${c.end.replace('T',' ')}</dd><dt>Control group</dt><dd>${c.cg}</dd><dt>Pre-sent</dt><dd>${RULE_DEFAULTS.presend} <span style="color:var(--ink-3)">(Parameters)</span></dd><dt>Priority</dt><dd>${c.priority} / 20</dd></dl>
       <dl class="kv"><dt>Target</dt><dd><b>${a.count}</b> customers · ${c.lists.map(l=>`${l.id} (${l.mode})`).join(', ')||'no segment'}</dd><dt>Offer</dt><dd>${c.type!=='Offer'?'—':c.strategy==='NBO'?'Next Best Offer (Digital Twin)':(c.offers.join(', ')||'no offer')}${c.promo.code?' · promo '+esc(c.promo.code):''}</dd><dt>Content</dt><dd>${c.plans.map(p=>`<div>${chName(p.ch)} · ${planFilled(p)?esc((p.slots.subject||p.slots.title||p.slots.body||'').slice(0,60))+(tplHidden(p.ch)?'':' <span style="color:var(--ink-3)">· '+esc((tplOf(p.content)||{}).name||'')+'</span>'):'<i>no content</i>'}${planModeText(p)!=='Single'?' · '+planModeText(p):''}</div>`).join('')||'—'}</dd><dt>Rules</dt><dd>${rulesText(c)}</dd><dt>Schedule</dt><dd>${esc(planSchedText(c))}${(c.sched||{}).sto?' · STO':''} · next ${planNext(c)}</dd><dt>Journeys</dt><dd>${u.join(', ')||'not referenced'}</dd></dl>
       <div class="note span2">Read-only overview of the whole campaign. Submitting and approving happen in the <b>Approval</b> step. No messages are sent from this environment.</div></div>`; }
@@ -3716,20 +3820,20 @@ function renderCampDetail(card){
   const cur=steps.find(x=>x.i===campStep); const visible=steps.filter(x=>!x.skip); const pos=visible.findIndex(x=>x.i===campStep);
   card.innerHTML=`<div class="card-h"><button class="btn sm outline" id="camp-back">‹ Campaign list</button><h2 style="font-size:16px">${campSel?`Campaign ${c.id}`:'New campaign'}</h2>${statusPill(c.status)}<span class="typechip ${c.type}">${c.type}</span><button type="button" class="goalchip${campGoal(c)?'':' unset'}" id="camp-goalchip" aria-haspopup="true" aria-expanded="false" title="${campGoal(c)?'The goal chosen when the campaign was created — click to change it':'No goal yet — click to choose what the campaign is for'}">${campGoal(c)?'Goal: '+esc(campGoal(c)):'Set goal'} ▾</button>${campSavedAt?`<span class="savebar">✓ Saved ${campSavedAt}</span>`:''}<div class="grow"></div><span style="color:var(--ink-3);font-size:11.5px">Created by ${esc(c.createdBy)} · ${c.created}</span>${campSel?`<button class="btn sm outline" id="camp-results" title="Operation analysis for this campaign: deliveries, eliminations, promotions, survey responses">Results</button>`:''}</div>
     <div class="stepper">${campStepperHtml(c)}</div>
-    <div style="flex:1;overflow:auto;display:grid;grid-template-columns:1fr 250px;gap:0 12px;padding-right:20px"><div style="min-width:0"><h1 class="step-h">${CAMP_STEP_H[campStep]}</h1>${body}</div><div style="padding-top:14px">${readyHtml(c)}</div></div>
+    <div style="flex:1;overflow:auto;padding-right:20px"><div style="min-width:0"><h1 class="step-h">${CAMP_STEP_H[campStep]}</h1>${body}</div></div>
     <div class="toolrow" style="border-top:1px solid var(--line-2);justify-content:flex-end;padding:12px 20px"><button class="btn dark" id="camp-prev" ${pos===0?'disabled':''}>Back</button><button class="btn grey" id="camp-save">Save</button><button class="btn outline" id="camp-saveclose">Save &amp; close</button>${campStep===6?`<button class="btn primary" id="camp-activate" ${finalDis?'disabled':''}>${finalBtn}</button>`:''}${pos<visible.length-1?`<button class="btn ${campStep===6?'outline':'primary'}" id="camp-next">${campStep===6?'Summary ›':'Next'}</button>`:''}</div>`;
   const g=id=>card.querySelector('#'+id);
   g('camp-back').onclick=()=>{ campMode='list'; renderCampaigns(); };
   if(g('camp-results')) g('camp-results').onclick=()=>opsOpenFor(c.id);
-  campStepperBind(card); campReadyBind(card);
+  campStepperBind(card); campMarkMissing(card); campBindGoto(card,card);
   g('camp-goalchip').onclick=e=>campGoalPop(card,e.currentTarget);
-  if(!card._stepSync){ card._stepSync=true; const sync=e=>{ if(e.target.closest('.stepper,#camp-ready,#camp-goalchip')) return; setTimeout(()=>campStepSync(card),0); }; ['input','change','click'].forEach(t=>card.addEventListener(t,sync)); }
+  if(!card._stepSync){ card._stepSync=true; const sync=e=>{ if(e.target.closest('.stepper,#camp-goalchip,[data-goto]')) return; setTimeout(()=>campStepSync(card),0); }; ['input','change','click'].forEach(t=>card.addEventListener(t,sync)); }
   if(g('camp-prev')) g('camp-prev').onclick=()=>{ campStep=visible[pos-1].i; renderCampDetail(card); };
   if(g('camp-next')) g('camp-next').onclick=()=>{ if(campStep===0&&!c.name.trim()){ toast('Name is required','Give the campaign a name before continuing.','bad'); return; } campStep=visible[pos+1].i; renderCampDetail(card); };
   const commit=(status)=>{ c.updated=TODAY; c.updatedBy=DEMO_USERS.me; if(status) c.status=status; syncPlans(c); c.plans.forEach(p=>{ p.slots=p.slots||slotsBlank(p.ch); p.text=p.slots.body||''; }); c.plans.forEach(p=>p.status=c.status==='Active'?(c.sched.trigger==='Run now'?'Running':'Scheduled'):c.status==='Pending approval'?'Waiting for approval':'Draft'); const i=CAMPAIGNS.findIndex(x=>x.id===c.id); if(i>=0) CAMPAIGNS[i]=JSON.parse(JSON.stringify(c)); else CAMPAIGNS.unshift(JSON.parse(JSON.stringify(c))); campSel=c.id; campSavedAt=new Date().toTimeString().slice(0,5); };
-  g('camp-save').onclick=()=>{ if(!c.name.trim()){ toast('Name is required','','bad'); return; } commit(); const r=campReady(c); toast(`Saved · ${c.id}`,`${c.name} — ${r.done} of ${r.total} parts ready${r.done<r.total?'; missing: '+r.items.filter(i=>!i.na&&!i.ok).map(i=>i.l.toLowerCase()).join(', '):''}.`); addLog('',`CMP-${c.id}  campaign saved · ${c.name} · ${c.status}`,{kind:'system'}); renderCampDetail(card); };
+  g('camp-save').onclick=()=>{ if(!c.name.trim()){ toast('Name is required','','bad'); return; } commit(); const r=campReady(c); toast(`Saved · ${c.id}`,`${c.name} — ready to submit: ${r.done} of ${r.total}${r.missing.length?'; still needed: '+r.missing.slice(0,3).map(m=>m.t.charAt(0).toLowerCase()+m.t.slice(1)).join(', ')+(r.missing.length>3?' …':''):''}.`); addLog('',`CMP-${c.id}  campaign saved · ${c.name} · ${c.status}`,{kind:'system'}); renderCampDetail(card); };
   g('camp-saveclose').onclick=()=>{ if(!c.name.trim()){ toast('Name is required','','bad'); return; } commit(); toast(`Saved · ${c.id}`,`${c.name} — back in the campaign list, marked ${c.status}.`); campMode='list'; renderCampaigns(); };
-  if(g('camp-activate')) g('camp-activate').onclick=()=>{ if(!c.name.trim()){ toast('Name is required','','bad'); return; } if(!c.lists.length){ toast('No target','Add at least one segment in Targeting.','bad'); campStep=1; renderCampDetail(card); return; } if(c.type==='Offer'&&c.strategy==='Manual'&&!c.offers.length){ toast('No offer','An Offer campaign needs at least one offer.','bad'); campStep=2; renderCampDetail(card); return; } syncPlans(c); if(!c.plans.length||c.plans.some(p=>!planFilled(p))){ toast('Content missing','Every channel needs its content written before activating.','bad'); campStep=3; renderCampDetail(card); return; }
+  if(g('camp-activate')) g('camp-activate').onclick=()=>{ syncPlans(c); if(campReady(c).missing.length){ campSubmitTried=true; campStepSync(card); campMissModal(card); return; }
     const now=()=>TODAY+' '+new Date().toTimeString().slice(0,5);
     if(ROLE==='marketer'){ if(!c.approver){ toast('Pick an approver','Choose who should approve in the Approval step.','bad'); campStep=6; renderCampDetail(card); return; } c.approvals.push({at:now(),who:DEMO_USERS.me,act:'Submitted',to:c.approver,note:c.approvalNote}); commit('Pending approval'); addLog('',`CMP-${c.id}  submitted for approval · ${c.name} · to ${c.approver} · by ${DEMO_USERS.me}`,{kind:'system'}); toast(`Submitted · ${c.id}`,`${c.name} is waiting for ${c.approver}. Nothing is sent until it is approved.`,'warn'); renderCampDetail(card); return; }
     c.approvals.push({at:now(),who:ROLE==='approver'?(c.approver||'Approver'):DEMO_USERS.me,act:'Approved',note:c.approvalComment||''}); c.approvalComment='';
@@ -5439,8 +5543,8 @@ const TOURS={
     title:'Pick the channels', body:'<b>Push</b> means we send it: SMS, e-mail, push, telemarketing. <b>Pull</b> means it waits to be shown when the customer comes to the app or the portal. A campaign uses one kind or the other, never both. Pick <b>SMS</b>.',
     advance:{until:()=>campDraft&&(campDraft.channels||[]).length>0},
     sample:()=>{ campDraft.channels=['sms']; syncPlans(campDraft); tourRerenderCamp(); }},
-   {id:'ready', view:'campaigns', before:()=>tourCampStep(0), target:'#camp-ready', placement:'left',
-    title:'Readiness, not a wizard', body:'This panel lists the parts of a complete campaign and ticks off what is done. You do not have to go in order, and <b>nothing here blocks saving</b> — parts get finished by different people on different days. Click any line to jump there.',
+   {id:'ready', view:'campaigns', before:()=>tourCampStep(0), target:'#camp-card .stepper', placement:'bottom',
+    title:'One path, not a wizard', body:'A step turns <b>green</b> when its part is done, <b>amber</b> when you have been there and it still needs something. Hover a step to see what is missing. You do not have to go in order, and <b>nothing blocks saving</b> — <i>Ready to submit</i> on the right counts what is left.',
     advance:'next'},
    {id:'to-target', view:'campaigns', target:'#camp-next', placement:'top',
     title:'Move to Targeting', body:'Press <b>Next</b> in the editor — or click <b>Targeting</b> in the step bar. Both work.',
@@ -5462,12 +5566,14 @@ const TOURS={
     title:'Write the message', body:'The <b>template</b> is the design and belongs to the admin — for SMS it is applied for you. The <b>content</b> is what you write, and it lives in this campaign. Type, and watch the preview on the right. <code>{{FIRST_NAME}}</code> and friends are filled in per customer.',
     advance:{until:()=>campDraft&&(campDraft.plans||[]).length>0&&campDraft.plans.every(planFilled)},
     sample:()=>{ syncPlans(campDraft); campDraft.plans.forEach(p=>{ p.slots=p.slots||slotsBlank(p.ch); if(!(p.slots.body||'').trim()) p.slots.body=SAMPLE_TEXT; p.content=p.content||tplDefault(p.ch); }); tourRerenderCamp(); }},
-   {id:'rules', view:'campaigns', before:()=>tourCampStep(4), target:'#camp-card .form2, #camp-card .padx', placement:'top',
-    title:'Communication rules', body:'Frequency caps, quiet hours and contact policies. The defaults come from <b>Parameters</b>, so most campaigns leave them alone — override only when a send is regulatory and has to ignore the caps.',
-    advance:'next'},
-   {id:'schedule', view:'campaigns', before:()=>tourCampStep(5), target:'#camp-card select[data-sk="trigger"]', placement:'bottom',
-    title:'When does it run?', body:'<b>Run now</b> sends as soon as it is approved. <b>Schedule</b> picks a date, a time and a repeat. Either way nothing leaves before an approver activates it.',
-    advance:'next'},
+   {id:'rules', view:'campaigns', before:()=>tourCampStep(4), target:'#camp-rmode', placement:'bottom',
+    title:'Communication rules', body:'Frequency caps, cooldowns and the pre-sent period. You have to choose: <b>Apply the standard rules</b> from Parameters — what most campaigns do — or <b>Customise</b> them for this one. Nothing is chosen for you. Pick the standard rules.',
+    advance:{until:()=>campDraft&&!!campDraft.rulesMode},
+    sample:()=>{ campDraft.rulesMode='standard'; campDraft.rules=defaultRules(campDraft); campDraft.override=false; tourRerenderCamp(); }},
+   {id:'schedule', view:'campaigns', before:()=>tourCampStep(5), target:'#camp-strig', placement:'bottom',
+    title:'When does it run?', body:'<b>Run now</b> sends once, as soon as it is approved. <b>Schedule</b> picks a date, a time and a repeat. Neither is preselected, so nothing goes out by accident — and nothing leaves before an approver activates it. Pick <b>Schedule</b>.',
+    advance:{until:()=>campDraft&&campDraft.sched&&!!campDraft.sched.trigger},
+    sample:()=>{ campDraft.sched=campDraft.sched||defaultSched(); campDraft.sched.trigger='Schedule'; tourRerenderCamp(); }},
    {id:'approval', view:'campaigns', before:()=>tourCampStep(6), target:'[data-tour="approval-form"], #camp-card .apr', placement:'left',
     title:'Hand it to an approver', body:'Pick who should review it, say what they should look at, then <b>Submit for approval</b>. You cannot activate your own campaign — that separation is the point.',
     advance:{until:()=>campDraft&&campDraft.status==='Pending approval'},
