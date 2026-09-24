@@ -75,8 +75,12 @@ customer sees it when they come*). **Start building** creates the draft and
 opens the editor on Info with the stepper. The goal is asked once and carries
 the campaign type, category and sub-category with it: Acquisition, Upsell /
 Cross-sell, Retention and Winback are Offer campaigns filed under Onboarding,
-Upsell, Retention and Win-back; Informational is an Info campaign. Info shows the
-goal as one row of chips instead of three selects. Push starts on SMS, pull on
+Upsell, Retention and Win-back; Informational is an Information campaign. The
+two campaign types are **Offer** and **Information** — not "Info", which is the
+name of the first step. The editor shows the goal as a chip in its header, next
+to the status and the type (*Goal: Retention*); the chip opens the five goals
+to change it, and a campaign created with *Skip* reads *Set goal*. No step of
+the form asks for it again; Summary shows it. Push starts on SMS, pull on
 In-App, and the exact channels are picked in Info. Underneath, *Start from a
 template* offers a copy of one of the three most recent campaigns, and *Skip —
 go straight to the form* opens an empty editor for people who know what they
@@ -90,14 +94,21 @@ complete, ticks what is done, and links to whatever is not. It never blocks
 saving. Parts of a campaign are done by different people on different days, and
 the UI now says so out loud: *"nothing here blocks saving"*.
 
-**Steps that do not apply are visibly inert, not missing.** An Info campaign has
-no offer, so the Offer step stays in the stepper, greyed and marked `–`, and the
-readiness panel shows it as *"Offer (Info campaign — skipped)"*. A step that
-vanishes makes people wonder what they lost.
+**The stepper is one connected path, coloured by readiness.** A line joins the
+steps; a step whose readiness item is met is green with a ✓ and the line after
+it is green (Summary turns green when every item is met); the current step keeps
+its orange highlight; a step you visited that still needs something has an
+amber outline and dot; the rest are grey. The colours follow `campReady()`, not
+clicks, update as you type, and never block moving between steps.
+
+**Steps that do not apply leave the path.** An Information campaign has no
+offer, so the stepper shows seven steps and runs from Targeting straight to
+Channel & content; the readiness panel still lists *"Offer (Information
+campaign — skipped)"*, so nothing silently disappears.
 
 Step by step:
 
-1. **Info** — name, goal (which sets type and category), period, control group,
+1. **Info** — name, period, control group,
    program, and **channels**. Channels are grouped into **push** (SMS, MMS,
    e-mail, mobile/web push, telemarketing — we send) and **pull** (in-app card,
    self-care banner, chatbot — shown when the customer comes). A campaign uses
@@ -110,7 +121,7 @@ Step by step:
 2. **Targeting** — two columns: available segments on the left, the target on
    the right, with a live count. Exclusions are channel-scoped.
 3. **Offer / NBO** — name offers, or hand the choice to Next Best Offer.
-   Optional promo code. Skipped for Info campaigns.
+   Optional promo code. Skipped for Information campaigns.
 4. **Channel & content** — one content block per channel, written into the
    slots of a chosen template, with a live render (phone frame for SMS/push,
    mail frame for e-mail). A/B and dynamic content are two independent
@@ -287,7 +298,7 @@ them more than a slideshow:
   flashes the control instead. The primary button is never a no-op: a button
   whose only effect is a subtle highlight reads as broken.
 - They follow the **real editor**. The campaign tour moves through the actual
-  eight steps and honours their rules — on an Info campaign the Offer step is
+  eight steps and honours their rules — on an Information campaign the Offer step is
   skipped, exactly as the editor skips it.
 
 Five tours ship: *Create your first campaign* (the important one — seventeen

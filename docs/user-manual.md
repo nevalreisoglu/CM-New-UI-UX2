@@ -215,7 +215,7 @@ A program is the business initiative campaigns and journeys belong to.
 ## Building a campaign
 
 **Campaign** in the menu opens the **Campaign List**: a search box, **Type**
-chips (All · Offer · Info), **Status** chips (All · Active · Draft · Pending
+chips (All · Offer · Information), **Status** chips (All · Active · Draft · Pending
 approval · Expired) and **Advanced filters** for category, campaign brand (when
 the admin has turned it on), datamart, delivery status, created by and the
 start and end dates. Each row shows the campaign's readiness as a small bar.
@@ -231,8 +231,8 @@ opens Operation analysis filtered to it. **+ New campaign** starts a new one.
 1. **Campaign name** — the cursor is already there. Required.
 2. **What is it for?** — pick one objective card: Acquisition, Upsell /
    Cross-sell, Retention, Winback or Informational. The goal decides the
-   campaign type and category for you: Informational is an Info campaign (no
-   Offer step), the other four are Offer campaigns filed under their category.
+   campaign type and category for you: Informational is an Information campaign
+   (no Offer step), the other four are Offer campaigns filed under their category.
    You are not asked for type, category or sub-category again.
 3. **How will it reach people?** — **We send it** (push: SMS, e-mail, push,
    telemarketing) or **The customer sees it when they come** (pull: in-app,
@@ -242,7 +242,8 @@ opens Operation analysis filtered to it. **+ New campaign** starts a new one.
 
 Below that, **Start from a template** opens a copy of one of your three most
 recent campaigns, and **Skip — go straight to the form** opens an empty editor.
-The goal and the channels can still be changed in Info.
+The goal shows in the editor header and the channels in Info; both can still
+be changed.
 
 In the editor, **‹ Campaign list** goes back, and **Results** (once the
 campaign has run) opens Operation analysis on its deliveries.
@@ -257,8 +258,28 @@ Approval · Summary`
 ticks what is done, and jumps to any item you click. It never stops you saving —
 parts get done by different people on different days.
 
-A step that does not apply stays visible but greyed: an Info campaign shows the
-**Offer** step marked `–`, because it has nothing to offer.
+**The stepper is one path**, with a line between the steps, and its colours
+follow the readiness panel rather than your clicks:
+
+| Looks like | Means |
+| --- | --- |
+| Green circle with ✓, green label, green line after it | the step's part of the readiness list is done (Summary: every part is done) |
+| Orange highlight | the step you are on — with a ✓ inside if it is also done |
+| Amber outline and dot | you have been there, but it still needs something |
+| Grey circle with its number | not started |
+
+A step turns green the moment you fill what it needs, without leaving it, and
+goes back if you clear it. The colours never stop you clicking to another step.
+*Step n of 8 · readiness n/7* on the right says the same in words.
+
+An **Information** campaign has nothing to offer, so the Offer step leaves the
+path: the stepper shows seven steps and runs from Targeting straight to Channel
+& content.
+
+**The header** shows the status, the campaign type (**Offer** or
+**Information**) and the goal — **Goal: Retention**, for example. Click the goal
+chip to change it; a campaign opened with *Skip* reads **Set goal** until you
+pick one. Changing the goal changes the type and category with it.
 
 Each step opens with a heading that says what it is for — *Tell us about your
 campaign*, *Who will you reach?*, *What will you offer?*, *How will you reach
@@ -267,9 +288,8 @@ them?*, *Set the ground rules*, *When will it go out?*, *Send it for approval*,
 
 #### 1 · Info
 
-Name (required — Next will refuse without it), the **Goal** you picked on the
-first screen (click another to change it; with *Skip* you pick it here), start
-and end, control group, and program.
+Name (required — Next will refuse without it), start and end, control group,
+and program. The goal is not asked again here — it is the chip in the header.
 
 **Channels** are in two groups:
 
@@ -296,7 +316,7 @@ in the list.
 #### 3 · Offer / NBO
 
 Name the offers, or set the strategy to **NBO** and let Next Best Offer decide.
-Optionally attach a promo code. Skipped for Info campaigns.
+Optionally attach a promo code. Skipped for Information campaigns.
 
 #### 4 · Channel & content
 
