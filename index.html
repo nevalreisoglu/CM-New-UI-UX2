@@ -794,6 +794,16 @@ body{font-size:14px;line-height:1.43}
 .db-hd .tile .v{font-size:22px;font-weight:700;color:var(--green-ink);font-variant-numeric:tabular-nums;line-height:28px}
 .db-hd .tile .d{font-size:11.5px;color:var(--ink-2);display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap;line-height:1.3}
 .db-hd .tile .d b{font-weight:600}.db-hd .tile .d b.up{color:var(--ok)}.db-hd .tile .d b.dn{color:var(--bad)}
+.db-hd .tile .d .nc{color:var(--ink-2)}
+.db-hd .tile{display:flex;flex-direction:column}
+.db-hd .tile .d{margin-top:auto;padding-top:2px}
+.db-hd .tile .v .u{font-size:12px;font-weight:400;color:var(--ink-2);margin-left:2px}
+.db-hd .tile .l .tip{margin-left:4px;vertical-align:-3px}
+.cgbar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--surface-2);margin:5px 0 4px}
+.cgbar i{display:block;height:100%}
+.cgbar .base,.db-hd .tile .k.base{background:#9595B0}
+.cgbar .inc,.db-hd .tile .k.inc{background:var(--acc)}
+.db-hd .tile .k{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px;vertical-align:-1px}
 .db-hd .tile.warn{border-left-color:var(--orange)}
 .db-hd .tile[role=button]{cursor:pointer}
 .db-hd .tile[role=button]:hover{background:var(--surface-2)}
@@ -1523,14 +1533,24 @@ five tiles:
 | Tile | Big number | Line under it |
 | --- | --- | --- |
 | Campaigns | campaigns that ran in the period | how many are active and how many ended |
-| Conversions | conversions | the conversion rate |
-| Revenue | revenue, in ₴ | "attributed to campaigns" |
-| ROI | e.g. `4.7x` | the net contribution |
-| Incremental | conversions the control group says would not have happened | share of all conversions |
+| Converted customers | customers who took the action the campaign asked for | "2.3% of delivered · 2.4M delivered" — the share and what it is a share of |
+| Revenue | revenue, in ₴ | the average per conversion and the conversion count |
+| ROI | e.g. `4.1x` | net and spend |
+| Extra conversions from campaigns | conversions the control group says would not have happened | a bar split into "would have converted anyway" (grey) and "thanks to campaigns" (turquoise) — together they are the converted total — then the share of all conversions |
 
-Each tile has a small sparkline of the period, day by day, and the change
-against the previous period. Revenue and ROI say **BSS feed, demo**: in the
-prototype they are calculated from the conversions, not read from billing.
+Hover the **i** on Converted customers and Extra conversions for what is
+counted and the control-group arithmetic. Each tile has a small sparkline of
+the period, day by day, and the change against the previous period; when
+nothing changed it says *no change*, with no arrow. Revenue and ROI say **BSS
+feed, demo**: in the prototype they are calculated from the conversions, not
+read from billing.
+
+**Demo figures at operator scale** (the pill next to *as of*): the totals on
+the dashboard and on Reports are multiplied to a telecom operator's scale so
+the screen reads as it would in production. The lists, targeting counts,
+journeys and Operation analysis show the small 30-customer demo set as it is —
+so a campaign that reaches 12 customers in Targeting shows tens of thousands
+delivered here. That is the scale, not a bug.
 As a **marketer** the strip is about your work, not totals:
 
 | Tile | Big number | Line under it |
@@ -2170,7 +2190,7 @@ const statusPill=st=>`<span class="pill ${CAMP_STATUS_CLS[st]||''}">${st}</span>
 const APPROVERS=[DEMO_USERS.approver,DEMO_USERS.approver2,'Marketing lead (any)'];
 /* tooltip helper — every field that needs explaining gets one (meeting 3) */
 const tip=t=>`<span class="tip" data-tip="${esc(t)}">i</span>`;
-const TIPS={name:'Shown in lists, reports and the approver\'s queue. Keep it searchable: what, for whom, when.',id:'Given by the system when the campaign is first saved. Used in reports and the Event DataMart.',type:'Offer = the customer gets an offer or promo code (Offer step). Info = a message only; the Offer step is skipped.',label:'Which brand sends the campaign. Only shown for multi-brand customers (Parameters › Campaign form).',category:'Reporting dimension. Categories are managed in Parameters.',sub:'Second reporting level under the category.',channels:'Pick the channels this campaign sends on. One content per channel is created in Channel & content; the same schedule applies to all of them.',start:'From this moment the campaign may run. Nothing is sent before it.',end:'After this moment no send happens, even if a schedule is still open.',cg:'A random share of the target is held back and gets nothing, so the effect can be measured. Method and size come from Parameters.',presend:'Days between two sends of this same campaign to one customer.',program:'Optional grouping of campaigns that belong to one business programme.',cbd:'Customer based delivery: one customer gets one send per run, even if several rows match.',alarms:'Get an alarm when a run fails or delivers below the expected volume.',priority:'When several pull campaigns compete for the same slot (app card, WSC banner, chatbot) the higher priority wins. Not used for push sends.',objective:'What the campaign should achieve, in one or two sentences. Shown to the approver.',desc:'Long description for colleagues. Hidden by default (Parameters › Campaign form).',target:'Segments are applied top to bottom: includes add customers, excludes remove them. Global exclusion lists are always applied last.',sortCol:'When a channel has a daily capacity, customers are sent in this order.',template:'The design: layout, brand blocks, fixed elements. Made by the admin under Templates. You write the text into its slots below; the design stays untouched.',variants:'A/B: two texts, a share of the target gets B, the rest gets the winner. Dynamic: the template\'s language / segment variants are picked per customer from a DataMart column.',abSplit:'Share of the target that receives variant B during the test.',dyn:'DataMart column whose value picks the variant at send time.',text:'The message itself. Placeholders like {{FIRST_NAME}} resolve per customer at send time.',override:'Sends to everyone in the target and ignores cooldown, overlap and pre-sent rules. Only for regulatory or service messages.',trigger:'Run now = once, right after approval. Schedule = at the chosen times until the end date.',sto:'Send time optimisation: the AI picks each customer\'s best hour on the day; the time here is the earliest slot.',approver:'Who is asked to approve. The approver sees the summary and this note.',approvalNote:'Tell the approver what to look at: the audience size, the offer, anything unusual.',promo:'Optional code the customer quotes to claim the offer. Use {{PROMO_CODE}} in the content.'};
+const TIPS={converted:'Customers who took the action the campaign asked for — renewing a package, accepting an offer, buying an upsell. The action is defined per campaign and counted within 7 days of delivery.',name:'Shown in lists, reports and the approver\'s queue. Keep it searchable: what, for whom, when.',id:'Given by the system when the campaign is first saved. Used in reports and the Event DataMart.',type:'Offer = the customer gets an offer or promo code (Offer step). Info = a message only; the Offer step is skipped.',label:'Which brand sends the campaign. Only shown for multi-brand customers (Parameters › Campaign form).',category:'Reporting dimension. Categories are managed in Parameters.',sub:'Second reporting level under the category.',channels:'Pick the channels this campaign sends on. One content per channel is created in Channel & content; the same schedule applies to all of them.',start:'From this moment the campaign may run. Nothing is sent before it.',end:'After this moment no send happens, even if a schedule is still open.',cg:'A random share of the target is held back and gets nothing, so the effect can be measured. Method and size come from Parameters.',presend:'Days between two sends of this same campaign to one customer.',program:'Optional grouping of campaigns that belong to one business programme.',cbd:'Customer based delivery: one customer gets one send per run, even if several rows match.',alarms:'Get an alarm when a run fails or delivers below the expected volume.',priority:'When several pull campaigns compete for the same slot (app card, WSC banner, chatbot) the higher priority wins. Not used for push sends.',objective:'What the campaign should achieve, in one or two sentences. Shown to the approver.',desc:'Long description for colleagues. Hidden by default (Parameters › Campaign form).',target:'Segments are applied top to bottom: includes add customers, excludes remove them. Global exclusion lists are always applied last.',sortCol:'When a channel has a daily capacity, customers are sent in this order.',template:'The design: layout, brand blocks, fixed elements. Made by the admin under Templates. You write the text into its slots below; the design stays untouched.',variants:'A/B: two texts, a share of the target gets B, the rest gets the winner. Dynamic: the template\'s language / segment variants are picked per customer from a DataMart column.',abSplit:'Share of the target that receives variant B during the test.',dyn:'DataMart column whose value picks the variant at send time.',text:'The message itself. Placeholders like {{FIRST_NAME}} resolve per customer at send time.',override:'Sends to everyone in the target and ignores cooldown, overlap and pre-sent rules. Only for regulatory or service messages.',trigger:'Run now = once, right after approval. Schedule = at the chosen times until the end date.',sto:'Send time optimisation: the AI picks each customer\'s best hour on the day; the time here is the earliest slot.',approver:'Who is asked to approve. The approver sees the summary and this note.',approvalNote:'Tell the approver what to look at: the audience size, the offer, anything unusual.',promo:'Optional code the customer quotes to claim the offer. Use {{PROMO_CODE}} in the content.'};
 /* ---------- PROGRAM = a business initiative: goal, period, owner, its campaigns and journeys, roll-up results. Not a folder of campaign IDs. ---------- */
 const PROGRAMS=[
   {id:'PRG-1',name:'Package renewal',desc:'Keep prepaid customers on a package: reminders before expiry, a renewal offer, a last-day nudge and the app follow-up.',owner:'Felix (CVM)',category:'Retention',start:'2026-09-01',end:'2026-12-31',goal:{metric:'Conversions',target:120},journeys:['JRN-07'],cap:{n:2,per:'week'},report:true,created:'2026-08-20',by:DEMO_USERS.me},
@@ -3688,8 +3708,8 @@ function renderParamsExtra(){
 /* ---------- REPORTS — concept: totals, last-N-days, per-campaign list; role based (marketer limited, executive full). Demo numbers derived from the campaigns. ---------- */
 let rpRange=7;
 function rpRows(){ return CAMPAIGNS.filter(c=>c.status!=='Draft'&&c.status!=='Pending approval').map(c=>{ const a=campAudience(c).count||0; const h=[...c.id].reduce((t,ch)=>t+ch.charCodeAt(0),0); const runs=Math.min(rpRange===7?3:rpRange===30?9:24,c.sched&&c.sched.trigger==='Run now'?1:99); const sent=Math.max(a,1)*runs; const del=Math.round(sent*(0.92+(h%6)/100)); const opened=Math.round(del*(0.28+(h%9)/40)); const clicked=Math.round(opened*(0.15+(h%7)/40)); const conv=Math.round(clicked*(0.22+(h%4)/20)); return {c,sent,del,opened,clicked,conv}; }); }
-function renderReports(){ const card=document.getElementById('rp-card'); if(!card) return; const rows=rpRows(); const T=k=>rows.reduce((t,r)=>t+r[k],0); const pct=(a,b)=>b?Math.round(1000*a/b)/10+'%':'—'; const exec=ROLE!=='marketer'; const days=Array.from({length:7},(_,i)=>{ const d=new Date(TODAY); d.setDate(d.getDate()-6+i); return d; }); const per=Math.max(1,Math.round(T('del')/7)); const bars=days.map((d,i)=>Math.round(per*(0.55+((i*37+11)%50)/50)));
-  card.innerHTML=`<div class="card-h"><h2>Reports</h2><span class="pill">concept</span><div class="grow"></div><span class="pill ${exec?'acc':''}">${exec?'executive view':'marketer view'}</span>
+function renderReports(){ const card=document.getElementById('rp-card'); if(!card) return; const rows=scaleRows(rpRows()); const T=k=>rows.reduce((t,r)=>t+r[k],0); const pct=(a,b)=>b?Math.round(1000*a/b)/10+'%':'—'; const exec=ROLE!=='marketer'; const days=Array.from({length:7},(_,i)=>{ const d=new Date(TODAY); d.setDate(d.getDate()-6+i); return d; }); const per=Math.max(1,Math.round(T('del')/7)); const bars=days.map((d,i)=>Math.round(per*(0.55+((i*37+11)%50)/50)));
+  card.innerHTML=`<div class="card-h"><h2>Reports</h2><span class="pill">concept</span><span class="pill" title="Aggregate figures are multiplied to a telecom operator's scale; row-level screens keep the 30-customer demo set.">Demo figures at operator scale</span><div class="grow"></div><span class="pill ${exec?'acc':''}">${exec?'executive view':'marketer view'}</span>
     <p>${exec?'Executive view: totals, trend and every campaign. ':'Marketer view: totals and your campaigns; the executive dashboard shows more. '}Concept for the flexible dashboard — panels the user composes, a report export, and the DVH analytics product as reference (totals delivered, last-7-days, live counters).</p></div>
     ${ROLE!=='cmo'?`<div class="rp-ops"><span><b>Reports is the aggregated, chart-led view.</b> For the row-level records behind these numbers — each delivery execution, eliminated customer, promotion code and survey response — open Operation analysis.</span><div style="flex:1"></div><button class="btn sm outline" id="rp-toops" style="white-space:nowrap">Operation analysis ›</button></div>`:''}
     <div class="toolrow" style="gap:8px;padding-top:0"><div class="chipbar"><span style="color:var(--ink-3);font-size:11px">PERIOD</span>${[7,30,90].map(n=>`<button class="fchip ${rpRange===n?'on':''}" data-rp="${n}">Last ${n} days</button>`).join('')}</div><div class="grow"></div><button class="btn sm outline" disabled title="Concept — the user composes panels">+ Add panel</button><button class="btn sm outline" disabled title="Concept — ask for a report in plain language">Ask the agent</button><button class="btn sm outline" disabled title="Concept">Export</button></div>
@@ -3782,8 +3802,12 @@ function renderPrgDetail(card){
 /* ---------- DASHBOARD — one page, role presets (Executive / Marketer / Ops); panels are cards the user can hide and re-add ---------- */
 let dbRange=30, dbHidden=new Set(), dbSort={k:'conv',dir:-1}, dbCamp=null;
 const DB_PANELS=[['live','Live now'],['att','Needs attention'],['trend','Delivered per day'],['conv','Conversions per day'],['funnel','Funnel & eliminations'],['chan','By channel'],['cat','By category'],['top','Campaign performance'],['jrn','Top journeys'],['cg','Control group uplift']];
-/* demo unit economics behind Revenue and ROI: revenue per conversion and cost per message sent (₴) */
-const UNIT_REV=186, COST_MSG=0.06;
+/* Aggregate business figures are shown at operator scale (decision D13): every count that reaches the
+   dashboard strip and panels and the Reports page goes through scaleRows() once. Row-level screens
+   (campaign list, targeting, journeys, Operation analysis) keep the 30-customer demo set untouched.
+   Demo unit economics behind Revenue and ROI: ARPU uplift per conversion and all-in cost per message (₴). */
+const DEMO_SCALE=1900, UNIT_REV=720, COST_MSG=1.1;
+const scaleRows=rows=>rows.map(r=>{ const o=Object.assign({},r); ['sent','del','opened','clicked','conv','targeted','elim'].forEach(k=>{ if(o[k]!=null) o[k]=o[k]*DEMO_SCALE; }); if(o.hasCG) o.incr=Math.max(0,Math.round(o.conv-o.cgRate*o.del)); return o; });
 /* why customers are removed before a send, with their demo shares — one set, read by the dashboard funnel and Operation analysis so the two screens agree */
 const ELIM_REASONS=[['Consent / opt-out',0.34],['Channel cooldown',0.27],['Exclusion lists',0.2],['Type overlap',0.12],['Pre-sent period',0.07]];
 const compact=n=>Math.round(n).toLocaleString('en',{notation:'compact',maximumFractionDigits:1});
@@ -3791,12 +3815,12 @@ const compact=n=>Math.round(n).toLocaleString('en',{notation:'compact',maximumFr
 function spark(vals){ if(!vals||vals.length<2) return ''; const mx=Math.max(...vals), mn=Math.min(...vals), rg=mx-mn||1; const line=vals.map((v,i)=>`${Math.round(1000*i/(vals.length-1))/10},${Math.round(10*(22-19*(v-mn)/rg))/10}`).join(' ');
   return `<svg class="spark" viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,24 ${line} 100,24"/><polyline points="${line}"/></svg>`; }
 function dbPreset(){ return ROLE==='marketer'?'Marketer':ROLE==='admin'?'Ops':'Executive'; }
-function dbRows(){ const saved=rpRange; rpRange=dbRange; const rows=rpRows(); rpRange=saved; return rows.map(r=>{ const h=[...r.c.id].reduce((t,ch)=>t+ch.charCodeAt(0),0); const hasCG=r.c.cg&&r.c.cg!=='No Control Group'; const rate=r.del?r.conv/r.del:0; const cgRate=hasCG?rate*(0.35+(h%5)/20):null; const incr=hasCG?Math.max(0,Math.round(r.conv-cgRate*r.del)):null; const targeted=Math.round(r.sent*(1.18+(h%7)/50)); return Object.assign(r,{hasCG,rate,cgRate,incr,targeted,elim:targeted-r.sent}); }); }
+function dbRows(){ const saved=rpRange; rpRange=dbRange; const rows=rpRows(); rpRange=saved; return rows.map(r=>{ const h=[...r.c.id].reduce((t,ch)=>t+ch.charCodeAt(0),0); const hasCG=r.c.cg&&r.c.cg!=='No Control Group'; const rate=r.del?r.conv/r.del:0; const cgRate=hasCG?rate*(0.5+(h%5)/20):null; const incr=hasCG?Math.max(0,Math.round(r.conv-cgRate*r.del)):null; const targeted=Math.round(r.sent*(1.18+(h%7)/50)); return Object.assign(r,{hasCG,rate,cgRate,incr,targeted,elim:targeted-r.sent}); }); }
 /* Data freshness belongs in the admin's queue: a stale datamart quietly makes
    every segment built on it wrong. */
 const dmStale=()=>DATAMARTS.filter(d=>dmHealth(d)!=='fresh'&&dmUsage(d.id).segments.length>0);
-function renderDashboard(){ const staleDms=dmStale(); const card=document.getElementById('db-card'); if(!card) return; const rows=dbRows(); const preset=dbPreset(); const exec=preset==='Executive'; const T=k=>rows.reduce((t,r)=>t+(r[k]||0),0); const pct=(a,b)=>b?Math.round(1000*a/b)/10+'%':'—'; const fmt=n=>Number(n).toLocaleString();
-  const seedD=(i,k)=>((i*37+k*11)%50)/50; const prev=k=>Math.round(T(k)*(0.86+seedD(k.length,dbRange)*0.3)); const delta=(cur,pv,inv)=>{ if(!pv) return ''; const d=Math.round(1000*(cur-pv)/pv)/10; const up=d>=0; return `<b class="${(up!==!!inv)?'up':'dn'}">${up?'▲':'▼'} ${Math.abs(d)}%</b><span>vs prev. ${dbRange} d</span>`; };
+function renderDashboard(){ const staleDms=dmStale(); const card=document.getElementById('db-card'); if(!card) return; const rows=scaleRows(dbRows()); const preset=dbPreset(); const exec=preset==='Executive'; const T=k=>rows.reduce((t,r)=>t+(r[k]||0),0); const pct=(a,b)=>b?Math.round(1000*a/b)/10+'%':'—'; const fmt=n=>Number(n).toLocaleString();
+  const seedD=(i,k)=>((i*37+k*11)%50)/50; const prev=k=>Math.round(T(k)*(0.86+seedD(k.charCodeAt(0)*7+k.length,dbRange)*0.3)); const delta=(cur,pv,inv)=>{ if(!pv) return ''; const raw=100*(cur-pv)/pv; if(Math.abs(raw)<0.005) return `<span class="nc">no change vs prev. ${dbRange} d</span>`; const d=Math.round(raw*10)/10; const txt=d===0?Math.abs(raw).toFixed(2):Math.abs(d); const up=raw>0; return `<b class="${(up!==!!inv)?'up':'dn'}">${up?'▲':'▼'} ${txt}%</b><span>vs prev. ${dbRange} d</span>`; };
   const reached=Math.round(T('del')*0.78), conv=T('conv'), incr=rows.filter(r=>r.hasCG).reduce((t,r)=>t+r.incr,0);
   const active=CAMPAIGNS.filter(c=>c.status==='Active'), pending=CAMPAIGNS.filter(c=>c.status==='Pending approval'), drafts=CAMPAIGNS.filter(c=>c.status==='Draft'), jlive=JOURNEYS.filter(j=>j.status==='Active');
   const soon=active.filter(c=>{ const d=(new Date(c.end)-new Date(TODAY))/864e5; return d>=0&&d<=7; });
@@ -3820,8 +3844,14 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
      conversions — a BSS feed would supply them in the product, hence the note on both tiles. */
   const ran=rows.length, ranActive=rows.filter(r=>r.c.status==='Active').length, prevRan=Math.max(1,Math.round(ran*(0.86+seedD(3,dbRange)*0.3)));
   const campDays=days.map(d=>{ const s=d.toISOString().slice(0,10); return rows.filter(r=>r.c.start.slice(0,10)<=s&&(!r.c.end||r.c.end.slice(0,10)>=s)).length; });
-  const revenue=conv*UNIT_REV, incrShare=conv?incr/conv:0, cost=T('sent')*COST_MSG, roi=cost?incr*UNIT_REV/cost:0, net=incr*UNIT_REV-cost;
-  const prevRoi=(()=>{ const pc=prev('conv'), pcost=prev('sent')*COST_MSG; return pcost?pc*incrShare*UNIT_REV/pcost:0; })();
+  /* Incremental: the uplift share measured on the campaigns with a control group, applied to every
+     conversion in the period; the baseline is what the control-group rate says would have happened anyway. */
+  const cgOnly=rows.filter(r=>r.hasCG), cgConvSum=cgOnly.reduce((t,r)=>t+r.conv,0), incrShare=cgConvSum?incr/cgConvSum:0;
+  const incrAll=Math.round(conv*incrShare), baseline=conv-incrAll, ctrlRate=T('del')?baseline/T('del'):0;
+  const revenue=conv*UNIT_REV, cost=T('sent')*COST_MSG, incrRev=incrAll*UNIT_REV, net=incrRev-cost, roi=cost?net/cost:0;
+  const prevRoi=(()=>{ const pc=prev('conv'), pcost=prev('sent')*COST_MSG; return pcost?(pc*incrShare*UNIT_REV-pcost)/pcost:0; })();
+  const unit='<small class="u">customers</small>';
+  const incrTip=`The control group converts at ${pct(ctrlRate,1)}. Applied to the whole target that would be ${fmt(baseline)} conversions. Actual conversions are ${fmt(conv)}. The difference — ${fmt(incrAll)} — is what the campaigns added. Measured on the ${cgOnly.length} campaign${cgOnly.length===1?'':'s'} with a control group, applied to all.`;
   const demoNote='<span style="font-weight:400;text-transform:none;letter-spacing:0">· BSS feed, demo</span>';
   const mtile=(l,v,d,cls,go,title)=>`<div class="tile ${cls||''}" data-go="${go}" role="button" tabindex="0"${title?` title="${esc(title)}"`:''}><div class="l">${l}</div><div class="v">${v}</div><div class="d"><span>${d}</span></div></div>`;
   const tile=(l,v,sub,d,sp,title)=>`<div class="tile"${title?` title="${esc(title)}"`:''}><div class="l">${l}</div><div class="v">${v}</div>${spark(sp)}${sub?`<div class="s">${sub}</div>`:''}<div class="d">${d}</div></div>`;
@@ -3856,15 +3886,19 @@ function renderDashboard(){ const staleDms=dmStale(); const card=document.getEle
   const LIVE_IC={run:'<path d="M8 5.5v13l10.5-6.5z"/>',jrn:'<circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><path d="M8 6h2.5a3.5 3.5 0 0 1 3.5 3.5V12M8 18h2.5a3.5 3.5 0 0 0 3.5-3.5V12h2"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4.5l3 2"/>',wait:'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4h5v3h-5zM9.5 12h5M9.5 16h3"/>',fail:'<path d="M12 4l9 16H3z"/><path d="M12 10v4.5M12 17.5v.01"/>'};
   const liveC=(cls,st,ic,go,v,l,x,vs)=>`<div class="c ${cls}" data-go="${go}"><div class="ct"><i class="dot"></i><span class="st">${st}</span><svg viewBox="0 0 24 24" aria-hidden="true">${LIVE_IC[ic]}</svg></div><div class="v"${vs?` style="${vs}"`:''}>${v}</div><div class="l">${l}</div></div>`;
   const P=(k,title,cls,body,sub)=>dbHidden.has(k)?'':`<div class="db-p ${cls||''}" data-p="${k}"><div class="ph">${title}${sub?` <small>— ${sub}</small>`:''}<button class="x" title="Hide panel" data-hide="${k}">×</button></div><div class="pb">${body}</div></div>`;
-  card.innerHTML=`<div class="card-h"><h2>Dashboard</h2><span class="pill acc">${preset} preset</span><span class="pill">as of ${TODAY}</span><div class="grow"></div>
+  card.innerHTML=`<div class="card-h"><h2>Dashboard</h2><span class="pill acc">${preset} preset</span><span class="pill">as of ${TODAY}</span><span class="pill" title="Aggregate figures are multiplied to a telecom operator's scale so the dashboard reads as it would in production. Lists, targeting and Operation analysis show the small 30-customer demo set as it is.">Demo figures at operator scale</span><div class="grow"></div>
       <p>${exec?'Executive view: business outcome first, then what is live, then where to look. ':preset==='Marketer'?'Marketer view: what needs your hand, what goes out this week, then how each campaign performs. ':'Ops view: what is running, what failed, what is scheduled next. '}Every number opens the list behind it. Panels can be hidden and re-added; the layout is saved per user (concept).</p></div>
     <div class="toolrow" style="padding-top:0;gap:8px"><div class="chipbar"><span style="color:var(--ink-3);font-size:11px">PERIOD</span>${[7,30,90].map(n=>`<button class="fchip ${dbRange===n?'on':''}" data-db="${n}">Last ${n} days</button>`).join('')}</div><div class="grow"></div><button class="btn sm outline" id="db-add">+ Add panel</button><button class="btn sm outline" disabled title="Concept — describe the panel you want">Ask the agent</button><button class="btn sm outline" disabled title="Concept">Save layout</button><button class="btn sm outline" disabled title="Concept">Export</button></div>
     <div class="db-hd">
       ${exec?`${tile('Campaigns',ran,`${ranActive} active · ${ran-ranActive} ended`,delta(ran,prevRan),campDays)}
-      ${tile('Conversions',fmt(conv),`${pct(conv,T('del'))} rate`,delta(conv,prev('conv')),cbars)}
-      ${tile(`Revenue ${demoNote}`,`₴ ${compact(revenue)}`,'attributed to campaigns',delta(revenue,prev('conv')*UNIT_REV),cbars.map(v=>v*UNIT_REV))}
-      ${tile(`ROI ${demoNote}`,`${roi.toFixed(1)}x`,`${net<0?'−':'+'}₴ ${compact(Math.abs(net))} net contribution`,delta(roi,prevRoi),days.map((d,i)=>bars[i]?cbars[i]*incrShare*UNIT_REV/(bars[i]*COST_MSG):0),'ROI = incremental revenue ÷ sending cost')}
-      ${tile('Incremental',fmt(incr),`vs control group · ${pct(incr,conv)} of total`,delta(incr,Math.round(incr*prev('conv')/Math.max(1,conv))),cbars.map(v=>v*incrShare))}`
+      ${tile(`Converted customers ${tip(TIPS.converted)}`,`${fmt(conv)} ${unit}`,`${pct(conv,T('del'))} of delivered · ${compact(T('del'))} delivered`,delta(conv,prev('conv')),cbars)}
+      ${tile(`Revenue ${demoNote}`,`₴ ${compact(revenue)}`,`₴ ${UNIT_REV} average per conversion · ${compact(conv)} conversions`,delta(revenue,prev('conv')*UNIT_REV),cbars.map(v=>v*UNIT_REV))}
+      ${tile(`ROI ${demoNote}`,`${roi.toFixed(1)}x`,`₴ ${compact(net)} net · ₴ ${compact(cost)} spend`,delta(roi,prevRoi),days.map((d,i)=>bars[i]?(cbars[i]*incrShare*UNIT_REV-bars[i]*COST_MSG)/(bars[i]*COST_MSG):0),'ROI = net ÷ spend. Net = incremental revenue − sending cost.')}
+      <div class="tile" title="${esc(incrTip)}"><div class="l">Extra conversions from campaigns ${tip(incrTip)}</div><div class="v">${fmt(incrAll)} ${unit}</div>
+        <div class="cgbar" aria-hidden="true"><i class="base" style="width:${conv?Math.round(100*baseline/conv):0}%"></i><i class="inc" style="width:${conv?100-Math.round(100*baseline/conv):0}%"></i></div>
+        <div class="s"><span class="k base"></span>${fmt(baseline)} would have converted anyway · <span class="k inc"></span>${fmt(incrAll)} thanks to campaigns</div>
+        <div class="s" style="color:var(--ink-2)">${pct(incrAll,conv)} of all conversions · measured against the control group</div>
+        <div class="d">${delta(incrAll,Math.round(prev('conv')*incrShare))}</div></div>`
       :preset==='Marketer'?`${mtile('Needs your action',drafts.length+soon.length,[[drafts.length-rejected.length,'draft'],[rejected.length,'rejected'],[noContent.length,'without content'],[soon.length,'ending within 7 days']].filter(x=>x[0]).map(x=>`${x[0]} ${x[1]}`).join(' · ')||'nothing waiting on you',drafts.length+soon.length?'warn':'ok','campaigns:Draft','Drafts not yet submitted, campaigns sent back by the approver, and active campaigns that end within 7 days')}
       ${mtile('Waiting for approval',pending.length,pending.length?`oldest waiting ${oldestWait} day${oldestWait===1?'':'s'}`:'nothing in the approver\'s queue',pending.length?'warn':'','campaigns:Pending approval')}
       ${mtile('Going out this week',weekN,firstSend?`${weekSends.length} campaign${weekSends.length===1?'':'s'} · next: ${esc(firstSend.c.name)} · ${whenTxt(firstSend.first)}`:'no send scheduled in the next 7 days','','campaigns:Active','Scheduled sends in the next 7 days, across the active campaigns')}

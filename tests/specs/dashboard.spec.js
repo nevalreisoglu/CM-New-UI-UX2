@@ -6,7 +6,7 @@ const { test, expect, setRole } = require('./fixtures');
  * strip is business outcome only; the marketer strip is the state of their
  * work, and opened / clicked stay per campaign in Campaign performance.
  */
-const labels = (app) => app.$$eval('#db-card .db-hd .tile .l', (ls) => ls.map((l) => l.textContent.replace(/·.*$/, '').trim()));
+const labels = (app) => app.$$eval('#db-card .db-hd .tile .l', (ls) => ls.map((l) => { const c = l.cloneNode(true); c.querySelectorAll('.tip').forEach((t) => t.remove()); return c.textContent.replace(/·.*$/, '').trim(); }));
 
 test.describe('dashboard headline strip', () => {
   test('the marketer sees the state of their work, not portfolio totals', async ({ app }) => {
@@ -42,7 +42,29 @@ test.describe('dashboard headline strip', () => {
   test('the executive strip is unchanged: business outcome only', async ({ app }) => {
     await setRole(app, 'cmo');
     await app.locator('.nav button[data-view="dashboard"]').click();
-    expect(await labels(app)).toEqual(['Campaigns', 'Conversions', 'Revenue', 'ROI', 'Incremental']);
+    expect(await labels(app)).toEqual(['Campaigns', 'Converted customers', 'Revenue', 'ROI', 'Extra conversions from campaigns']);
     await expect(app.locator('#db-card .db-grid .db-p').first()).toHaveAttribute('data-p', 'live');
+  });
+
+  test('the executive figures read at operator scale and stay consistent', async ({ app }) => {
+    await setRole(app, 'cmo');
+    await app.locator('.nav button[data-view="dashboard"]').click();
+    await expect(app.locator('#db-card .card-h .pill', { hasText: 'Demo figures at operator scale' })).toHaveCount(1);
+    const t = await app.$$eval('#db-card .db-hd .tile', (ts) => ts.map((x) => x.innerText));
+    const conv = +t[1].match(/([\d,]+)\s+customers/)[1].replace(/,/g, '');
+    expect(conv).toBeGreaterThan(20000);
+    expect(t[1]).toMatch(/% of delivered · [\d.]+M delivered/);
+    expect(t[2]).toMatch(/₴ \d+ average per conversion/);
+    expect(t[3]).toMatch(/₴ [\d.]+M net · ₴ [\d.]+M spend/);
+    const base = +t[4].match(/([\d,]+) would have converted anyway/)[1].replace(/,/g, '');
+    const incr = +t[4].match(/([\d,]+) thanks to campaigns/)[1].replace(/,/g, '');
+    expect(base + incr).toBe(conv); // the two segments sum to the converted total
+    expect(await app.$$eval('#db-card .cgbar i', (i) => i.length)).toBe(2);
+    expect(t.join('\n')).not.toMatch(/[▲▼] 0%/);
+    // row-level data is untouched
+    await app.locator('.nav button[data-view="programs"]').click();
+    await setRole(app, 'marketer');
+    await app.locator('.nav button[data-view="campaigns"]').click();
+    await expect(app.locator('#camp-table tr[data-id="433"] td.num').first()).toContainText('12');
   });
 });

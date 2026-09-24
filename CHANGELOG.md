@@ -2,6 +2,13 @@
 
 Version numbers follow the published artifact versions.
 
+## v49 — 24 Sept 2026
+**Dashboard KPIs readable at operator scale** (decisions D13, D14).
+- Aggregate figures on the dashboard (strip and panels) and on Reports go through one `scaleRows()` with `DEMO_SCALE = 1900`: ≈ 2.4M delivered, 55K converted customers (2.3 %), 19K extra conversions (35 %), ₴ 40M revenue, ₴ 2.7M spend, ROI 4.1x over 30 days. Row-level screens keep the 30-customer demo set. A *Demo figures at operator scale* pill sits next to *as of*. Unit economics: ₴ 720 per conversion, ₴ 1.10 per message; ROI = net ÷ spend.
+- **Converted customers** replaces *Conversions*: the unit after the number, "2.3 % of delivered · 2.4M delivered" underneath, a tooltip saying what is counted. **Extra conversions from campaigns** replaces *Incremental*: a two-segment bar (baseline grey, incremental turquoise) summing to the converted total, "n would have converted anyway · n thanks to campaigns", the share of all conversions, and a computed control-group tooltip. Revenue shows the average per conversion, ROI shows net and spend; every tile's second line carries a denominator or a comparison.
+- **Delta**: a zero change renders "no change vs prev. N d" in muted text with no arrow; a change that rounds to 0.0 % shows two decimals. Previous-period seeds no longer collide, so a ratio never reports a false "no change".
+- `tests/specs/dashboard.spec.js` covers the executive strip, the bar, the scale pill and the no-arrow rule; the brand audit adds the executive dashboard.
+
 ## v48 — 24 Sept 2026
 **Light chrome** (decision V7). The left menu, top bar and footer drop the solid navy / lilac fill for a translucent lilac wash over the page (menu 8 %, bars 14 %, active row 22 % with the orange bar), with dark ink text and white controls. No colour token changed value; `--bar-bg`, `--nav-bg`, `--nav-hover`, `--nav-active` and `--chrome-line` are new. The brand audit now composites translucent backgrounds before measuring.
 
