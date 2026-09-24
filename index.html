@@ -303,6 +303,18 @@ pre.code{margin:0;background:var(--brand-navy);color:#E6E6F0;border-radius:6px;p
 .stepper button.on{background:var(--sec-soft);color:var(--sec-ink);font-weight:600}
 .stepper button.on i{background:var(--orange);border-color:var(--orange);color:#fff}
 .stepper button.done i{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+/* connected stepper: colours follow readiness (decision C16), never visits alone */
+.stepper{flex-wrap:nowrap;align-items:center;gap:0}
+.stepper button{flex:none;white-space:nowrap}
+.stepper .sconn{flex:1 1 16px;min-width:6px;max-width:36px;height:2px;border-radius:1px;background:var(--line)}
+.stepper .sconn.ok{background:var(--ok)}
+.stepper button.done{color:var(--ok)}
+.stepper button.done i{background:var(--ok);border-color:var(--ok);color:#fff}
+.stepper button.todo i{position:relative;border-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+.stepper button.todo i::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:#F9AA56;box-shadow:0 0 0 1.5px #fff}
+.stepper button.on.done{color:var(--sec-ink)}
+.stepper button.on.done i{background:var(--orange);border-color:var(--orange);color:#fff}
+.stepper .spos{flex:none;padding-left:10px;font-size:11.5px;line-height:15px;color:var(--ink-3);text-align:right;white-space:nowrap}
 .form2{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;padding:8px 20px 16px}
 .form2 .span2{grid-column:1/-1}
 @media (max-width:900px){.form2{grid-template-columns:1fr}}
@@ -359,7 +371,7 @@ pre.code{margin:0;background:var(--brand-navy);color:#E6E6F0;border-radius:6px;p
 .kpi{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-2)}
 .kpi b{color:var(--ink)}
 .typechip{display:inline-block;border-radius:3px;padding:1px 7px;font-size:11.5px;font-weight:600}
-.typechip.Offer{background:var(--t-offer);color:var(--t-offer-i)} .typechip.Info{background:var(--t-delivery);color:var(--t-delivery-i)} .typechip.Event{background:var(--t-wait);color:var(--t-wait-i)} .typechip.Survey{background:var(--t-cond);color:var(--t-cond-i)}
+.typechip.Offer{background:var(--t-offer);color:var(--t-offer-i)} .typechip.Information{background:var(--t-delivery);color:var(--t-delivery-i)} .typechip.Event{background:var(--t-wait);color:var(--t-wait-i)} .typechip.Survey{background:var(--t-cond);color:var(--t-cond-i)}
 .pager{display:flex;gap:4px;justify-content:center;padding:8px 20px 16px}
 .pager button{border:1px solid var(--line);background:#fff;border-radius:4px;width:28px;height:28px;font-size:12px;color:var(--ink-2)}
 .pager button.on{background:var(--orange);border-color:var(--orange);color:#fff}
@@ -400,10 +412,16 @@ pre.code{margin:0;background:var(--brand-navy);color:#E6E6F0;border-radius:6px;p
 .chsel button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:3px 10px;font-size:11.5px;color:var(--ink-2);display:inline-flex;align-items:center;gap:6px}
 .chsel button.on{background:var(--orange-soft);border-color:var(--orange);color:var(--orange-ink);font-weight:600}
 .chsel button.on::after{content:"×";font-weight:400;opacity:.7}
-.goalsel{display:flex;flex-wrap:wrap;gap:6px}
-.goalsel button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:12.5px;color:var(--ink-2)}
-.goalsel button:hover{border-color:var(--ink-3)}
-.goalsel button.on{background:var(--orange-soft);border-color:var(--orange);color:var(--orange-ink);font-weight:600}
+.goalchip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:2px 10px;font-size:12px;color:var(--ink);font-weight:500;white-space:nowrap}
+.goalchip:hover{border-color:var(--ink-3)}
+.goalchip.unset{color:var(--ink-2);font-weight:400;border-style:dashed}
+.goalpop{position:fixed;z-index:60;background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(36,36,65,.16);padding:6px;width:280px}
+.goalpop .gh{font-size:11.5px;color:var(--ink-2);padding:4px 8px 6px}
+.goalpop button{display:block;width:100%;text-align:left;border:0;background:none;border-radius:6px;padding:7px 8px;font-size:13px;color:var(--ink)}
+.goalpop button small{display:block;font-size:11.5px;color:var(--ink-2)}
+.goalpop button:hover{background:var(--surface-2)}
+.goalpop button.on{background:var(--orange-soft);color:var(--orange-ink);font-weight:600}
+.goalpop button.on small{color:var(--orange-ink);font-weight:400}
 /* assistant */
 .assist{background:var(--orange-soft);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
 .assist .row{display:flex;gap:6px}
@@ -744,8 +762,9 @@ body{font-size:14px;line-height:1.43}
 .ins .tile .v,.stat .v{color:var(--green-ink)}
 .ins .tile .s,.stat .s{color:var(--ink-2)}
 /* steps, chips, pills */
-.stepper{padding:10px 20px}
-.stepper button{font-size:14px;line-height:20px}
+.stepper{padding:8px 14px}
+.stepper button{font-size:13px;line-height:18px;padding:6px 6px;gap:6px}
+.stepper button i{width:20px;height:20px}
 .stepper button.on{background:var(--sec-soft);color:var(--sec-ink)}
 .pill{font-size:11px;line-height:16px;font-weight:500}
 .chip{font-size:12px;line-height:16px;padding:2px 8px}
@@ -764,7 +783,7 @@ body{font-size:14px;line-height:1.43}
 .kv{font-size:13px;gap:7px 12px}
 .kv dt{font-weight:600;color:var(--ink-2)}
 .tip{width:15px;height:15px;font-size:9.5px}
-#camp-table td:first-child{min-width:200px}
+#camp-table td:first-child{min-width:190px}
 /* simulation strip — demo-only controls, visibly separated from product UI */
 .simbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;margin:0 20px 10px;border:1.5px dashed var(--ink-3);background:repeating-linear-gradient(135deg,var(--surface-2) 0 10px,var(--grey-2) 10px 20px);border-radius:8px;font-size:12.5px}
 .ctool.simbar{margin:0;border-radius:0;border-left:0;border-right:0}
@@ -1636,7 +1655,7 @@ A program is the business initiative campaigns and journeys belong to.
 ## Building a campaign
 
 **Campaign** in the menu opens the **Campaign List**: a search box, **Type**
-chips (All · Offer · Info), **Status** chips (All · Active · Draft · Pending
+chips (All · Offer · Information), **Status** chips (All · Active · Draft · Pending
 approval · Expired) and **Advanced filters** for category, campaign brand (when
 the admin has turned it on), datamart, delivery status, created by and the
 start and end dates. Each row shows the campaign's readiness as a small bar.
@@ -1652,8 +1671,8 @@ opens Operation analysis filtered to it. **+ New campaign** starts a new one.
 1. **Campaign name** — the cursor is already there. Required.
 2. **What is it for?** — pick one objective card: Acquisition, Upsell /
    Cross-sell, Retention, Winback or Informational. The goal decides the
-   campaign type and category for you: Informational is an Info campaign (no
-   Offer step), the other four are Offer campaigns filed under their category.
+   campaign type and category for you: Informational is an Information campaign
+   (no Offer step), the other four are Offer campaigns filed under their category.
    You are not asked for type, category or sub-category again.
 3. **How will it reach people?** — **We send it** (push: SMS, e-mail, push,
    telemarketing) or **The customer sees it when they come** (pull: in-app,
@@ -1663,7 +1682,8 @@ opens Operation analysis filtered to it. **+ New campaign** starts a new one.
 
 Below that, **Start from a template** opens a copy of one of your three most
 recent campaigns, and **Skip — go straight to the form** opens an empty editor.
-The goal and the channels can still be changed in Info.
+The goal shows in the editor header and the channels in Info; both can still
+be changed.
 
 In the editor, **‹ Campaign list** goes back, and **Results** (once the
 campaign has run) opens Operation analysis on its deliveries.
@@ -1678,8 +1698,28 @@ Approval · Summary`
 ticks what is done, and jumps to any item you click. It never stops you saving —
 parts get done by different people on different days.
 
-A step that does not apply stays visible but greyed: an Info campaign shows the
-**Offer** step marked `–`, because it has nothing to offer.
+**The stepper is one path**, with a line between the steps, and its colours
+follow the readiness panel rather than your clicks:
+
+| Looks like | Means |
+| --- | --- |
+| Green circle with ✓, green label, green line after it | the step's part of the readiness list is done (Summary: every part is done) |
+| Orange highlight | the step you are on — with a ✓ inside if it is also done |
+| Amber outline and dot | you have been there, but it still needs something |
+| Grey circle with its number | not started |
+
+A step turns green the moment you fill what it needs, without leaving it, and
+goes back if you clear it. The colours never stop you clicking to another step.
+*Step n of 8 · readiness n/7* on the right says the same in words.
+
+An **Information** campaign has nothing to offer, so the Offer step leaves the
+path: the stepper shows seven steps and runs from Targeting straight to Channel
+& content.
+
+**The header** shows the status, the campaign type (**Offer** or
+**Information**) and the goal — **Goal: Retention**, for example. Click the goal
+chip to change it; a campaign opened with *Skip* reads **Set goal** until you
+pick one. Changing the goal changes the type and category with it.
 
 Each step opens with a heading that says what it is for — *Tell us about your
 campaign*, *Who will you reach?*, *What will you offer?*, *How will you reach
@@ -1688,9 +1728,8 @@ them?*, *Set the ground rules*, *When will it go out?*, *Send it for approval*,
 
 #### 1 · Info
 
-Name (required — Next will refuse without it), the **Goal** you picked on the
-first screen (click another to change it; with *Skip* you pick it here), start
-and end, control group, and program.
+Name (required — Next will refuse without it), start and end, control group,
+and program. The goal is not asked again here — it is the chip in the header.
 
 **Channels** are in two groups:
 
@@ -1717,7 +1756,7 @@ in the list.
 #### 3 · Offer / NBO
 
 Name the offers, or set the strategy to **NBO** and let Next Best Offer decide.
-Optionally attach a promo code. Skipped for Info campaigns.
+Optionally attach a promo code. Skipped for Information campaigns.
 
 #### 4 · Channel & content
 
@@ -2259,25 +2298,25 @@ const JOURNEYS = [
 const CAMPAIGNS = [
   {id:'433',name:'Package renewal — SMS offer',type:'Offer',status:'Active',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:DEMO_USERS.me,created:'2026-09-08',updated:'2026-09-12',start:'2026-09-14T00:00',end:'2026-09-30T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:12,cbd:true,alarms:true,objective:'Renew packages expiring within 2 days; +10% bonus data on renewal.',desc:'Daily scheduled delivery, dynamic uk/en SMS content, Kharkiv excluded by list.',strategy:'Manual',lists:[{id:'ML-2202',mode:'Include'},{id:'ML-2210',mode:'Exclude'}],offers:['OFR-1042'],channels:['sms'],contents:['SMS-301'],sortCol:'CHURN_RISK',sortDir:'Descending'},
   {id:'434',name:'Renewal opened → app push follow-up',type:'Event',status:'Active',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:DEMO_USERS.me,created:'2026-09-09',updated:'2026-09-12',start:'2026-09-14T00:00',end:'2026-09-30T23:59',datamart:'Event DataMart',cg:'No Control Group',presend:'1 day',priority:14,cbd:true,alarms:false,objective:'Customers who opened the renewal SMS but did not renew get a push with one-tap renewal.',desc:'Follow-up to customers who opened the renewal SMS (segment on the Event DataMart).',strategy:'Manual',lists:[{id:'ML-2203',mode:'Include'}],offers:['OFR-1042'],channels:['push'],contents:['PSH-401'],sortCol:'',sortDir:''},
-  {id:'435',name:'Renewal — last day reminder',type:'Info',status:'Active',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:DEMO_USERS.me,created:'2026-09-09',updated:'2026-09-12',start:'2026-09-14T00:00',end:'2026-09-30T23:59',datamart:'Main DataMart',cg:'5% Control Group',presend:'1 day',priority:8,cbd:true,alarms:false,objective:'Info message on the expiry day for customers still not renewed.',desc:'Scheduled at 10:00 local; pre-sent period prevents duplicate sends.',strategy:'Manual',lists:[{id:'ML-2202',mode:'Include'},{id:'ML-2203',mode:'Exclude'},{id:'ML-2210',mode:'Exclude'}],offers:[],channels:['sms'],contents:['SMS-303'],sortCol:'',sortDir:''},
+  {id:'435',name:'Renewal — last day reminder',type:'Information',status:'Active',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:DEMO_USERS.me,created:'2026-09-09',updated:'2026-09-12',start:'2026-09-14T00:00',end:'2026-09-30T23:59',datamart:'Main DataMart',cg:'5% Control Group',presend:'1 day',priority:8,cbd:true,alarms:false,objective:'Info message on the expiry day for customers still not renewed.',desc:'Scheduled at 10:00 local; pre-sent period prevents duplicate sends.',strategy:'Manual',lists:[{id:'ML-2202',mode:'Include'},{id:'ML-2203',mode:'Exclude'},{id:'ML-2210',mode:'Exclude'}],offers:[],channels:['sms'],contents:['SMS-303'],sortCol:'',sortDir:''},
   {id:'436',name:'Data add-on cross-sell after renewal',type:'Offer',status:'Draft',category:'Upsell',sub:'Data add-on',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:'',created:'2026-09-12',updated:'2026-09-12',start:'2026-09-15T00:00',end:'2026-10-15T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'7 days',priority:6,cbd:true,alarms:false,objective:'Offer 5 GB add-on to renewed high-usage customers; Campaign Type overlap rule keeps it behind 433.',desc:'',strategy:'NBO',lists:[{id:'ML-2402',mode:'Include'}],offers:['OFR-1043'],channels:['push','sms'],contents:['PSH-403','SMS-320'],sortCol:'DATA_USAGE_GB',sortDir:'Descending'},
   /* two demo campaigns in the approval loop, so the Marketer strip, Needs attention and the approver tour have something to show */
   {id:'2004',name:'5G upgrade reminder — e-mail',type:'Offer',status:'Pending approval',category:'Upsell',sub:'5G',label:'ETIYA',program:'Growth',createdBy:DEMO_USERS.growth,updatedBy:DEMO_USERS.growth,created:'2026-09-10',updated:'2026-09-11',start:'2026-09-18T00:00',end:'2026-10-31T23:59',datamart:'Main DataMart',cg:'10% Control Group',presend:'30 days',priority:7,cbd:true,alarms:false,objective:'Remind 5G-ready customers without an unlimited plan that the first month is free.',desc:'',strategy:'Manual',lists:[{id:'ML-2402',mode:'Include'}],offers:['OFR-1051'],channels:['email'],contents:['EML-211'],sortCol:'',sortDir:'',approver:DEMO_USERS.approver,approvals:[{at:'2026-09-11 16:20',who:DEMO_USERS.growth,act:'Submitted',note:'Follow-up to 2003 for customers who did not open it.'}]},
   {id:'2613',name:'Win-back 15% — autumn',type:'Offer',status:'Draft',category:'Win-back',sub:'Discount',label:'ETIYA',program:'Churn prevention',createdBy:DEMO_USERS.me,updatedBy:DEMO_USERS.approver,created:'2026-09-11',updated:'2026-09-13',start:'2026-09-20T00:00',end:'2026-10-20T23:59',datamart:'Main DataMart',cg:'5% Control Group',presend:'30 days',priority:15,cbd:true,alarms:false,objective:'Bring back prepaid customers who left in the last 60 days.',desc:'',strategy:'Manual',lists:[{id:'ML-2201',mode:'Include'}],offers:['OFR-1042'],channels:['sms'],contents:['SMS-302'],sortCol:'',sortDir:'',approver:DEMO_USERS.approver,approvals:[{at:'2026-09-12 10:05',who:DEMO_USERS.me,act:'Submitted',note:'Same mechanics as 2612, new period.'},{at:'2026-09-13 09:40',who:DEMO_USERS.approver,act:'Rejected',note:'15% is above the 10% cap for prepaid win-back. Resubmit at 10%.'}]},
   {id:'3310',name:'Top-up bonus 10%',type:'Offer',status:'Active',category:'Retention',sub:'Top-up',label:'ETIYA',program:'Churn prevention',createdBy:DEMO_USERS.me,updatedBy:DEMO_USERS.me,created:'2026-08-30',updated:'2026-09-05',start:'2026-09-01T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'5% Control Group',presend:'3 days',priority:10,cbd:true,alarms:false,objective:'Bonus on next top-up for churn-risk prepaid.',desc:'',strategy:'NBO',lists:[{id:'ML-2201',mode:'Include'}],offers:['OFR-1042'],channels:['sms','push'],contents:['SMS-302','PSH-401'],sortCol:'CHURN_RISK',sortDir:'Descending'},
-  {id:'3311',name:'Bonus reminder',type:'Info',status:'Active',category:'Retention',sub:'Top-up',label:'ETIYA',program:'Churn prevention',createdBy:DEMO_USERS.me,updatedBy:'',created:'2026-08-30',updated:'2026-08-30',start:'2026-09-01T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:5,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2201',mode:'Include'}],offers:[],channels:['push'],contents:['PSH-402'],sortCol:'',sortDir:''},
+  {id:'3311',name:'Bonus reminder',type:'Information',status:'Active',category:'Retention',sub:'Top-up',label:'ETIYA',program:'Churn prevention',createdBy:DEMO_USERS.me,updatedBy:'',created:'2026-08-30',updated:'2026-08-30',start:'2026-09-01T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:5,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2201',mode:'Include'}],offers:[],channels:['push'],contents:['PSH-402'],sortCol:'',sortDir:''},
   {id:'3312',name:'Retention personal offer',type:'Offer',status:'Active',category:'Retention',sub:'Assisted',label:'ETIYA',program:'Churn prevention',createdBy:DEMO_USERS.crm,updatedBy:'',created:'2026-08-21',updated:'2026-08-21',start:'2026-09-01T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'30 days',priority:18,cbd:true,alarms:true,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2201',mode:'Include'}],offers:['OFR-1060'],channels:['tm'],contents:['TM-601'],sortCol:'',sortDir:''},
-  {id:'2001',name:'Welcome',type:'Info',status:'Active',category:'Onboarding',sub:'Welcome',label:'ETIYA',program:'Onboarding',createdBy:DEMO_USERS.crm,updatedBy:DEMO_USERS.me,created:'2026-07-02',updated:'2026-08-11',start:'2026-07-05T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'365 days',priority:9,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2301',mode:'Include'}],offers:[],channels:['email'],contents:['EML-201'],sortCol:'',sortDir:''},
-  {id:'2002',name:'Get the app',type:'Info',status:'Active',category:'Onboarding',sub:'App adoption',label:'ETIYA',program:'Onboarding',createdBy:DEMO_USERS.crm,updatedBy:'',created:'2026-07-02',updated:'2026-07-02',start:'2026-07-05T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'30 days',priority:4,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2301',mode:'Include'}],offers:[],channels:['sms'],contents:['SMS-310'],sortCol:'',sortDir:''},
+  {id:'2001',name:'Welcome',type:'Information',status:'Active',category:'Onboarding',sub:'Welcome',label:'ETIYA',program:'Onboarding',createdBy:DEMO_USERS.crm,updatedBy:DEMO_USERS.me,created:'2026-07-02',updated:'2026-08-11',start:'2026-07-05T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'365 days',priority:9,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2301',mode:'Include'}],offers:[],channels:['email'],contents:['EML-201'],sortCol:'',sortDir:''},
+  {id:'2002',name:'Get the app',type:'Information',status:'Active',category:'Onboarding',sub:'App adoption',label:'ETIYA',program:'Onboarding',createdBy:DEMO_USERS.crm,updatedBy:'',created:'2026-07-02',updated:'2026-07-02',start:'2026-07-05T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'30 days',priority:4,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2301',mode:'Include'}],offers:[],channels:['sms'],contents:['SMS-310'],sortCol:'',sortDir:''},
   {id:'2003',name:'5G first month free',type:'Offer',status:'Active',category:'Upsell',sub:'5G',label:'ETIYA',program:'Growth',createdBy:DEMO_USERS.growth,updatedBy:'',created:'2026-07-20',updated:'2026-07-20',start:'2026-08-01T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'10% Control Group',presend:'60 days',priority:7,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2402',mode:'Include'}],offers:['OFR-1051'],channels:['email','push'],contents:['EML-211','PSH-403'],sortCol:'',sortDir:''},
   {id:'2410',name:'Data add-on 5GB',type:'Offer',status:'Expired',category:'Upsell',sub:'Data add-on',label:'ETIYA',program:'Growth',createdBy:DEMO_USERS.growth,updatedBy:'',created:'2026-05-02',updated:'2026-05-02',start:'2026-05-05T00:00',end:'2026-06-30T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'30 days',priority:6,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2402',mode:'Include'}],offers:['OFR-1043'],channels:['email'],contents:['EML-212'],sortCol:'',sortDir:''},
   {id:'2511',name:'NPS survey — day 30',type:'Survey',status:'Active',category:'Experience',sub:'NPS',label:'ETIYA',program:'Onboarding',createdBy:DEMO_USERS.crm,updatedBy:'',created:'2026-06-14',updated:'2026-06-14',start:'2026-07-01T00:00',end:'2026-12-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'90 days',priority:2,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2301',mode:'Include'}],offers:[],channels:['email'],contents:['EML-230'],sortCol:'',sortDir:''},
   {id:'2612',name:'Win-back 20% discount',type:'Offer',status:'Expired',category:'Win-back',sub:'Discount',label:'ETIYA',program:'Churn prevention',createdBy:DEMO_USERS.me,updatedBy:'',created:'2026-04-10',updated:'2026-04-10',start:'2026-04-15T00:00',end:'2026-05-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'30 days',priority:15,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2201',mode:'Include'}],offers:['OFR-1042'],channels:['sms'],contents:['SMS-302'],sortCol:'',sortDir:''},
   {id:'374',name:'Budget Conscious Streamers Retention',type:'Offer',status:'Active',category:'Retention',sub:'Streaming',label:'ETIYA',program:'',createdBy:DEMO_USERS.analyst,updatedBy:DEMO_USERS.analyst,created:'2026-08-07',updated:'2026-08-09',start:'2026-08-10T00:00',end:'2026-10-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'7 days',priority:5,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2201',mode:'Include'}],offers:['OFR-1043'],channels:['push'],contents:['PSH-401'],sortCol:'',sortDir:''},
   {id:'372',name:'High-Value Gamers Content Plus Value Pack',type:'Offer',status:'Active',category:'Upsell',sub:'Content',label:'ETIYA',program:'',createdBy:DEMO_USERS.analyst2,updatedBy:DEMO_USERS.analyst2,created:'2026-08-06',updated:'2026-08-06',start:'2026-08-10T00:00',end:'2026-10-31T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'7 days',priority:5,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[{id:'ML-2402',mode:'Include'}],offers:['OFR-1043'],channels:['email'],contents:['EML-212'],sortCol:'',sortDir:''},
-  {id:'365',name:'ecm_auto_Campaign20260807478',type:'Info',status:'Expired',category:'Test',sub:'Automation',label:'ETIYA',program:'',createdBy:DEMO_USERS.growth,updatedBy:'',created:'2026-08-07',updated:'2026-08-07',start:'2026-08-07T00:00',end:'2026-08-07T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:1,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[],offers:[],channels:['sms'],contents:['SMS-310'],sortCol:'',sortDir:''},
+  {id:'365',name:'ecm_auto_Campaign20260807478',type:'Information',status:'Expired',category:'Test',sub:'Automation',label:'ETIYA',program:'',createdBy:DEMO_USERS.growth,updatedBy:'',created:'2026-08-07',updated:'2026-08-07',start:'2026-08-07T00:00',end:'2026-08-07T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:1,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[],offers:[],channels:['sms'],contents:['SMS-310'],sortCol:'',sortDir:''},
 ];
-const CAMP_TYPES=['Offer','Info'];
+const CAMP_TYPES=['Offer','Information'];
 const CAMP_CATS={Retention:['Package renewal','Top-up','Assisted','Streaming'],Upsell:['Data add-on','5G','Content'],Onboarding:['Welcome','App adoption'],'Win-back':['Discount'],Experience:['NPS'],Test:['Automation']};
 const CAMP_LABELS=['KYIVSTAR-DEMO','ETIYA','B2B','PARTNER'];
 /* meeting 3: optional Info fields are configuration (per customer / version); single-brand customers never see the brand field */
@@ -2287,7 +2326,7 @@ const statusPill=st=>`<span class="pill ${CAMP_STATUS_CLS[st]||''}">${st}</span>
 const APPROVERS=[DEMO_USERS.approver,DEMO_USERS.approver2,'Marketing lead (any)'];
 /* tooltip helper — every field that needs explaining gets one (meeting 3) */
 const tip=t=>`<span class="tip" data-tip="${esc(t)}">i</span>`;
-const TIPS={goal:'What the campaign is for — chosen when it was created. It sets the campaign type and files it under a category: Informational is an Info campaign with no Offer step, the others are Offer campaigns.',converted:'Customers who took the action the campaign asked for — renewing a package, accepting an offer, buying an upsell. The action is defined per campaign and counted within 7 days of delivery.',name:'Shown in lists, reports and the approver\'s queue. Keep it searchable: what, for whom, when.',id:'Given by the system when the campaign is first saved. Used in reports and the Event DataMart.',type:'Offer = the customer gets an offer or promo code (Offer step). Info = a message only; the Offer step is skipped.',label:'Which brand sends the campaign. Only shown for multi-brand customers (Parameters › Campaign form).',category:'Reporting dimension. Categories are managed in Parameters.',sub:'Second reporting level under the category.',channels:'Pick the channels this campaign sends on. One content per channel is created in Channel & content; the same schedule applies to all of them.',start:'From this moment the campaign may run. Nothing is sent before it.',end:'After this moment no send happens, even if a schedule is still open.',cg:'A random share of the target is held back and gets nothing, so the effect can be measured. Method and size come from Parameters.',presend:'Days between two sends of this same campaign to one customer.',program:'Optional grouping of campaigns that belong to one business programme.',cbd:'Customer based delivery: one customer gets one send per run, even if several rows match.',alarms:'Get an alarm when a run fails or delivers below the expected volume.',priority:'When several pull campaigns compete for the same slot (app card, WSC banner, chatbot) the higher priority wins. Not used for push sends.',objective:'What the campaign should achieve, in one or two sentences. Shown to the approver.',desc:'Long description for colleagues. Hidden by default (Parameters › Campaign form).',target:'Segments are applied top to bottom: includes add customers, excludes remove them. Global exclusion lists are always applied last.',sortCol:'When a channel has a daily capacity, customers are sent in this order.',template:'The design: layout, brand blocks, fixed elements. Made by the admin under Templates. You write the text into its slots below; the design stays untouched.',variants:'A/B: two texts, a share of the target gets B, the rest gets the winner. Dynamic: the template\'s language / segment variants are picked per customer from a DataMart column.',abSplit:'Share of the target that receives variant B during the test.',dyn:'DataMart column whose value picks the variant at send time.',text:'The message itself. Placeholders like {{FIRST_NAME}} resolve per customer at send time.',override:'Sends to everyone in the target and ignores cooldown, overlap and pre-sent rules. Only for regulatory or service messages.',trigger:'Run now = once, right after approval. Schedule = at the chosen times until the end date.',sto:'Send time optimisation: the AI picks each customer\'s best hour on the day; the time here is the earliest slot.',approver:'Who is asked to approve. The approver sees the summary and this note.',approvalNote:'Tell the approver what to look at: the audience size, the offer, anything unusual.',promo:'Optional code the customer quotes to claim the offer. Use {{PROMO_CODE}} in the content.'};
+const TIPS={goal:'What the campaign is for — chosen when it was created. It sets the campaign type and files it under a category: Informational is an Information campaign with no Offer step, the others are Offer campaigns.',converted:'Customers who took the action the campaign asked for — renewing a package, accepting an offer, buying an upsell. The action is defined per campaign and counted within 7 days of delivery.',name:'Shown in lists, reports and the approver\'s queue. Keep it searchable: what, for whom, when.',id:'Given by the system when the campaign is first saved. Used in reports and the Event DataMart.',type:'Offer = the customer gets an offer or promo code (Offer step). Info = a message only; the Offer step is skipped.',label:'Which brand sends the campaign. Only shown for multi-brand customers (Parameters › Campaign form).',category:'Reporting dimension. Categories are managed in Parameters.',sub:'Second reporting level under the category.',channels:'Pick the channels this campaign sends on. One content per channel is created in Channel & content; the same schedule applies to all of them.',start:'From this moment the campaign may run. Nothing is sent before it.',end:'After this moment no send happens, even if a schedule is still open.',cg:'A random share of the target is held back and gets nothing, so the effect can be measured. Method and size come from Parameters.',presend:'Days between two sends of this same campaign to one customer.',program:'Optional grouping of campaigns that belong to one business programme.',cbd:'Customer based delivery: one customer gets one send per run, even if several rows match.',alarms:'Get an alarm when a run fails or delivers below the expected volume.',priority:'When several pull campaigns compete for the same slot (app card, WSC banner, chatbot) the higher priority wins. Not used for push sends.',objective:'What the campaign should achieve, in one or two sentences. Shown to the approver.',desc:'Long description for colleagues. Hidden by default (Parameters › Campaign form).',target:'Segments are applied top to bottom: includes add customers, excludes remove them. Global exclusion lists are always applied last.',sortCol:'When a channel has a daily capacity, customers are sent in this order.',template:'The design: layout, brand blocks, fixed elements. Made by the admin under Templates. You write the text into its slots below; the design stays untouched.',variants:'A/B: two texts, a share of the target gets B, the rest gets the winner. Dynamic: the template\'s language / segment variants are picked per customer from a DataMart column.',abSplit:'Share of the target that receives variant B during the test.',dyn:'DataMart column whose value picks the variant at send time.',text:'The message itself. Placeholders like {{FIRST_NAME}} resolve per customer at send time.',override:'Sends to everyone in the target and ignores cooldown, overlap and pre-sent rules. Only for regulatory or service messages.',trigger:'Run now = once, right after approval. Schedule = at the chosen times until the end date.',sto:'Send time optimisation: the AI picks each customer\'s best hour on the day; the time here is the earliest slot.',approver:'Who is asked to approve. The approver sees the summary and this note.',approvalNote:'Tell the approver what to look at: the audience size, the offer, anything unusual.',promo:'Optional code the customer quotes to claim the offer. Use {{PROMO_CODE}} in the content.'};
 /* ---------- PROGRAM = a business initiative: goal, period, owner, its campaigns and journeys, roll-up results. Not a folder of campaign IDs. ---------- */
 const PROGRAMS=[
   {id:'PRG-1',name:'Package renewal',desc:'Keep prepaid customers on a package: reminders before expiry, a renewal offer, a last-day nudge and the app follow-up.',owner:'Felix (CVM)',category:'Retention',start:'2026-09-01',end:'2026-12-31',goal:{metric:'Conversions',target:120},journeys:['JRN-07'],cap:{n:2,per:'week'},report:true,created:'2026-08-20',by:DEMO_USERS.me},
@@ -2299,7 +2338,7 @@ const CAMP_PROGRAMS=['— none',...PROGRAMS.map(p=>p.name)];
 const CAMP_CGS=['No Control Group','5% Control Group','10% Control Group','Exact 2,000 per channel','Uploaded list CG-11'];
 const CAMP_PRESEND=['1 day','3 days','7 days','30 days','60 days','90 days','365 days'];
 /* meeting 3 follow-up: pre-sent period is a communication-rule default set by the admin, not a per-campaign field */
-const RULE_DEFAULTS={presend:'1 day',cooldown:{sms:'1 day',isms:'1 day',mms:'1 day',email:'3 days',push:'1 day',webpush:'1 day',tm:'7 days',inapp:'—',wsc:'—',chatbot:'—'},overlap:'1 Info · 1 Offer / day'};
+const RULE_DEFAULTS={presend:'1 day',cooldown:{sms:'1 day',isms:'1 day',mms:'1 day',email:'3 days',push:'1 day',webpush:'1 day',tm:'7 days',inapp:'—',wsc:'—',chatbot:'—'},overlap:'1 Information · 1 Offer / day'};
 function campAudience(c){
   if(c.eventDriven) return {count:null,inc:0,exc:0};
   const inc=new Set(), exc=new Set(excludedCids(c.channels));
@@ -3354,16 +3393,16 @@ let campMode='list', campSel=null, campStep=0, campDraft=null, campAdv=false, ca
 const campFilter={q:'',type:'All',status:'All',category:'',label:'',datamart:'',createdBy:''};
 const campUsedBy=id=>JOURNEYS.filter(j=>j.nodes.some(n=>n.type==='delivery'&&String(n.cfg.campaign).startsWith(id+' '))).map(j=>j.id);
 const chanIcon={sms:'SMS',email:'Email',push:'Push',tm:'TM',wsc:'WSC',whatsapp:'WA',chatbot:'Bot',order:'Order'};
-function campBlank(){ const nid=String(Math.max(...CAMPAIGNS.map(c=>parseInt(c.id)||0))+1); return {id:nid,name:'',type:'Offer',status:'Draft',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:'',created:TODAY,updated:TODAY,start:TODAY+'T00:00',end:'2026-09-30T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:1,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[],offers:[],channels:['sms'],contents:[],plans:[],eventDriven:false,promo:{code:'',kind:'Single code',valid:''},rules:null,sched:null,rulesSet:false,schedSet:false,sortCol:'',sortDir:'',approver:'',approvalNote:'',approvals:[]}; }
-function campCopy(id){ const src=CAMPAIGNS.find(x=>x.id===id); campOpen(null); Object.assign(campDraft,JSON.parse(JSON.stringify({type:src.type,goal:src.goal,label:src.label,category:src.category,sub:src.sub,cg:src.cg,presend:src.presend,program:src.program,objective:src.objective,desc:src.desc,lists:src.lists,strategy:src.strategy,offers:src.offers,channels:src.channels,contents:src.contents,plans:src.plans.map(p=>Object.assign({},p,{status:'Draft'})),eventDriven:src.eventDriven,promo:src.promo,rules:src.rules,sched:src.sched,rulesSet:src.rulesSet,schedSet:src.schedSet,priority:src.priority})),{name:src.name+' (copy)'}); renderCampaigns(); toast('Campaign copied',`Settings of ${src.id} copied into a new draft — rename and adjust.`); }
+function campBlank(){ const nid=String(Math.max(...CAMPAIGNS.map(c=>parseInt(c.id)||0))+1); return {id:nid,name:'',type:'Offer',goal:'',status:'Draft',category:'Retention',sub:'Package renewal',label:'KYIVSTAR-DEMO',program:'Package renewal',createdBy:DEMO_USERS.me,updatedBy:'',created:TODAY,updated:TODAY,start:TODAY+'T00:00',end:'2026-09-30T23:59',datamart:'Main DataMart',cg:'No Control Group',presend:'1 day',priority:1,cbd:true,alarms:false,objective:'',desc:'',strategy:'Manual',lists:[],offers:[],channels:['sms'],contents:[],plans:[],eventDriven:false,promo:{code:'',kind:'Single code',valid:''},rules:null,sched:null,rulesSet:false,schedSet:false,sortCol:'',sortDir:'',approver:'',approvalNote:'',approvals:[]}; }
+function campCopy(id){ const src=CAMPAIGNS.find(x=>x.id===id); campOpen(null); Object.assign(campDraft,JSON.parse(JSON.stringify({type:src.type,goal:campGoal(src),label:src.label,category:src.category,sub:src.sub,cg:src.cg,presend:src.presend,program:src.program,objective:src.objective,desc:src.desc,lists:src.lists,strategy:src.strategy,offers:src.offers,channels:src.channels,contents:src.contents,plans:src.plans.map(p=>Object.assign({},p,{status:'Draft'})),eventDriven:src.eventDriven,promo:src.promo,rules:src.rules,sched:src.sched,rulesSet:src.rulesSet,schedSet:src.schedSet,priority:src.priority})),{name:src.name+' (copy)'}); renderCampaigns(); toast('Campaign copied',`Settings of ${src.id} copied into a new draft — rename and adjust.`); }
 /* New campaign starts on a centred creation screen (decision C9): name, objective, push or pull, one CTA.
    The stepper appears only once the draft exists. campOpen(null) still goes straight to the form. */
 let ccObj='', ccReach='push';
 /* The goal is asked once, on the creation screen, and carries the campaign type, category and
    sub-category with it — the Info step shows the goal, not the three fields (decision C13). */
 const CAMP_GOAL={'Acquisition':{type:'Offer',category:'Onboarding',sub:'Welcome'},'Upsell / Cross-sell':{type:'Offer',category:'Upsell',sub:'Data add-on'},
-  'Retention':{type:'Offer',category:'Retention',sub:'Package renewal'},'Winback':{type:'Offer',category:'Win-back',sub:'Discount'},'Informational':{type:'Info'}};
-function campGoal(c){ if(c.goal) return c.goal; if(c.type!=='Offer') return 'Informational';
+  'Retention':{type:'Offer',category:'Retention',sub:'Package renewal'},'Winback':{type:'Offer',category:'Win-back',sub:'Discount'},'Informational':{type:'Information'}};
+function campGoal(c){ if(c.goal!==undefined) return c.goal; if(c.type!=='Offer') return 'Informational';
   return {Onboarding:'Acquisition',Upsell:'Upsell / Cross-sell',Retention:'Retention','Win-back':'Winback'}[c.category]||''; }
 function campSetGoal(c,g){ c.goal=g; Object.assign(c,CAMP_GOAL[g]||{}); }
 const CC_OBJ=[
@@ -3375,7 +3414,7 @@ const CC_OBJ=[
 const CC_REACH=[
   ['push','We send it','SMS, e-mail, push or a call — it goes out on a schedule.','<path d="M4 12l16-8-6 16-3-7z"/>','sms'],
   ['pull','The customer sees it when they come','In the app, on self-care or in the chatbot — nothing is sent.','<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 17h2"/>','inapp']];
-function campCreate(){ campMode='create'; campSel=null; campStep=0; campDraft=campBlank(); campSavedAt=''; ccObj=''; ccReach='push'; renderCampaigns(); }
+function campCreate(){ campVisited=new Set(); campMode='create'; campSel=null; campStep=0; campDraft=campBlank(); campSavedAt=''; ccObj=''; ccReach='push'; renderCampaigns(); }
 function renderCampCreate(card){ const c=campDraft; const ic=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
   const recent=[...CAMPAIGNS].sort((a,b)=>(b.updated||'').localeCompare(a.updated||'')).slice(0,3);
   card.innerHTML=`<div class="cc-top"><button class="btn sm outline" id="camp-back">‹ Campaign list</button></div>
@@ -3401,7 +3440,7 @@ function renderCampCreate(card){ const c=campDraft; const ic=d=>`<svg viewBox="0
     if(ccObj) campSetGoal(c,ccObj); c.channels=[CC_REACH.find(x=>x[0]===ccReach)[4]]; syncPlans(c);
     campMode='detail'; campStep=0; renderCampaigns(); };
 }
-function campOpen(id){ campMode='detail'; campSel=id; campStep=0; campDraft=id?JSON.parse(JSON.stringify(CAMPAIGNS.find(c=>c.id===id))):campBlank(); campSavedAt=''; renderCampaigns(); }
+function campOpen(id){ campVisited=new Set(); campMode='detail'; campSel=id; campStep=0; campDraft=id?JSON.parse(JSON.stringify(CAMPAIGNS.find(c=>c.id===id))):campBlank(); campSavedAt=''; renderCampaigns(); }
 let campSavedAt='', tgQ='', tgGrp='';
 /* readiness layer — "where am I, what is missing". Never blocks: parts can be done in any order, by different people, on different days. */
 const CAMP_STEPS=['Info','Targeting','Offer','Channel & content','Communication rules','Schedule','Approval','Summary'];
@@ -3413,7 +3452,7 @@ function campReady(c){
   const items=[
     {k:'info',step:0,l:'Name, period and channels',ok:!!(c.name&&c.name.trim()&&c.start&&c.end&&chs.length)},
     {k:'target',step:1,l:'Target audience (segments)',ok:(c.lists||[]).length>0},
-    {k:'offer',step:2,l:c.type==='Offer'?'Offer'+(c.promo&&c.promo.code?' · promo code':''):'Offer (Info campaign — skipped)',ok:c.type!=='Offer'||c.strategy==='NBO'||(c.offers||[]).length>0,na:c.type!=='Offer'},
+    {k:'offer',step:2,l:c.type==='Offer'?'Offer'+(c.promo&&c.promo.code?' · promo code':''):'Offer (Information campaign — skipped)',ok:c.type!=='Offer'||c.strategy==='NBO'||(c.offers||[]).length>0,na:c.type!=='Offer'},
     {k:'content',step:3,l:chs.length?`Content for ${chs.map(ch=>PLAN_CHANNELS.find(x=>x[0]===ch)[1]).join(', ')}`:'Content per channel',ok:chs.length>0&&(c.plans||[]).length===chs.length&&c.plans.every(planReady)},
     {k:'rules',step:4,l:'Communication rules reviewed',ok:!!c.rulesSet},
     {k:'sched',step:5,l:c.schedSet?'Schedule · '+planSchedText(c):'Schedule',ok:!!c.schedSet},
@@ -3421,6 +3460,37 @@ function campReady(c){
   ];
   const rel=items.filter(i=>!i.na); return {items,done:rel.filter(i=>i.ok).length,total:rel.length,audience:a};
 }
+/* Stepper states follow campReady(), not clicks (decision C16): done = its readiness item is met
+   (Summary: every item met); todo = visited but not met; the current step keeps its orange highlight.
+   An Information campaign's Offer step stays in the DOM but hidden, so the path reads seven steps. */
+let campVisited=new Set();
+function campStepDone(c,i,r){ r=r||campReady(c); if(i===7) return r.done===r.total; const it=r.items.find(x=>x.step===i); return !!(it&&!it.na&&it.ok); }
+function campStepperHtml(c){ const steps=campStepsFor(c), r=campReady(c), visible=steps.filter(x=>!x.skip), pos=visible.findIndex(x=>x.i===campStep);
+  let out='', prev=null;
+  steps.forEach(st=>{
+    if(st.skip){ out+=`<button data-step="${st.i}" disabled hidden title="Information campaign — no offer"><i>–</i>${st.s}</button>`; return; }
+    if(prev!==null) out+=`<span class="sconn${campStepDone(c,prev,r)?' ok':''}" aria-hidden="true"></span>`;
+    const done=campStepDone(c,st.i,r), cur=st.i===campStep, todo=!done&&!cur&&campVisited.has(st.i);
+    const n=visible.findIndex(x=>x.i===st.i)+1;
+    out+=`<button class="${[cur?'on':'',done?'done':'',todo?'todo':''].filter(Boolean).join(' ')}" data-step="${st.i}" title="${done?'Done':todo?'Visited — still needs something':cur?'You are here':'Not started'}"><i>${done?'✓':n}</i>${st.s}</button>`;
+    prev=st.i; });
+  return out+`<span class="spos">Step ${pos+1} of ${visible.length} ·<br>readiness ${r.done}/${r.total}</span>`; }
+/* Refresh the stepper and the readiness panel in place after an edit, so a step turns green
+   without leaving it; nothing else is re-rendered, so typing never loses focus. */
+function campStepSync(card){ const c=campDraft; if(!c||campMode!=='detail') return; const st=card.querySelector('.stepper'); if(!st) return;
+  st.innerHTML=campStepperHtml(c); campStepperBind(card);
+  const rp=card.querySelector('#camp-ready'); if(rp){ const t=document.createElement('div'); t.innerHTML=readyHtml(c); const nw=t.querySelector('#camp-ready'); if(nw){ rp.replaceWith(nw); campReadyBind(card); } } }
+function campStepperBind(card){ card.querySelectorAll('.stepper button:not([disabled])').forEach(b=>b.onclick=()=>{ campStep=+b.dataset.step; renderCampDetail(card); }); }
+function campReadyBind(card){ const c=campDraft; card.querySelectorAll('#camp-ready li').forEach(li=>li.onclick=()=>{ const st=+li.dataset.step; campStep=(st===2&&c.type!=='Offer')?3:st; renderCampDetail(card); }); }
+/* The goal is chosen once, on the creation screen; the editor shows it as a header chip that
+   opens this popover (decision C15). Skip-created campaigns read "Set goal". */
+function campGoalPop(card,chip){ const c=campDraft; let pop=document.getElementById('camp-goalpop'); if(pop){ pop.remove(); chip.setAttribute('aria-expanded','false'); return; }
+  const g=campGoal(c); pop=document.createElement('div'); pop.className='goalpop'; pop.id='camp-goalpop'; pop.setAttribute('role','menu');
+  pop.innerHTML=`<div class="gh">What is this campaign for? It sets the campaign type and category.</div>`+CC_OBJ.map(([k,d])=>`<button type="button" role="menuitemradio" aria-checked="${g===k}" class="${g===k?'on':''}" data-goal="${k}">${k}<small>${d}${k==='Informational'?' — Information campaign, no Offer step':''}</small></button>`).join('');
+  document.body.appendChild(pop); const r=chip.getBoundingClientRect(); pop.style.top=(r.bottom+6)+'px'; pop.style.left=Math.max(8,Math.min(r.left,innerWidth-pop.offsetWidth-8))+'px'; chip.setAttribute('aria-expanded','true');
+  pop.querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>{ campSetGoal(c,b.dataset.goal); pop.remove(); if(c.type!=='Offer'&&campStep===2) campStep=3; renderCampDetail(card); toast('Goal set',`${b.dataset.goal} — ${c.type} campaign${c.type==='Offer'?' · '+c.category:''}.`); });
+  const close=e=>{ if(e.type==='keydown'&&e.key!=='Escape') return; if(e.type==='mousedown'&&(pop.contains(e.target)||chip.contains(e.target))) return; pop.remove(); chip.setAttribute('aria-expanded','false'); document.removeEventListener('mousedown',close,true); document.removeEventListener('keydown',close,true); };
+  setTimeout(()=>{ document.addEventListener('mousedown',close,true); document.addEventListener('keydown',close,true); },0); }
 function readyHtml(c,compact){ const r=campReady(c); const pct=Math.round(100*r.done/r.total);
   if(compact) return `<span class="mini" title="${r.items.filter(i=>!i.na&&!i.ok).map(i=>'missing: '+i.l).join(' · ')||'ready'}"><i><b style="width:${pct}%"></b></i>${r.done}/${r.total}</span>`;
   return `<div class="ready" id="camp-ready"><div class="t">Readiness <span class="pill ${r.done===r.total?'ok':'warn'}" style="margin-left:auto">${r.done} of ${r.total}</span></div><div class="bar"><i style="width:${pct}%"></i></div><ul>${r.items.map(i=>`<li class="${i.ok?'ok':''} ${i.na?'na':''}" data-step="${i.step}"><b>${i.ok?'✓':''}</b>${i.l}</li>`).join('')}</ul><small style="color:var(--ink-3);font-size:11px">Click an item to jump there. Parts can be done in any order — nothing here blocks saving.</small></div>`; }
@@ -3446,7 +3516,7 @@ function planPreviewHtml(p,cust,variant){ let sl=variant==='B'?p.slotsB:p.slots;
   const d=contentToItem(p.ch,p.content,sl); if(p.dynOn&&cust&&cust.row.LANGUAGE==='uk'&&p.bodyAlt){ d.variants={uk:p.bodyAlt}; d.body=p.bodyAlt; }
   let html=ctPreviewHtml(d,cust); if(sv&&CH_KIND[p.ch]==='pull'){ const k=html.lastIndexOf('</div>'); html=html.slice(0,k)+srvFormHtml(sv,'en','inline')+html.slice(k); }
   return `<div class="prev-wrap" style="margin:0;padding:10px;overflow:hidden">${html}</div>`; }
-const PLAN_RULES=[['cg','Control group','from the campaign: size and method'],['cooldown','Channel cooldown','days between two sends on the same channel, any campaign'],['type','Campaign Type (overlap)','max. Info / Offer sends per day'],['presend','Campaign pre-sent','days between two sends of this same campaign to one customer (default from Parameters)']];
+const PLAN_RULES=[['cg','Control group','from the campaign: size and method'],['cooldown','Channel cooldown','days between two sends on the same channel, any campaign'],['type','Campaign Type (overlap)','max. Information / Offer sends per day'],['presend','Campaign pre-sent','days between two sends of this same campaign to one customer (default from Parameters)']];
 const PLAN_STATUS_CLS={Draft:'warn','Waiting for approval':'warn',Scheduled:'acc',Running:'ok',Paused:'',Completed:'',Stopped:'bad'};
 const defaultRules=c=>({cg:{use:c.cg!=='No Control Group',log:true},cooldown:{use:true,log:true},type:{use:true,log:true},presend:{use:true,log:true}});
 const defaultSched=()=>({trigger:'Schedule',type:'Daily',time:'10:00',date:TODAY,count:'',days:['Mon','Wed','Fri'],sto:false});
@@ -3524,7 +3594,7 @@ function bindDelivery(card,c,step){
     card.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{ const d=b.dataset.day; const i=c.sched.days.indexOf(d); if(i>=0) c.sched.days.splice(i,1); else c.sched.days.push(d); rerender(); }); }
 }
 /* seed: derive channels, plans, rules and schedule for the demo campaigns */
-CAMPAIGNS.forEach(c=>{ if(c.type==='Event'||c.type==='Survey') c.type='Info'; c.eventDriven=false; if(!c.plans){ c.plans=[]; (c.channels||[]).forEach(ch=>{ const cid=(c.contents||[]).find(id=>{ const it=CONTENT_ITEMS.find(x=>x.id===id); return it&&(it.ch===ch||(ch==='sms'&&it.ch==='isms')); })||''; const it=CONTENT_ITEMS.find(x=>x.id===cid); const sl=slotsBlank(ch); if(it){ if(ch==='email'){ Object.assign(sl,{subject:(it.subject||{}).A||'',preheader:it.preheader||'',headline:it.hero||'',lead:it.lead||'',body:it.body||'',cta:it.cta||''}); } else { sl.body=Object.values(it.variants||{})[0]||''; if('title' in sl) sl.title=it.title||''; if('cta' in sl) sl.cta=it.cta||''; } } const slB=Object.assign({},sl,it&&it.subject&&it.subject.B?{subject:it.subject.B}:{}); c.plans.push({id:`DP-${c.id}-${ch.toUpperCase()}`,ch,content:tplDefault(ch),slots:sl,slotsB:slB,bodyAlt:it&&it.variants&&it.variants.uk||'',text:sl.body,ab:!!(it&&it.subject&&it.subject.B),dynOn:!!(it&&it.dyn),contentB:tplDefault(ch),abSplit:20,dyn:it?it.dyn||'LANGUAGE':'LANGUAGE',tests:[DEMO_USERS.me.split(' ')[0]+' (test MSISDN)'],status:c.status==='Active'?'Running':c.status==='Expired'?'Completed':'Draft'}); }); }
+CAMPAIGNS.forEach(c=>{ if(c.type==='Event'||c.type==='Survey') c.type='Information'; c.eventDriven=false; if(!c.plans){ c.plans=[]; (c.channels||[]).forEach(ch=>{ const cid=(c.contents||[]).find(id=>{ const it=CONTENT_ITEMS.find(x=>x.id===id); return it&&(it.ch===ch||(ch==='sms'&&it.ch==='isms')); })||''; const it=CONTENT_ITEMS.find(x=>x.id===cid); const sl=slotsBlank(ch); if(it){ if(ch==='email'){ Object.assign(sl,{subject:(it.subject||{}).A||'',preheader:it.preheader||'',headline:it.hero||'',lead:it.lead||'',body:it.body||'',cta:it.cta||''}); } else { sl.body=Object.values(it.variants||{})[0]||''; if('title' in sl) sl.title=it.title||''; if('cta' in sl) sl.cta=it.cta||''; } } const slB=Object.assign({},sl,it&&it.subject&&it.subject.B?{subject:it.subject.B}:{}); c.plans.push({id:`DP-${c.id}-${ch.toUpperCase()}`,ch,content:tplDefault(ch),slots:sl,slotsB:slB,bodyAlt:it&&it.variants&&it.variants.uk||'',text:sl.body,ab:!!(it&&it.subject&&it.subject.B),dynOn:!!(it&&it.dyn),contentB:tplDefault(ch),abSplit:20,dyn:it?it.dyn||'LANGUAGE':'LANGUAGE',tests:[DEMO_USERS.me.split(' ')[0]+' (test MSISDN)'],status:c.status==='Active'?'Running':c.status==='Expired'?'Completed':'Draft'}); }); }
   c.rules=c.rules||defaultRules(c); c.sched=c.sched||Object.assign(defaultSched(),{type:c.eventDriven?'Once':'Daily',date:c.start.slice(0,10),sto:(c.channels||[]).includes('push')}); c.rulesSet=c.status!=='Draft'; c.schedSet=c.status!=='Draft'; c.promo=c.promo||{code:'',kind:'Single code',valid:''}; c.approver=c.approver||''; c.approvalNote=c.approvalNote||''; c.approvals=c.approvals||(c.status==='Active'||c.status==='Expired'?[{at:c.created+' 09:40',who:c.createdBy,act:'Submitted',note:'Ready for review.'},{at:c.created+' 11:05',who:DEMO_USERS.approver,act:'Approved',note:'OK — audience and offer checked.'}]:[]); });
 function renderCampList(card){
   const f=campFilter; const q=f.q.toLowerCase();
@@ -3567,7 +3637,7 @@ function renderCampList(card){
   card.querySelectorAll('.pager button').forEach(b=>b.onclick=()=>{ campPage=+b.dataset.p; renderCampList(card); });
 }
 function renderCampDetail(card){
-  const c=campDraft; const steps=campStepsFor(c); if(c.type!=='Offer'&&campStep===2) campStep=3;
+  const c=campDraft; const gp=document.getElementById('camp-goalpop'); if(gp) gp.remove(); const steps=campStepsFor(c); if(c.type!=='Offer'&&campStep===2) campStep=3; campVisited.add(campStep);
   if(campStep===4) c.rulesSet=true; if(campStep===5) c.schedSet=true; c.approvals=c.approvals||[];
   const a=campAudience(c);
   const sel=(k,label,opts,req)=>`<div class="fld"><label class="${req?'req':''}">${label}${TIPS[k]?tip(TIPS[k]):''}</label><select data-k="${k}">${opts.map(o=>`<option ${String(c[k])===String(o)?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`;
@@ -3577,7 +3647,6 @@ function renderCampDetail(card){
     body=`<div class="form2">
       <div class="fld"><label class="req">Name ${tip(TIPS.name)}</label><input data-k="name" maxlength="100" value="${esc(c.name)}" placeholder="Campaign name"><div class="cnt">${c.name.length}/100</div></div>
       ${inp('id','Campaign ID',false,'text',true)}
-      <div class="fld span2"><label class="req">Goal ${tip(TIPS.goal)}</label><div class="goalsel" id="camp-goal" role="group" aria-label="Goal">${CC_OBJ.map(([k])=>`<button type="button" class="${campGoal(c)===k?'on':''}" data-goal="${k}" aria-pressed="${campGoal(c)===k}">${k}</button>`).join('')}</div></div>
       ${CAMP_CFG.multiBrand?sel('label','Campaign Brand',CAMP_LABELS,true):''}
       <div class="fld span2"><label class="req">Channels ${tip(TIPS.channels)}</label>
         <div class="chgrp ${kind?kind+'-on':''}"><div class="push"><div class="gh">Push — we send to the customer ${tip('Outbound sends: SMS, MMS, e-mail, mobile / web push, telemarketing. One schedule for all of them.')}</div><div class="chsel">${PLAN_CHANNELS.filter(([k])=>CH_KIND[k]==='push').map(chBtn).join('')}</div></div><div class="pull"><div class="gh">Pull — shown when the customer comes ${tip('In-app card, web self-care banner, chatbot answer. Nothing is sent; the campaign is offered when the customer opens the channel. Priority decides which campaign wins the slot.')}</div><div class="chsel">${PLAN_CHANNELS.filter(([k])=>CH_KIND[k]==='pull').map(chBtn).join('')}</div></div></div>
@@ -3640,20 +3709,21 @@ function renderCampDetail(card){
     </div>`; }
   else { const u=campUsedBy(c.id); body=`<div class="form2" style="padding-top:14px">
       <dl class="kv"><dt>Campaign</dt><dd><b>${c.id}</b> · ${esc(c.name)||'<i>unnamed</i>'}</dd><dt>Type</dt><dd><span class="typechip ${c.type}">${c.type}</span> ${CAMP_CFG.multiBrand?`<span class="lbl-chip">${c.label}</span>`:''}</dd><dt>Goal</dt><dd>${esc(campGoal(c)||c.category)}</dd><dt>Period</dt><dd>${c.start.replace('T',' ')} → ${c.end.replace('T',' ')}</dd><dt>Control group</dt><dd>${c.cg}</dd><dt>Pre-sent</dt><dd>${RULE_DEFAULTS.presend} <span style="color:var(--ink-3)">(Parameters)</span></dd><dt>Priority</dt><dd>${c.priority} / 20</dd></dl>
-      <dl class="kv"><dt>Target</dt><dd><b>${a.count}</b> customers · ${c.lists.map(l=>`${l.id} (${l.mode})`).join(', ')||'no segment'}</dd><dt>Offer</dt><dd>${c.type!=='Offer'?'—':c.strategy==='NBO'?'Next Best Offer (Digital Twin)':(c.offers.join(', ')||'no offer')}${c.promo.code?' · promo '+esc(c.promo.code):''}</dd><dt>Content</dt><dd>${c.plans.map(p=>`<div>${chName(p.ch)} · ${planFilled(p)?esc((p.slots.subject||p.slots.title||p.slots.body||'').slice(0,60))+(tplHidden(p.ch)?'':' <span style="color:var(--ink-3)">· '+esc((tplOf(p.content)||{}).name||'')+'</span>'):'<i>no content</i>'}${planModeText(p)!=='Single'?' · '+planModeText(p):''}</div>`).join('')||'—'}</dd><dt>Rules</dt><dd>${rulesText(c)}</dd><dt>Schedule</dt><dd>${esc(planSchedText(c))}${c.sched.sto?' · STO':''} · next ${planNext(c)}</dd><dt>Journeys</dt><dd>${u.join(', ')||'not referenced'}</dd></dl>
+      <dl class="kv"><dt>Target</dt><dd><b>${a.count}</b> customers · ${c.lists.map(l=>`${l.id} (${l.mode})`).join(', ')||'no segment'}</dd><dt>Offer</dt><dd>${c.type!=='Offer'?'—':c.strategy==='NBO'?'Next Best Offer (Digital Twin)':(c.offers.join(', ')||'no offer')}${c.promo.code?' · promo '+esc(c.promo.code):''}</dd><dt>Content</dt><dd>${c.plans.map(p=>`<div>${chName(p.ch)} · ${planFilled(p)?esc((p.slots.subject||p.slots.title||p.slots.body||'').slice(0,60))+(tplHidden(p.ch)?'':' <span style="color:var(--ink-3)">· '+esc((tplOf(p.content)||{}).name||'')+'</span>'):'<i>no content</i>'}${planModeText(p)!=='Single'?' · '+planModeText(p):''}</div>`).join('')||'—'}</dd><dt>Rules</dt><dd>${rulesText(c)}</dd><dt>Schedule</dt><dd>${esc(planSchedText(c))}${(c.sched||{}).sto?' · STO':''} · next ${planNext(c)}</dd><dt>Journeys</dt><dd>${u.join(', ')||'not referenced'}</dd></dl>
       <div class="note span2">Read-only overview of the whole campaign. Submitting and approving happen in the <b>Approval</b> step. No messages are sent from this environment.</div></div>`; }
   const rd=campReady(c);
   const finalBtn=ROLE==='approver'?(c.status==='Pending approval'?'Approve & activate':c.status==='Active'?'Save & re-activate':'Activate'):ROLE==='marketer'?(c.status==='Pending approval'?'Waiting for approval':c.status==='Active'?'Submit change for approval':'Submit for approval'):(c.status==='Active'?'Save & re-activate':'Activate'); const finalDis=ROLE==='cmo'||(ROLE==='marketer'&&c.status==='Pending approval');
   const cur=steps.find(x=>x.i===campStep); const visible=steps.filter(x=>!x.skip); const pos=visible.findIndex(x=>x.i===campStep);
-  card.innerHTML=`<div class="card-h"><button class="btn sm outline" id="camp-back">‹ Campaign list</button><h2 style="font-size:16px">${campSel?`Campaign ${c.id}`:'New campaign'}</h2>${statusPill(c.status)}<span class="typechip ${c.type}">${c.type}</span>${campSavedAt?`<span class="savebar">✓ Saved ${campSavedAt}</span>`:''}<div class="grow"></div><span style="color:var(--ink-3);font-size:11.5px">Created by ${esc(c.createdBy)} · ${c.created}</span>${campSel?`<button class="btn sm outline" id="camp-results" title="Operation analysis for this campaign: deliveries, eliminations, promotions, survey responses">Results</button>`:''}</div>
-    <div class="stepper">${steps.map(st=>`<button class="${st.i===campStep?'on':st.i<campStep&&!st.skip?'done':''}" data-step="${st.i}" ${st.skip?'disabled title="Info campaign — no offer" style="opacity:.45"':''}><i>${st.skip?'–':st.i<campStep?'✓':visible.findIndex(x=>x.i===st.i)+1}</i>${st.s}</button>`).join('')}<span style="flex:1"></span><span style="font-size:11.5px;color:var(--ink-3);align-self:center">Step ${pos+1} of ${visible.length} · readiness ${rd.done}/${rd.total}</span></div>
+  card.innerHTML=`<div class="card-h"><button class="btn sm outline" id="camp-back">‹ Campaign list</button><h2 style="font-size:16px">${campSel?`Campaign ${c.id}`:'New campaign'}</h2>${statusPill(c.status)}<span class="typechip ${c.type}">${c.type}</span><button type="button" class="goalchip${campGoal(c)?'':' unset'}" id="camp-goalchip" aria-haspopup="true" aria-expanded="false" title="${campGoal(c)?'The goal chosen when the campaign was created — click to change it':'No goal yet — click to choose what the campaign is for'}">${campGoal(c)?'Goal: '+esc(campGoal(c)):'Set goal'} ▾</button>${campSavedAt?`<span class="savebar">✓ Saved ${campSavedAt}</span>`:''}<div class="grow"></div><span style="color:var(--ink-3);font-size:11.5px">Created by ${esc(c.createdBy)} · ${c.created}</span>${campSel?`<button class="btn sm outline" id="camp-results" title="Operation analysis for this campaign: deliveries, eliminations, promotions, survey responses">Results</button>`:''}</div>
+    <div class="stepper">${campStepperHtml(c)}</div>
     <div style="flex:1;overflow:auto;display:grid;grid-template-columns:1fr 250px;gap:0 12px;padding-right:20px"><div style="min-width:0"><h1 class="step-h">${CAMP_STEP_H[campStep]}</h1>${body}</div><div style="padding-top:14px">${readyHtml(c)}</div></div>
     <div class="toolrow" style="border-top:1px solid var(--line-2);justify-content:flex-end;padding:12px 20px"><button class="btn dark" id="camp-prev" ${pos===0?'disabled':''}>Back</button><button class="btn grey" id="camp-save">Save</button><button class="btn outline" id="camp-saveclose">Save &amp; close</button>${campStep===6?`<button class="btn primary" id="camp-activate" ${finalDis?'disabled':''}>${finalBtn}</button>`:''}${pos<visible.length-1?`<button class="btn ${campStep===6?'outline':'primary'}" id="camp-next">${campStep===6?'Summary ›':'Next'}</button>`:''}</div>`;
   const g=id=>card.querySelector('#'+id);
   g('camp-back').onclick=()=>{ campMode='list'; renderCampaigns(); };
   if(g('camp-results')) g('camp-results').onclick=()=>opsOpenFor(c.id);
-  card.querySelectorAll('.stepper button:not([disabled])').forEach(b=>b.onclick=()=>{ campStep=+b.dataset.step; renderCampDetail(card); });
-  card.querySelectorAll('#camp-ready li').forEach(li=>li.onclick=()=>{ const st=+li.dataset.step; campStep=(st===2&&c.type!=='Offer')?3:st; renderCampDetail(card); });
+  campStepperBind(card); campReadyBind(card);
+  g('camp-goalchip').onclick=e=>campGoalPop(card,e.currentTarget);
+  if(!card._stepSync){ card._stepSync=true; const sync=e=>{ if(e.target.closest('.stepper,#camp-ready,#camp-goalchip')) return; setTimeout(()=>campStepSync(card),0); }; ['input','change','click'].forEach(t=>card.addEventListener(t,sync)); }
   if(g('camp-prev')) g('camp-prev').onclick=()=>{ campStep=visible[pos-1].i; renderCampDetail(card); };
   if(g('camp-next')) g('camp-next').onclick=()=>{ if(campStep===0&&!c.name.trim()){ toast('Name is required','Give the campaign a name before continuing.','bad'); return; } campStep=visible[pos+1].i; renderCampDetail(card); };
   const commit=(status)=>{ c.updated=TODAY; c.updatedBy=DEMO_USERS.me; if(status) c.status=status; syncPlans(c); c.plans.forEach(p=>{ p.slots=p.slots||slotsBlank(p.ch); p.text=p.slots.body||''; }); c.plans.forEach(p=>p.status=c.status==='Active'?(c.sched.trigger==='Run now'?'Running':'Scheduled'):c.status==='Pending approval'?'Waiting for approval':'Draft'); const i=CAMPAIGNS.findIndex(x=>x.id===c.id); if(i>=0) CAMPAIGNS[i]=JSON.parse(JSON.stringify(c)); else CAMPAIGNS.unshift(JSON.parse(JSON.stringify(c))); campSel=c.id; campSavedAt=new Date().toTimeString().slice(0,5); };
@@ -3668,7 +3738,6 @@ function renderCampDetail(card){
   card.querySelectorAll('[data-k]').forEach(el=>{ const h=()=>{ const k=el.dataset.k; if(el.type==='checkbox') c[k]=el.checked; else if(el.type==='range'){ c[k]=+el.value; g('prio-out').textContent=el.value; return; } else c[k]=el.value; if(k==='category'){ c.sub=(CAMP_CATS[c.category]||[''])[0]; renderCampDetail(card); } if((k==='type'||k==='cg')&&campStep===0) renderCampDetail(card); }; el.oninput=h; el.onchange=h; });
   card.querySelectorAll('[data-pr]').forEach(el=>{ el.oninput=el.onchange=()=>{ c.promo[el.dataset.pr]=el.value; }; });
   card.querySelectorAll('.cnt').forEach(cn=>{ const inp=cn.parentElement.querySelector('[maxlength]'); if(inp) inp.addEventListener('input',()=>cn.textContent=`${inp.value.length}/${inp.maxLength}`); });
-  if(campStep===0) card.querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>{ campSetGoal(c,b.dataset.goal); renderCampDetail(card); });
   if(campStep===0) card.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{ const ch=b.dataset.ch; c.channels=c.channels||[]; const i=c.channels.indexOf(ch); if(i>=0) c.channels.splice(i,1); else { const kind=campKind(c); if(kind&&CH_KIND[ch]!==kind){ toast('Push and pull don\'t mix',`${chName(ch)} is a ${CH_KIND[ch]} channel; this campaign already uses ${kind} channels (${c.channels.map(chName).join(', ')}). Remove them first, or make a second campaign / a journey.`,'warn'); return; } c.channels.push(ch); } syncPlans(c); renderCampDetail(card); });
   if(campStep===1){
     g('tg-q').oninput=e=>{ tgQ=e.target.value; const v=tgQ; renderCampDetail(card); const i=g('tg-q'); i.focus(); i.setSelectionRange(v.length,v.length); };
@@ -5363,8 +5432,8 @@ const TOURS={
     title:'Pick a goal, then start building', body:'The goal and <b>push or pull</b> set sensible defaults — a <b>Retention</b> goal files it under Retention, <b>We send it</b> starts it on SMS. Everything stays editable. <b>Start building</b> opens the editor with its steps.',
     advance:{until:()=>campMode==='detail'},
     sample:()=>{ ccObj=ccObj||'Retention'; const b=document.getElementById('cc-start'); if(b) b.click(); }},
-   {id:'type', view:'campaigns', before:()=>tourCampStep(0), target:'#camp-goal', placement:'bottom',
-    title:'The goal you picked', body:'The goal from the first screen is here, and it decides the rest: <b>Informational</b> only tells people something, so it skips the Offer step; every other goal is an <b>Offer</b> campaign and is filed under its category. Ours is Retention.',
+   {id:'type', view:'campaigns', before:()=>tourCampStep(0), target:'#camp-goalchip', placement:'bottom',
+    title:'The goal you picked', body:'The goal from the first screen sits in the header, and it decides the rest: <b>Informational</b> is an <b>Information</b> campaign that only tells people something, so it skips the Offer step; every other goal is an <b>Offer</b> campaign filed under its category. Ours is Retention — click the chip to change it.',
     advance:'next'},
    {id:'channels', view:'campaigns', before:()=>tourCampStep(0), target:'#camp-card .chgrp', placement:'top',
     title:'Pick the channels', body:'<b>Push</b> means we send it: SMS, e-mail, push, telemarketing. <b>Pull</b> means it waits to be shown when the customer comes to the app or the portal. A campaign uses one kind or the other, never both. Pick <b>SMS</b>.',
