@@ -2,6 +2,9 @@
 
 Version numbers follow the published artifact versions.
 
+## v58 — 23 Oct 2026
+**Prototype wording removed** (decision X8). The *Prototype* pill in the top bar and on the user manual, the *⚗ Simulation · demo only* badge and its dashed strip on the Journey Builder and Journey Monitor, and every on-screen "prototype" sentence (hints, toasts, tour notes, Release & licences, the embedded manual) are gone. The event and clock controls (Send event, Advance 1 day / 5 days, Reset, Day n) stay as a plain toolbar row. Ids, classes and `data-tour` hooks are unchanged; `tests/specs/journey.spec.js` and `manual.spec.js` now assert the absence of the badge and the word.
+
 ## v57 — 24 Sept 2026
 **Guided tours for Journey and Program** (decision X7).
 - **Build your first journey** (marketer, admin; 15 steps): *Create your journey* with `balance_low` → the canvas → a Delivery with the journey's own SMS text → a Wait for event (`offer_accepted`, 1 day) → an *accepted* branch to the goal and a *timeout* branch to a push reminder → Validate → Activate → a test event in the simulation strip → Journey Monitor.

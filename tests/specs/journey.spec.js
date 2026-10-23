@@ -90,21 +90,21 @@ test.describe('journey builder and monitor', () => {
    * v41: the demo clock and event controls sit in a marked strip so nobody reads
    * them as product features. Both the builder and the monitor carry one.
    */
-  test.describe('simulation strip (v41)', () => {
-    test('the builder strip is labelled demo only', async ({ app }) => {
+  test.describe('event and clock strip', () => {
+    test('the builder strip holds the event controls without a demo badge', async ({ app }) => {
       await openJourney(app);
       const bar = app.locator('#view-journeys .simbar');
       await expect(bar).toBeVisible();
-      await expect(bar.locator('.simtag')).toContainText('Simulation · demo only');
-      await expect(bar).toHaveAttribute('title', 'Demo only — not part of the product');
-      await expect(bar.locator('.hint')).toContainText('no real clock or sends');
+      expect(await bar.locator('.simtag').count()).toBe(0);
+      expect(await bar.locator('.hint').count()).toBe(0);
+      await expect(bar.locator('#btn-send-event')).toBeVisible();
     });
 
-    test('the monitor strip is labelled demo only and holds the clock controls', async ({ app }) => {
+    test('the monitor strip holds the clock controls without a demo badge', async ({ app }) => {
       await app.locator('.nav button[data-view="monitor"]').click();
       const bar = app.locator('#view-monitor .simbar');
       await expect(bar).toBeVisible();
-      await expect(bar.locator('.simtag')).toContainText('Simulation · demo only');
+      expect(await bar.locator('.simtag').count()).toBe(0);
       await expect(bar.locator('#btn-tick')).toHaveAttribute('title', /simulated clock one day forward/);
       await expect(bar.locator('#btn-tick5')).toBeVisible();
       await expect(bar.locator('#btn-reset')).toBeVisible();

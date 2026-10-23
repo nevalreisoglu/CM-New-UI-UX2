@@ -71,11 +71,11 @@ test.describe('user manual', () => {
       .toBeLessThan(40);
   });
 
-  test('the simulation strip is explained as demo-only', async ({ app }) => {
+  test('the event and clock strip is explained without prototype wording', async ({ app }) => {
     await app.locator('#btn-manual').click();
     const text = await app.locator('#man-doc').innerText();
-    expect(text).toContain('Simulation · demo only');
-    expect(text).toContain('not part of the product');
+    expect(text).toContain('The event and clock strip');
+    expect(text.toLowerCase()).not.toContain('prototype');
   });
 
   test('the embedded copy matches docs/user-manual.md', async ({ app }) => {
