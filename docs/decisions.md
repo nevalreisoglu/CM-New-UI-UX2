@@ -73,7 +73,7 @@ Status: **Settled** = do not reopen without an explicit ask · **Open** = still 
 
 | # | Decision | Why | Status |
 |---|---|---|---|
-| X1 | Journey simulator controls are labelled **"⚗ Simulation · demo only"**. | They must not be mistaken for a product feature in a customer demo. | Settled |
+| X1 | Journey simulator controls are labelled **"⚗ Simulation · demo only"**. | They must not be mistaken for a product feature in a customer demo. | Superseded by X8 |
 | X2 | Guided tours + a Getting started surface, Insider-style, starting from the first campaign. | Designed, to be implemented. | Open |
 | X3 | The ECM **Datamart** module is designed and scoped. | To be implemented. | Open |
 | X4 | **DVH is out of scope** for now. | The product has not been seen by the team yet. | Open |
@@ -197,3 +197,11 @@ Source: the task brief of 24 Sept 2026, "Guided tours for Journey and Program" �
 |---|---|---|---|
 | X7 | **Every top-level object — campaign, journey, program — has its own interactive first-run tour, built on the same engine.** *Build your first journey* and *Group work in a program* (marketer, admin) and the read-only *Follow a program* (CMO, approver) are `TOURS` entries: each waiting step advances when the user does it and has a sample, so the tour runs end to end with *Do it for me* and *Next*. The engine gained one optional hook, `resume(step)`, so a tour whose draft is lost on reload restarts at its *New …* step, as the campaign tour already did; its behaviour is otherwise unchanged. The journey tour activates before sending a test event, because a Draft ignores events, and uses the journey's existing activation path — there is no approval step for journeys. The program sample period is 1 Sept – 31 Dec rather than 1 Oct, so the timeline shows today and the members' bars in the prototype's September. A step whose control opens something to use (the members picker, branches drawn to other steps) spotlights the whole area, not the button. Getting started ticks the items from app state: a new journey that passes validation with a delivery; a new program with a member; a program Timeline opened. Supersedes X2's "to be implemented". | The campaign tour proved the pattern; journeys and programs are equal top-level objects and were the two rows still marked *coming soon*. One engine keeps the tours consistent and the tests reusable. | Settled |
 
+
+## Prototype wording removed (23 Oct 2026, v58)
+
+Source: owner request on 23 Oct 2026, reviewing the Journey Builder — "remove Prototype, Simulation · demo only and everything that says prototype".
+
+| # | Decision | Why | Status |
+|---|---|---|---|
+| X8 | **No screen says "prototype" or "demo only".** The top-bar pill, the manual's pill, the simulation badge, the dashed strip styling, the hint sentences and the tour / toast notes that referred to "the prototype" are removed or reworded; the user manual is reworded the same way. The event and clock controls stay as an ordinary toolbar row (`.simbar`, same ids and `data-tour` hooks). Supersedes X1. | The page is now shown as the product itself; the labels undercut it. The CSS and JS names are kept so the Playwright scripts still select on them. | Settled |

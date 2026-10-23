@@ -1,6 +1,6 @@
 # ECM Journey Studio — user manual
 
-How to drive the prototype, screen by screen. It is a click-through model of the
+How to use the product, screen by screen. It is a click-through model of the
 redesigned Etiya Campaign Management front end: **nothing is sent and nothing is
 saved between reloads.**
 
@@ -38,14 +38,14 @@ first page it can.
 first-visit tips switch. See **Getting started and guided tours** below.
 
 **User manual.** The button at the top right opens this manual. It is embedded
-in the prototype, so it works offline and travels with the file — close it with
+in the page, so it works offline and travels with the file — close it with
 **Close**, **Esc**, or a click outside.
 
 ---
 
 ## Getting started and guided tours
 
-The first time you open the prototype in a role, a card offers a short guided
+The first time you open the product in a role, a card offers a short guided
 tour. Take it or dismiss it — everything it covers is also on the **Getting
 started** page, at your own pace.
 
@@ -107,7 +107,7 @@ leave the tour (it asks first).
 | Review and approve a campaign | Approver | From "Needs attention" to the approval step and the decision. |
 | Read the dashboard | Everyone | Period, headline KPIs, Live now, Needs attention, funnel and eliminations, control-group uplift. |
 | Admin setup | Admin | The five Parameters screens. |
-| Build your first journey | Marketer, Admin | Fifteen steps: a balance-low journey from *Create your journey* to the canvas — an SMS delivery, a Wait for event with an *accepted* branch to the goal and a *timeout* branch to a push reminder — then Validate, Activate, a test event in the simulation strip and Journey Monitor. |
+| Build your first journey | Marketer, Admin | Fifteen steps: a balance-low journey from *Create your journey* to the canvas — an SMS delivery, a Wait for event with an *accepted* branch to the goal and a *timeout* branch to a push reminder — then Validate, Activate, a test event from the event strip and Journey Monitor. |
 | Group work in a program | Marketer, Admin | Nine steps: a *Q4 Retention push* program with its owner, period, a goal (5,000 conversions) and a contact cap; save it, add members, read the timeline and the goal progress. |
 | Follow a program | CMO / Executive, Approver | Four read-only steps: the dashboard, the program list, a program's goal progress and its timeline. Nothing to edit. |
 
@@ -126,7 +126,7 @@ picks up from *New journey* or *New program*.
 A tour is written for one role. If you change the role picker while a tour is
 running, it stops and says so; restart it from **? › Guided tours**.
 
-Because the prototype keeps nothing across a reload, a tour resumed after
+Because nothing is kept across a reload, a tour resumed after
 refreshing the page starts again from **New campaign** — the draft it was
 building is gone.
 
@@ -134,7 +134,7 @@ building is gone.
 
 ## Dashboard
 
-The page the prototype opens on. Pick the **period** first (last 7, 30 or 90
+The page the product opens on. Pick the **period** first (last 7, 30 or 90
 days); every number and every "vs prev." delta reads through it.
 
 **The headline strip** shows business outcomes only. As an executive you see
@@ -152,7 +152,7 @@ Hover the **i** on Converted customers and Extra conversions for what is
 counted and the control-group arithmetic. Each tile has a small sparkline of
 the period, day by day, and the change against the previous period; when
 nothing changed it says *no change*, with no arrow. Revenue and ROI say **BSS
-feed, demo**: in the prototype they are calculated from the conversions, not
+feed, demo**: here they are calculated from the conversions, not
 read from billing.
 
 **Demo figures at operator scale** (the pill next to *as of*): the totals on
@@ -362,8 +362,8 @@ One card per channel you picked. For each:
 4. **Copy content from campaign…** pulls wording from another campaign.
 5. **Attach survey** adds a survey to the message (not on telemarketing) — see
    *Surveys* below.
-6. **Send test** sends the content to the test users (a toast in the
-   prototype).
+6. **Send test** sends the content to the test users (shown as a toast
+   here).
 
 Under **Variants**, **A/B test** and **Dynamic by column** are independent
 switches — you can use either, both, or neither. A/B adds a second set of
@@ -510,7 +510,7 @@ campaign list:
    delivery step, owner, datamart and an updated date range.
 3. Read the row: status, **validation** (hover the bar for what is unresolved),
    the trigger, steps and version, customers inside, entered, converted and the
-   conversion rate — counted by the simulation in the prototype.
+   conversion rate — counted as of the current day.
 4. **Open** (or click the row) goes to the canvas. **More** holds **Monitor**,
    **Execution report**, **Copy** and — for approvers and admins — **Pause** or
    **Resume**.
@@ -557,14 +557,13 @@ Per-customer state for the selected journey: status, version and activation of
 every journey; participants and how they were admitted, who is active,
 deliveries and failures, goal reached, and events rejected by re-entry or
 concurrency rules. Below that, a funnel by step and a point-in-time participant
-list (**Show state as of**), with **Download CSV** (a toast in the prototype),
+list (**Show state as of**), with **Download CSV** (a toast here),
 and the execution log with **Clear**.
 
-### The simulation strip — demo only
+### The event and clock strip
 
-Both screens carry a dashed purple strip badged **⚗ Simulation · demo only**.
-It is **not part of the product**. The prototype has no real clock and sends
-nothing; these controls move a simulated clock so you can watch customers move:
+Both screens carry a strip with the test-event and clock controls, so you can
+watch customers move through a journey:
 
 - **Send event** (builder) — inject a business event for a chosen customer.
   Immediate steps run at once.
@@ -572,8 +571,8 @@ nothing; these controls move a simulated clock so you can watch customers move:
   are generated, customers move on.
 - **Reset** — back to day 0, participants reloaded from the entry segment.
 
-The prototype runs three simulated days at load, so the monitor opens on
-**Day 3** with something to show. In the product, the monitor updates on its own.
+Three days are run at load, so the monitor opens on **Day 3** with something
+to show.
 
 ---
 
@@ -646,7 +645,7 @@ real join columns.
 
 ### Check freshness
 
-**Load & refresh** (a concept in the prototype) shows the source, the schedule
+**Load & refresh** (a concept) shows the source, the schedule
 and the load history — rows added, changed and failed, duration, and notes such
 as a newly detected column. **Run now** simulates a load.
 
@@ -736,7 +735,7 @@ editor) opens this page on Deliveries, already filtered to that campaign.
   turns each condition into a chip above the grid; × on a chip removes it.
 - **Saved views** — **Save view**, give it a name, and pick it from **Saved
   views** later. It keeps the scope, the tab, the columns and the filters. The
-  prototype keeps them until you reload; the product saves them for you.
+  views are kept until you reload.
 
 Recipient e-mail and phone are masked (`a•••@example.com`,
 `+90 5•• ••• 12 34`). An admin can turn on **Show recipient details** in
@@ -796,7 +795,7 @@ branching rule skipped.
 - **Esc** closes any dialog: the manual, the execution report, the segment
   assistant and the Operation analysis side panel.
 - *Offers* and *Policies* are hidden from the menu for every role for now. The
-  screens are still in the prototype and can be brought back without rework.
-- The prototype opens on the **Dashboard**.
+  screens are still in the page and can be brought back without rework.
+- The product opens on the **Dashboard**.
 - Guided tours never block the page, and `?notour` in the URL turns off anything
   that would start on its own.

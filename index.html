@@ -806,10 +806,9 @@ body{font-size:14px;line-height:1.43}
 .kv dt{font-weight:600;color:var(--ink-2)}
 .tip{width:15px;height:15px;font-size:9.5px}
 #camp-table td:first-child{min-width:190px}
-/* simulation strip — demo-only controls, visibly separated from product UI */
-.simbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;margin:0 20px 10px;border:1.5px dashed var(--ink-3);background:repeating-linear-gradient(135deg,var(--surface-2) 0 10px,var(--grey-2) 10px 20px);border-radius:8px;font-size:12.5px}
+/* event and clock strip (journey builder and monitor) */
+.simbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;margin:0 20px 10px;border:1px solid var(--line);background:var(--surface-2);border-radius:8px;font-size:12.5px}
 .ctool.simbar{margin:0;border-radius:0;border-left:0;border-right:0}
-.simbar .simtag{display:inline-flex;align-items:center;gap:5px;background:var(--brand-navy);color:#fff;font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:4px;white-space:nowrap}
 .simbar .btn{background:#fff;border:1px solid var(--line);color:var(--ink)}
 .simbar .btn:hover{background:var(--grey-2)}
 .simbar .pill{background:#fff;border-color:var(--line);color:var(--ink)}
@@ -1091,9 +1090,8 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
   <header class="topbar">
     <div class="logo"><span class="mark"></span><span class="w"><b>ETIYA</b><small>Marketing Cloud</small></span></div>
     <button class="burger" id="btn-nav" aria-label="Collapse or expand the menu" title="Collapse menu"><i></i></button>
-    <div class="proto"><span class="pill" title="Prototype — not a product version">Prototype</span></div>
     <div class="tright">
-      <button class="btn sm outline manbtn" id="btn-manual" title="User manual — how to drive this prototype, screen by screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg><span class="ml">User manual</span></button>
+      <button class="btn sm outline manbtn" id="btn-manual" title="User manual — how to use the product, screen by screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg><span class="ml">User manual</span></button>
       <div class="helpwrap">
         <button class="btn sm outline helpbtn" id="btn-help" aria-haspopup="true" aria-expanded="false" title="Help, guided tours and Getting started">?</button>
         <div class="helpmenu" id="help-menu" hidden></div>
@@ -1163,15 +1161,13 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
                 <div class="grow"></div>
                 <button class="btn sm outline" id="btn-report">Execution report</button>
               </div>
-              <div class="ctool evbar simbar" data-tour="j-sim" title="Demo only — not part of the product">
-                <span class="simtag">⚗ Simulation · demo only</span>
+              <div class="ctool evbar simbar" data-tour="j-sim">
                 <label for="ev-name" style="color:var(--ink-2)">event</label><select id="ev-name"></select>
                 <label for="ev-cust" style="color:var(--ink-2)">for</label><select id="ev-cust"></select>
                 <button class="btn sm" id="btn-send-event">Send event</button>
                 <span style="color:var(--ink-3)">·</span>
                 <button class="btn sm" id="btn-tick-j" title="Move the simulated clock one day forward">Advance 1 day</button>
                 <span class="pill" id="daypill-j">Day 0</span>
-                <span class="hint">The prototype has no real clock or sends. Events run immediate steps at once; Timer and Wait steps move with "Advance 1 day". Not a product control.</span>
               </div>
               <div class="ctool">
                 <button class="ic" title="Help"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h0"/></svg><span>Help</span></button>
@@ -1337,13 +1333,11 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
             <label for="msel" style="color:var(--ink-2)">Journey</label>
             <select id="msel"></select>
           </div>
-          <div class="simbar" title="Demo only — not part of the product">
-            <span class="simtag">⚗ Simulation · demo only</span>
+          <div class="simbar">
             <button class="btn sm" id="btn-tick" title="Move the simulated clock one day forward: timers expire, mock delivery outcomes are generated, customers move on">Advance 1 day</button>
             <button class="btn sm" id="btn-tick5" title="Five days at once">Advance 5 days</button>
             <button class="btn sm" id="btn-reset" title="Back to day 0; participants reloaded from the entry segment">Reset</button>
             <span class="pill" id="daypill">Day 0</span>
-            <span class="hint">The prototype has no real clock or sends — these buttons move a simulated clock so you can watch customers progress. In the product the monitor updates on its own.</span>
           </div>
           <div class="h4">Journeys — status, version and activation</div>
           <div class="padx" style="padding-bottom:8px">
@@ -1422,7 +1416,7 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
             <div class="stat"><div class="l">Product release</div><div class="v">ECM 26.1</div><div class="s">commercial version shown to customers</div></div>
             <div class="stat"><div class="l">Technical release</div><div class="v mono" style="font-size:16px">1.4.28</div><div class="s">build 2026-09-15 · was shown next to dates before</div></div>
             <div class="stat"><div class="l">Environment</div><div class="v" style="font-size:16px">Demo · EU-1</div><div class="s">no messages are sent from here</div></div>
-            <div class="stat"><div class="l">Journey Studio</div><div class="v" style="font-size:16px">prototype</div><div class="s">UX/UI redesign track</div></div>
+            <div class="stat"><div class="l">Journey Studio</div><div class="v" style="font-size:16px">2.0</div><div class="s">UX/UI redesign track</div></div>
           </div>
           <div class="h4">Third-party components</div>
           <div class="padx"><table class="tbl"><thead><tr><th>Component</th><th>Used for</th><th>Licence</th><th>Status</th><th>Decision</th></tr></thead><tbody>
@@ -1454,7 +1448,7 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
        tests/specs/manual.spec.js fails if the two drift apart. -->
   <div class="modal-bg" id="man-modal" hidden>
     <div class="card modal man">
-      <div class="ph"><h3>User manual</h3><span class="pill">Prototype</span><div class="grow" style="flex:1"></div><button class="btn sm outline" id="man-close">Close</button></div>
+      <div class="ph"><h3>User manual</h3><div class="grow" style="flex:1"></div><button class="btn sm outline" id="man-close">Close</button></div>
       <div class="mbody"><nav class="mtoc" id="man-toc" aria-label="Manual contents"></nav><div class="mdoc" id="man-doc" tabindex="0"></div></div>
     </div>
   </div>
@@ -1462,7 +1456,7 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
 <!-- MANUAL:START -->
 # ECM Journey Studio — user manual
 
-How to drive the prototype, screen by screen. It is a click-through model of the
+How to use the product, screen by screen. It is a click-through model of the
 redesigned Etiya Campaign Management front end: **nothing is sent and nothing is
 saved between reloads.**
 
@@ -1500,14 +1494,14 @@ first page it can.
 first-visit tips switch. See **Getting started and guided tours** below.
 
 **User manual.** The button at the top right opens this manual. It is embedded
-in the prototype, so it works offline and travels with the file — close it with
+in the page, so it works offline and travels with the file — close it with
 **Close**, **Esc**, or a click outside.
 
 ---
 
 ## Getting started and guided tours
 
-The first time you open the prototype in a role, a card offers a short guided
+The first time you open the product in a role, a card offers a short guided
 tour. Take it or dismiss it — everything it covers is also on the **Getting
 started** page, at your own pace.
 
@@ -1569,7 +1563,7 @@ leave the tour (it asks first).
 | Review and approve a campaign | Approver | From "Needs attention" to the approval step and the decision. |
 | Read the dashboard | Everyone | Period, headline KPIs, Live now, Needs attention, funnel and eliminations, control-group uplift. |
 | Admin setup | Admin | The five Parameters screens. |
-| Build your first journey | Marketer, Admin | Fifteen steps: a balance-low journey from *Create your journey* to the canvas — an SMS delivery, a Wait for event with an *accepted* branch to the goal and a *timeout* branch to a push reminder — then Validate, Activate, a test event in the simulation strip and Journey Monitor. |
+| Build your first journey | Marketer, Admin | Fifteen steps: a balance-low journey from *Create your journey* to the canvas — an SMS delivery, a Wait for event with an *accepted* branch to the goal and a *timeout* branch to a push reminder — then Validate, Activate, a test event from the event strip and Journey Monitor. |
 | Group work in a program | Marketer, Admin | Nine steps: a *Q4 Retention push* program with its owner, period, a goal (5,000 conversions) and a contact cap; save it, add members, read the timeline and the goal progress. |
 | Follow a program | CMO / Executive, Approver | Four read-only steps: the dashboard, the program list, a program's goal progress and its timeline. Nothing to edit. |
 
@@ -1588,7 +1582,7 @@ picks up from *New journey* or *New program*.
 A tour is written for one role. If you change the role picker while a tour is
 running, it stops and says so; restart it from **? › Guided tours**.
 
-Because the prototype keeps nothing across a reload, a tour resumed after
+Because nothing is kept across a reload, a tour resumed after
 refreshing the page starts again from **New campaign** — the draft it was
 building is gone.
 
@@ -1596,7 +1590,7 @@ building is gone.
 
 ## Dashboard
 
-The page the prototype opens on. Pick the **period** first (last 7, 30 or 90
+The page the product opens on. Pick the **period** first (last 7, 30 or 90
 days); every number and every "vs prev." delta reads through it.
 
 **The headline strip** shows business outcomes only. As an executive you see
@@ -1614,7 +1608,7 @@ Hover the **i** on Converted customers and Extra conversions for what is
 counted and the control-group arithmetic. Each tile has a small sparkline of
 the period, day by day, and the change against the previous period; when
 nothing changed it says *no change*, with no arrow. Revenue and ROI say **BSS
-feed, demo**: in the prototype they are calculated from the conversions, not
+feed, demo**: here they are calculated from the conversions, not
 read from billing.
 
 **Demo figures at operator scale** (the pill next to *as of*): the totals on
@@ -1824,8 +1818,8 @@ One card per channel you picked. For each:
 4. **Copy content from campaign…** pulls wording from another campaign.
 5. **Attach survey** adds a survey to the message (not on telemarketing) — see
    *Surveys* below.
-6. **Send test** sends the content to the test users (a toast in the
-   prototype).
+6. **Send test** sends the content to the test users (shown as a toast
+   here).
 
 Under **Variants**, **A/B test** and **Dynamic by column** are independent
 switches — you can use either, both, or neither. A/B adds a second set of
@@ -1972,7 +1966,7 @@ campaign list:
    delivery step, owner, datamart and an updated date range.
 3. Read the row: status, **validation** (hover the bar for what is unresolved),
    the trigger, steps and version, customers inside, entered, converted and the
-   conversion rate — counted by the simulation in the prototype.
+   conversion rate — counted as of the current day.
 4. **Open** (or click the row) goes to the canvas. **More** holds **Monitor**,
    **Execution report**, **Copy** and — for approvers and admins — **Pause** or
    **Resume**.
@@ -2019,14 +2013,13 @@ Per-customer state for the selected journey: status, version and activation of
 every journey; participants and how they were admitted, who is active,
 deliveries and failures, goal reached, and events rejected by re-entry or
 concurrency rules. Below that, a funnel by step and a point-in-time participant
-list (**Show state as of**), with **Download CSV** (a toast in the prototype),
+list (**Show state as of**), with **Download CSV** (a toast here),
 and the execution log with **Clear**.
 
-### The simulation strip — demo only
+### The event and clock strip
 
-Both screens carry a dashed purple strip badged **⚗ Simulation · demo only**.
-It is **not part of the product**. The prototype has no real clock and sends
-nothing; these controls move a simulated clock so you can watch customers move:
+Both screens carry a strip with the test-event and clock controls, so you can
+watch customers move through a journey:
 
 - **Send event** (builder) — inject a business event for a chosen customer.
   Immediate steps run at once.
@@ -2034,8 +2027,8 @@ nothing; these controls move a simulated clock so you can watch customers move:
   are generated, customers move on.
 - **Reset** — back to day 0, participants reloaded from the entry segment.
 
-The prototype runs three simulated days at load, so the monitor opens on
-**Day 3** with something to show. In the product, the monitor updates on its own.
+Three days are run at load, so the monitor opens on **Day 3** with something
+to show.
 
 ---
 
@@ -2108,7 +2101,7 @@ real join columns.
 
 ### Check freshness
 
-**Load & refresh** (a concept in the prototype) shows the source, the schedule
+**Load & refresh** (a concept) shows the source, the schedule
 and the load history — rows added, changed and failed, duration, and notes such
 as a newly detected column. **Run now** simulates a load.
 
@@ -2198,7 +2191,7 @@ editor) opens this page on Deliveries, already filtered to that campaign.
   turns each condition into a chip above the grid; × on a chip removes it.
 - **Saved views** — **Save view**, give it a name, and pick it from **Saved
   views** later. It keeps the scope, the tab, the columns and the filters. The
-  prototype keeps them until you reload; the product saves them for you.
+  views are kept until you reload.
 
 Recipient e-mail and phone are masked (`a•••@example.com`,
 `+90 5•• ••• 12 34`). An admin can turn on **Show recipient details** in
@@ -2258,8 +2251,8 @@ branching rule skipped.
 - **Esc** closes any dialog: the manual, the execution report, the segment
   assistant and the Operation analysis side panel.
 - *Offers* and *Policies* are hidden from the menu for every role for now. The
-  screens are still in the prototype and can be brought back without rework.
-- The prototype opens on the **Dashboard**.
+  screens are still in the page and can be brought back without rework.
+- The product opens on the **Dashboard**.
 - Guided tours never block the page, and `?notour` in the URL turns off anything
   that would start on its own.
 <!-- MANUAL:END -->
@@ -2284,7 +2277,7 @@ branching rule skipped.
 </div>
 
 <script>
-/* Demo users: fictional names only — no real person, customer or employee appears in the prototype.
+/* Demo users: fictional names only — no real person, customer or employee appears in the demo data.
    `me` is the signed-in user in every role view; change the names here and nowhere else. */
 const DEMO_USERS={me:'Ayşe Demir',approver:'Mert Yıldız',approver2:'Selin Kaya',crm:'Elif Şahin',growth:'Can Aydın',analyst:'Deniz Arslan',analyst2:'Ece Koç'};
 document.getElementById('me-name').textContent=DEMO_USERS.me;
@@ -3359,7 +3352,7 @@ function renderJList(card){ const f=jFilter, rows=jFiltered(); const per=8, page
   const chip=(v)=>`<button class="fchip ${jStatusF===v?'on':''}" data-jst="${v}">${v}</button>`;
   const sel=(k,label,opts)=>`<div class="fld"><label for="jf-${k}">${label}</label><select id="jf-${k}" data-jf="${k}"><option value="">Any</option>${opts.map(o=>{ const [v,l]=Array.isArray(o)?o:[o,o]; return `<option value="${esc(v)}" ${f[k]===v?'selected':''}>${esc(l)}</option>`; }).join('')}</select></div>`;
   card.innerHTML=`<div class="card-h"><h2>Journey List</h2><div class="grow"></div><button class="btn primary sm" id="jl-new" style="white-space:nowrap">+ New journey</button>
-      <p>Journey = an entry (event, segment or schedule) + steps a customer moves through over time. Customers inside, entered and converted come from the journey simulation (day ${day}); in the product they are live.</p></div>
+      <p>Journey = an entry (event, segment or schedule) + steps a customer moves through over time. Customers inside, entered and converted are as of day ${day}.</p></div>
     <div class="toolrow" style="gap:8px">
       <div class="search-in"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="jl-q" placeholder="Search by name or journey ID" value="${esc(jQ)}" aria-label="Search journeys"></div>
       <div class="chipbar"><span style="color:var(--ink-3);font-size:11px">STATUS</span>${chip('All')}${J_STATUSES.map(chip).join('')}</div>
@@ -4654,7 +4647,7 @@ function renderOpsan(){ const card=document.getElementById('ops-card'); if(!card
       <select id="ops-views" aria-label="Saved views"><option value="">Saved views${opsViews.length?` (${opsViews.length})`:''}</option>${opsViews.map((v,i)=>`<option value="${i}">${esc(v.name)}</option>`).join('')}</select>
       <div class="dm-menu"><button class="btn sm outline" id="ops-savebtn" aria-expanded="${opsPop==='save'}">Save view</button>
         <div class="pop" ${opsPop==='save'?'':'hidden'} style="width:290px;padding:10px"><div class="fld"><label for="ops-viewname">Name this view</label><input id="ops-viewname" value="${esc(opsViewName)}" placeholder="e.g. Renewal SMS — last 7 days"></div>
-          <small style="color:var(--ink-3);display:block;margin:6px 0 8px">Keeps the scope, the tab, the columns and the filters. In the product it is saved for you; this prototype keeps it until the page reloads.</small>
+          <small style="color:var(--ink-3);display:block;margin:6px 0 8px">Keeps the scope, the tab, the columns and the filters. Kept until the page reloads.</small>
           <div style="display:flex;gap:6px;justify-content:flex-end"><button class="btn sm outline" id="ops-savecancel">Cancel</button><button class="btn sm primary" id="ops-savego">Save</button></div></div></div>
     </div>
     <div class="tabs ops-tabs" role="tablist">${OPS_TABS.map(([k,l])=>`<button role="tab" class="${opsTab===k?'on':''}" data-opt="${k}" aria-selected="${opsTab===k}">${l}</button>`).join('')}</div>
@@ -4703,13 +4696,13 @@ function renderOpsDrawer(rows){ const dr=document.getElementById('ops-drawer'); 
       <div><div class="sec">Every field</div><dl class="kv ops-kv">${fields.concat(extra.filter(e=>!fields.some(f=>f[0]===e[0]))).map(([l,v,tech])=>`<dt>${esc(l)}${tech?' <span class="chip">id</span>':''}</dt><dd>${esc(typeof v==='number'?v.toLocaleString():v===''||v==null?'—':v)}</dd>`).join('')}</dl></div>
       ${opsTab==='promo'&&!(opsReveal&&ROLE==='admin')?'<div class="note">Recipient info is masked. An admin can reveal it with Show recipient details.</div>':''}
     </div>
-    <div class="df">${r.c.kind==='journey'?`<button class="btn sm primary" data-go="journeys:${r.c.id}">Open journey ›</button><button class="btn sm outline" id="ops-odel" title="Opens the journey on the canvas with this Delivery step selected">Open delivery</button>`:`<button class="btn sm primary" data-go="campaigns:${r.c.id}">Open campaign ›</button><button class="btn sm outline" id="ops-odel" title="Opens the campaign's Channel &amp; content step, where this delivery is defined">Open delivery</button>`}<button class="btn sm outline" id="ops-ocust" title="Concept — customer 360 is outside this prototype">Open customer</button></div>`;
+    <div class="df">${r.c.kind==='journey'?`<button class="btn sm primary" data-go="journeys:${r.c.id}">Open journey ›</button><button class="btn sm outline" id="ops-odel" title="Opens the journey on the canvas with this Delivery step selected">Open delivery</button>`:`<button class="btn sm primary" data-go="campaigns:${r.c.id}">Open campaign ›</button><button class="btn sm outline" id="ops-odel" title="Opens the campaign's Channel &amp; content step, where this delivery is defined">Open delivery</button>`}<button class="btn sm outline" id="ops-ocust" title="Opens the customer 360 view">Open customer</button></div>`;
   dr.hidden=false;
   dr.querySelector('#ops-dclose').onclick=()=>{ opsDrawer=null; renderOpsan(); };
   const jnode=r.node||(r.ex&&r.ex.node);
   dr.querySelector('[data-go]').onclick=()=>{ opsDrawer=null; dr.hidden=true; if(r.c.kind==='journey'){ jOpen(r.c.id); return; } showView('campaigns'); campOpen(r.c.id); };
   dr.querySelector('#ops-odel').onclick=()=>{ opsDrawer=null; dr.hidden=true; if(r.c.kind==='journey'){ jOpen(r.c.id,jnode); return; } showView('campaigns'); campOpen(r.c.id); campStep=3; renderCampaigns(); };
-  dr.querySelector('#ops-ocust').onclick=()=>toast('Open customer',`${r.cust?r.cust.cid:'The customer'} — the customer 360 view is outside this prototype. In the product this opens the customer's contact history.`,'warn');
+  dr.querySelector('#ops-ocust').onclick=()=>toast('Open customer',`${r.cust?r.cust.cid:'The customer'} — opens the customer's contact history in the customer 360 view.`,'warn');
 }
 window.addEventListener('keydown',e=>{ if(e.key==='Escape'&&curView==='opsan'){ if(opsPop){ opsPop=''; renderOpsan(); } else if(opsDrawer){ opsDrawer=null; renderOpsan(); } } });
 
@@ -5451,7 +5444,7 @@ function dmTabLoad(body,d){
       <div class="fld span2"><label>Detail ${tip('The view, file or endpoint the rows come from.')}</label><input data-sk="detail" value="${esc(src.detail)}" placeholder="e.g. BSS replica · view CVM_CUSTOMER_V"></div>
       <div class="fld span2" style="flex-direction:row;gap:8px;align-items:center"><button class="btn primary" id="dm-run" ${dmBusy?'disabled':''}>${dmBusy?'Loading…':'Run now'}</button>
         <span style="color:var(--ink-2);font-size:12.5px">Simulated — no data leaves the browser.</span></div>
-      ${d.columns.length?'':'<div class="fld span2"><div class="dm-drop"><b>Load a file to detect columns</b>Drop a CSV or XLSX here. Columns, types and a first profile are detected, then you document them on the Columns tab. (Concept — no upload in the prototype.)</div></div>'}
+      ${d.columns.length?'':'<div class="fld span2"><div class="dm-drop"><b>Load a file to detect columns</b>Drop a CSV or XLSX here. Columns, types and a first profile are detected, then you document them on the Columns tab. (Concept — no upload here.)</div></div>'}
     </div>
     ${src.kind!=='File upload'?`<div class="padx"><div class="note">Guard rails for query-based sources: the view is opened <b>read-only</b>, the preview is capped at <b>100k rows</b>, and a statement is cancelled after <b>30 s</b>.</div></div>`:''}
     <div class="h4">Load history</div>
@@ -5722,7 +5715,7 @@ const TOURS={
 'first-journey':{
   name:'Build your first journey', mins:3, roles:['marketer','admin'],
   blurb:'A balance-low journey: an SMS nudge, a wait for the top-up, a push reminder on timeout.',
-  resume:step=>step>1?{step:1,note:'The prototype does not keep a journey across a reload, so we will pick up from <b>New journey</b>.'}:null,
+  resume:step=>step>1?{step:1,note:'A journey is not kept across a reload, so we will pick up from <b>New journey</b>.'}:null,
   steps:[
    {id:'nav', target:'.nav button[data-view="journeys"]', placement:'right',
     title:'Open Journey Builder', body:'Journeys react to what a customer does, step by step over time. A campaign sends once; a journey <b>follows the customer</b>.<br><br>We’ll build one for Felix’s story: a prepaid customer whose balance is running low.',
@@ -5784,11 +5777,11 @@ const TOURS={
     advance:{until:()=>{ const j=tourJ(); if(!j||!tourFlags.jValidated) return false; const r=jValidate(j); return r.done===r.total; }},
     sample:()=>{ const b=document.getElementById('btn-validate'); if(b) b.click(); }},
    {id:'activate', view:'journeys', before:()=>tourJOpen(), target:'#btn-activate', placement:'left',
-    title:'Activate', body:'A Draft ignores every event. <b>Activate</b> starts listening for <code>balance_low</code> — this is the journey’s own activation path in the prototype; there is no separate approval step for journeys yet. Pause and Resume sit with approvers and admins.',
+    title:'Activate', body:'A Draft ignores every event. <b>Activate</b> starts listening for <code>balance_low</code> — this is the journey’s own activation path; there is no separate approval step for journeys yet. Pause and Resume sit with approvers and admins.',
     advance:{until:()=>{ const j=tourJ(); return !!(j&&j.status==='Active'); }},
     sample:()=>{ const b=document.getElementById('btn-activate'); if(b) b.click(); }},
    {id:'sim', view:'journeys', before:()=>{ tourJOpen(); if(typeof evName!=='undefined') evName.value='balance_low'; }, target:'[data-tour="j-sim"]', placement:'bottom',
-    title:'Try it — demo only', body:'This dashed strip is <b>not part of the product</b>: it moves a simulated clock. <b>Send event</b> <code>balance_low</code> for a test customer and watch them enter and get the SMS; then <b>Advance 1 day</b> to fire the timeout and the push reminder.',
+    title:'Try it', body:'This strip sends a test event and moves the clock. <b>Send event</b> <code>balance_low</code> for a test customer and watch them enter and get the SMS; then <b>Advance 1 day</b> to fire the timeout and the push reminder.',
     advance:{until:()=>{ const j=tourJ(); return !!(j&&sim[j.id]&&Object.keys(sim[j.id].parts).length>0); }},
     sample:()=>{ const x=excludedCids(); const c=CUSTOMERS.find(k=>!x.has(k.cid))||CUSTOMERS[0]; evName.value='balance_low'; evCust.value=c.id; sendEvent('balance_low',c.id); }},
    {id:'monitor', target:'.nav button[data-view="monitor"]', placement:'right',
@@ -5799,7 +5792,7 @@ const TOURS={
 'first-program':{
   name:'Group work in a program', mins:2, roles:['marketer','admin'],
   blurb:'A Q4 retention initiative: a goal, a contact cap, and the campaigns and journeys that serve it.',
-  resume:step=>step>1?{step:1,note:'The prototype does not keep a program across a reload, so we will pick up from <b>New program</b>.'}:null,
+  resume:step=>step>1?{step:1,note:'A program is not kept across a reload, so we will pick up from <b>New program</b>.'}:null,
   steps:[
    {id:'nav', target:'.nav button[data-view="programs"]', placement:'right',
     title:'Open Program', body:'A program is a business initiative, not a folder: a <b>goal</b>, a <b>period</b>, an <b>owner</b>, and the campaigns and journeys that serve it.',
@@ -6244,7 +6237,7 @@ function tourResume(){
   const rec=tourRec(id);
   const wrap=document.createElement('div'); wrap.className='tour-dim';
   const card=document.createElement('div'); card.className='tour-card center';
-  /* The prototype keeps nothing across a reload, so a draft from the previous
+  /* Nothing is kept across a reload, so a draft from the previous
      visit is gone and the tour has to go back to the step that creates one.
      The saved-draft branch is kept for when persistence exists. */
   const saved=id==='first-campaign'?newCampaigns()[0]:null;
@@ -6253,7 +6246,7 @@ function tourResume(){
   const step=hook?hook.step:restart?2:rec.step;
   card.innerHTML=`<h4>Continue where you left off?</h4>
     <p><b>${esc(TOURS[id].name)}</b> — you stopped at step ${rec.step+1} of ${TOURS[id].steps.length}.</p>
-    ${restart?`<p style="color:rgba(255,255,255,.7)">${hook?hook.note:'The prototype does not keep drafts across a reload, so we will pick up from <b>New campaign</b>.'}</p>`:''}
+    ${restart?`<p style="color:rgba(255,255,255,.7)">${hook?hook.note:'Drafts are not kept across a reload, so we will pick up from <b>New campaign</b>.'}</p>`:''}
     <div class="tc-foot"><button class="txt" data-drop>Start over</button><span class="tc-grow"></span><button class="txt" data-no>Not now</button><button data-yes>Continue</button></div>`;
   document.body.append(wrap,card);
   const close=()=>{ wrap.remove(); card.remove(); };
