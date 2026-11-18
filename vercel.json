@@ -3,6 +3,19 @@
   "buildCommand": "rm -rf dist && mkdir -p dist && cp index.html dist/ && cp -r sender/site/. dist/",
   "outputDirectory": "dist",
   "headers": [
-    { "source": "/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
-  ]
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "functions": {
+    "api/send.js": {
+      "maxDuration": 30
+    }
+  }
 }

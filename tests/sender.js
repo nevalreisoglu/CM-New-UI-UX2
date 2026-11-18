@@ -45,6 +45,18 @@ const stub = (calls, status = 200) => async (url, opt) => { calls.push({ url: St
     const down = await sender.sendAll(pkg, ENV, stub([], 500));
     check(down.filter((r) => r.status === 'failed').length === 3, 'a provider error is reported as failed');
 
+    // Twilio: accepted is not delivered
+    const twilio = (post, polls) => { let n = 0; return async (url, opt) => (opt && opt.method === 'POST' ? { ok: post.ok !== false, status: post.status || 201, json: async () => post.body } : { ok: true, status: 200, json: async () => polls[Math.min(n++, polls.length - 1)] }); };
+    const one = { messages: [{ channel: 'sms', text: 'x' }] }; const FAST = Object.assign({ SMS_POLL_MS: '1' }, ENV);
+    let r1 = (await sender.sendAll(one, FAST, twilio({ body: { sid: 'SM1', status: 'queued' } }, [{ status: 'sent' }, { status: 'delivered' }])))[0];
+    check(r1.status === 'sent' && /delivered$/.test(r1.detail), `a delivered SMS says so (${r1.detail})`);
+    r1 = (await sender.sendAll(one, FAST, twilio({ body: { sid: 'SM1', status: 'queued' } }, [{ status: 'undelivered', error_code: 30008 }])))[0];
+    check(r1.status === 'failed' && /Twilio 30008/.test(r1.detail), `an undelivered SMS is reported as failed with Twilio's code (${r1.detail})`);
+    r1 = (await sender.sendAll(one, FAST, twilio({ body: { sid: 'SM1', status: 'queued' } }, [{ status: 'sent' }])))[0];
+    check(r1.status === 'sent' && /not confirmed/.test(r1.detail), 'an SMS still on its way says delivery is not confirmed');
+    r1 = (await sender.sendAll(one, FAST, twilio({ ok: false, status: 400, body: { code: 21608, message: 'x' } }, [])))[0];
+    check(r1.status === 'failed' && /21608/.test(r1.detail) && /verified/.test(r1.detail) && !/1112233/.test(r1.detail), `a refused SMS explains why (${r1.detail})`);
+
     const call = (headers, env) => sender.handle('POST', headers, '{"messages":[]}', env, stub([]));
     check((await call({ 'x-live-key': 'wrong' }, ENV)).statusCode === 401, 'a wrong key is refused');
     check((await call({}, ENV)).statusCode === 401, 'a missing key is refused');
