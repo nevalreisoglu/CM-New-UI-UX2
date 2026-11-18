@@ -24,9 +24,8 @@ Olgay Bey, then the customer.
 
 - **One file.** Everything lives in `index.html`. No build step, no bundler, no framework.
 - **No external requests** except the Google Fonts stylesheet. It must render correctly
-  from a `file://` URL, offline, weeks from now. One exception (decision X9): served by the
-  sender app and opened with `?live=<key>`, activating a journey posts to the app's own
-  `/api/send`. Never add another, and never put a key or a real recipient in the repo.
+  from a `file://` URL, offline, weeks from now. One exception (decisions X9, X10): served by the
+  sender app, activating a journey posts to the app's own `/api/send`. Never add another, and never put a key or a real recipient in the repo.
 - **No browser storage** (`localStorage` and friends). State lives in JS variables.
 - **Do not rename ids, classes or `data-*` hooks.** The Playwright scripts in `tests/`
   select on them. If a rename is genuinely necessary, update the scripts in the same commit.

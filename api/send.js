@@ -61,8 +61,11 @@ async function sendAll(pkg, env, fetchImpl) {
 /** The request rules, apart from the host's request/response objects, so they can be tested. */
 async function handle(method, headers, rawBody, env, fetchImpl) {
   if (method !== 'POST') return { statusCode: 405, body: { error: 'POST only' } };
-  if (!env.DEMO_SEND_KEY) return { statusCode: 503, body: { error: 'The sender has no DEMO_SEND_KEY yet' } };
-  if (!sameKey((headers || {})['x-live-key'] || '', env.DEMO_SEND_KEY)) return { statusCode: 401, body: { error: 'Wrong live key' } };
+  const h = headers || {};
+  /* only the site's own page may ask: a browser on another site sends a different Origin */
+  if (h.origin && h.host && h.origin.replace(/^https?:\/\//, '') !== h.host) return { statusCode: 403, body: { error: 'Other sites cannot send' } };
+  /* DEMO_SEND_KEY is optional (decision X10): set it to require ?live=<key>, leave it out to send on every activation */
+  if (env.DEMO_SEND_KEY && !sameKey(h['x-live-key'] || '', env.DEMO_SEND_KEY)) return { statusCode: 401, body: { error: 'Wrong live key' } };
   let pkg = rawBody;
   if (typeof rawBody === 'string') { try { pkg = JSON.parse(rawBody); } catch (e) { return { statusCode: 400, body: { error: 'Not JSON' } }; } }
   return { statusCode: 200, body: { results: await sendAll(pkg, env, fetchImpl) } };

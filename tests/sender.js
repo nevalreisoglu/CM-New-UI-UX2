@@ -48,18 +48,20 @@ const stub = (calls, status = 200) => async (url, opt) => { calls.push({ url: St
     const call = (headers, env) => sender.handle('POST', headers, '{"messages":[]}', env, stub([]));
     check((await call({ 'x-live-key': 'wrong' }, ENV)).statusCode === 401, 'a wrong key is refused');
     check((await call({}, ENV)).statusCode === 401, 'a missing key is refused');
-    check((await call({ 'x-live-key': '' }, {})).statusCode === 503, 'no key configured means nothing can be sent');
+    check((await call({}, {})).statusCode === 200, 'with no key configured, the site sends without one');
+    check((await call({ 'x-live-key': 'k-123', origin: 'https://evil.example', host: 'site.example' }, ENV)).statusCode === 403, 'a page on another site is refused');
+    check((await call({ 'x-live-key': 'k-123', origin: 'https://site.example', host: 'site.example' }, ENV)).statusCode === 200, 'the site itself is accepted');
     check((await sender.handle('POST', { 'x-live-key': 'k-123' }, { messages: [{ channel: 'web', url: 'https://s.example/offer/?n=A' }] }, ENV, stub([]))).body.results[0].status === 'sent', 'a body the host already parsed is accepted');
     check((await sender.handle('GET', {}, '', ENV, stub([]))).statusCode === 405, 'GET is refused');
   }
 
   console.log('\nend to end: activate a journey on the served prototype');
   const provider = []; const realFetch = global.fetch; global.fetch = stub(provider);
-  const posts = [];
+  const posts = []; let serverEnv = ENV;
   const server = http.createServer((req, res) => {
     const url = new URL(req.url, 'http://x');
     if (url.pathname === '/api/send') { let body = ''; req.on('data', (d) => { body += d; }); req.on('end', async () => {
-      posts.push(JSON.parse(body)); const out = await sender.handle(req.method, req.headers, body, ENV, global.fetch);
+      posts.push(JSON.parse(body)); const out = await sender.handle(req.method, req.headers, body, serverEnv, global.fetch);
       res.writeHead(out.statusCode, { 'content-type': 'application/json' }); res.end(JSON.stringify(out.body)); }); return; }
     const file = url.pathname.startsWith('/offer/') ? 'sender/site/offer/index.html' : 'index.html';
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }); res.end(fs.readFileSync(path.join(ROOT, file)));
@@ -102,8 +104,18 @@ const stub = (calls, status = 200) => async (url, opt) => { calls.push({ url: St
     const page = await open('');
     const before = posts.length;
     await page.evaluate(() => { showView('journeys'); jOpen('JRN-07'); const j = JOURNEYS.find((x) => x.id === 'JRN-07'); j.status = 'Draft'; activateJourney(j, false); }); await page.waitForTimeout(400);
-    check(posts.length === before, 'without ?live= nothing is posted');
+    check(posts.length === before + 1, 'without ?live= the page still posts (no special link needed)');
+    check(!(await page.locator('#ts-modal').count()) && !(await page.locator('#toast', { hasText: 'Sent for real' }).count()), 'a sender that wants a key answers 401 and the page stays quiet');
     await page.close();
+  }
+  {
+    serverEnv = Object.assign({}, ENV); delete serverEnv.DEMO_SEND_KEY;
+    const page = await open(''); const before = provider.length;
+    await page.evaluate(() => { showView('journeys'); jOpen('JRN-12'); const j = JOURNEYS.find((x) => x.id === 'JRN-12'); j.status = 'Draft'; activateJourney(j, false); });
+    await page.waitForSelector('#ts-modal .ts-live', { timeout: 8000 }).catch(() => {});
+    const live = await page.textContent('#ts-modal .ts-live').catch(() => '');
+    check(/Email · sent/.test(live) && provider.length === before + 2, 'on a site with no key, the plain address sends on Activate');
+    serverEnv = ENV; await page.close();
   }
   {
     const page = await browser.newPage(); const reqs = []; page.on('request', (r) => { if (!r.url().startsWith('file:') && !r.url().includes('fonts.')) reqs.push(r.url()); });

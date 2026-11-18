@@ -2078,8 +2078,8 @@ journey's execution log in a dialog.
   hand out. A *preferred cascade* step lands on the recipient's first
   reachable channel — switch to a recipient without the app and it moves to
   SMS. A delivery step's own **Send test** opens the same view.
-- **Sending for real.** When the product is opened from the hosted sender site with its
-  `?live=` key, **Activate** also sends one real message per channel the journey uses —
+- **Sending for real.** When the product is opened from the hosted sender site, **Activate**
+  also sends one real message per channel the journey uses —
   an SMS, an e-mail and a push to the recipients set up on that site — and the links in
   them open the offer page. The Send test view opens with a **Sent for real** line saying
   what went out. Resuming a paused journey does not send again.
@@ -3788,11 +3788,12 @@ function tsRun(surf,cust){ const id=++tsRunId; const m=document.getElementById('
   if(!order.length){ fin(); return; }
   order.forEach((k,i)=>setTimeout(()=>{ if(id!==tsRunId) return; const s=m.querySelector(`.ts-surf[data-surf="${k}"]`); if(!s) return; const d=new Date(t0.getTime()+(i+1)*1000);
     s.classList.add('done'); s.querySelector('.ts-txt').textContent=`✓ ${hhmmss(d)} · ${surf[k].why.replace(/&amp;/g,'&')}`; lines.push(`${TS_SURF.find(x=>x[0]===k)[1]} ✓`); if(i===order.length-1) fin(); },380*(i+1))); }
-/* ---------- LIVE SEND (decision X9) — only when the page is served by the sender app (sender/README.md) and
-   opened with ?live=<key>. Activating a journey then posts one message per channel to the app's own /api/send,
-   which delivers them to the recipients configured there. From a file:// URL, or without the key, nothing is
-   requested: the prototype stays self-contained. ---------- */
-const LIVE_KEY=/^https?:$/.test(location.protocol)?(new URLSearchParams(location.search).get('live')||''):'';
+/* ---------- LIVE SEND (decisions X9, X10) — only when the page is served over http(s), i.e. by the sender app
+   (sender/README.md). Activating a journey then posts one message per channel to the app's own /api/send, which
+   delivers them to the recipients configured there. No special link is needed; ?live=<key> is only for a site
+   whose owner set a key. From a file:// URL nothing is requested: the prototype stays self-contained. ---------- */
+const LIVE=/^https?:$/.test(location.protocol);
+const LIVE_KEY=LIVE?(new URLSearchParams(location.search).get('live')||''):'';
 let liveLast=null;
 /* the e-mail as the preview draws it, with its styles inlined so a mail client shows the same thing */
 function tsMailHtml(item,cust,link){ const dv=ctDevice; ctDevice='desktop'; const host=document.createElement('div'); host.style.cssText='position:absolute;left:-9999px;top:0;width:600px'; document.body.appendChild(host);
@@ -3813,13 +3814,14 @@ function liveSendPackage(j,cust){ const data=tsFromJourney(j,cust); const R=t=>r
   const pu=first('push'); if(pu) out.push({channel:'push',step:pu.label,title:R(pu.item.title||j.name),text:body(pu.item),click:link});
   if(out.length||offer) out.push({channel:'web',url:link});
   return {journey:{id:j.id,name:j.name},recipient:cust.name,messages:out}; }
-function liveSend(j){ if(!LIVE_KEY) return; const cust=tsDefaultCust(); const pkg=liveSendPackage(j,cust); if(!pkg.messages.length) return;
+function liveSend(j){ if(!LIVE) return; const cust=tsDefaultCust(); const pkg=liveSendPackage(j,cust); if(!pkg.messages.length) return;
   const names={sms:'SMS',email:'Email',push:'Mobile push',web:'Website'};
   const done=results=>{ liveLast={jid:j.id,at:new Date().toTimeString().slice(0,8),results}; const line=results.map(r=>`${names[r.channel]||r.channel} ${r.status==='sent'?'✓':r.status==='skipped'?'– not set up':'✕'}`).join(' · ');
     addLog(results.some(r=>r.status==='failed')?'warn':'ok',`${j.id}  live send · ${line}`,{j:j.id,node:j.nodes[0].id,kind:'system'}); toast('Sent for real',line,results.some(r=>r.status==='failed')?'warn':undefined); tsOpen('journey',j.id); };
-  fetch('/api/send',{method:'POST',headers:{'content-type':'application/json','x-live-key':LIVE_KEY},body:JSON.stringify(pkg)})
-    .then(r=>r.json().then(b=>r.ok?b.results:[{channel:'send',status:'failed',detail:b.error||('HTTP '+r.status)}]))
-    .catch(e=>[{channel:'send',status:'failed',detail:String(e.message||e)}]).then(done); }
+  /* served by something that is not the sender (no /api/send), or by a sender that wants a key we were not given: stay quiet */
+  fetch('/api/send',{method:'POST',headers:Object.assign({'content-type':'application/json'},LIVE_KEY?{'x-live-key':LIVE_KEY}:{}),body:JSON.stringify(pkg)})
+    .then(r=>{ if(!r.ok&&!LIVE_KEY&&[401,404,405].includes(r.status)) return null; return r.json().then(b=>r.ok?b.results:[{channel:'send',status:'failed',detail:b.error||('HTTP '+r.status)}],()=>[{channel:'send',status:'failed',detail:'HTTP '+r.status}]); })
+    .catch(e=>[{channel:'send',status:'failed',detail:String(e.message||e)}]).then(res=>{ if(res) done(res); }); }
 const PLAN_RULES=[['cg','Control group','from the campaign: size and method'],['cooldown','Channel cooldown','days between two sends on the same channel, any campaign'],['type','Campaign Type (overlap)','max. Information / Offer sends per day'],['presend','Campaign pre-sent','days between two sends of this same campaign to one customer (default from Parameters)']];
 const PLAN_STATUS_CLS={Draft:'warn','Waiting for approval':'warn',Scheduled:'acc',Running:'ok',Paused:'',Completed:'',Stopped:'bad'};
 const defaultRules=c=>({cg:{use:c.cg!=='No Control Group',log:true},cooldown:{use:true,log:true},type:{use:true,log:true},presend:{use:true,log:true}});
