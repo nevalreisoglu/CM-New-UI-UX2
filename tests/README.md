@@ -106,3 +106,10 @@ node ../tools/embed-manual.js --check  # exit 1 if out of date
 
 `manual.spec.js` fails the suite if the two drift apart, so a forgotten re-embed
 shows up as a test failure rather than a stale manual in someone's browser.
+
+## Live send
+
+`node sender.js` covers the hosted sender (decision X9, `../sender/README.md`): the function's rules
+(one message per channel, configured recipients only, key required, masked results) and an end-to-end
+run — the prototype served over http with `?live=`, a journey activated, the offer page opened — with
+Resend, Twilio and ntfy stubbed. It never sends a real message.

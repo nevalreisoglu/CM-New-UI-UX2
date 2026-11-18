@@ -24,7 +24,9 @@ Olgay Bey, then the customer.
 
 - **One file.** Everything lives in `index.html`. No build step, no bundler, no framework.
 - **No external requests** except the Google Fonts stylesheet. It must render correctly
-  from a `file://` URL, offline, weeks from now.
+  from a `file://` URL, offline, weeks from now. One exception (decision X9): served by the
+  sender app and opened with `?live=<key>`, activating a journey posts to the app's own
+  `/api/send`. Never add another, and never put a key or a real recipient in the repo.
 - **No browser storage** (`localStorage` and friends). State lives in JS variables.
 - **Do not rename ids, classes or `data-*` hooks.** The Playwright scripts in `tests/`
   select on them. If a rename is genuinely necessary, update the scripts in the same commit.
@@ -67,6 +69,9 @@ Olgay Bey, then the customer.
   `jOpen(id)` is the only way onto the canvas.
 - **Programs** are business initiatives with a goal, a contact cap, member campaigns and
   journeys, and a Gantt timeline (`.gantt`).
+- **Send test** (`tsOpen`, `tsFromCampaign`, `tsFromJourney`) draws what a test recipient gets on four
+  surfaces. **Live send** (`LIVE_KEY`, `liveSend`, `liveSendPackage`) is the hosted sender in
+  `api/send.js` + `vercel.json` + `sender/` — see `sender/README.md`; test with `node tests/sender.js`.
 - Design tokens are CSS custom properties in `:root`. Some names are historical
   (`--green` is the primary, not a green) — change values, keep names.
 
