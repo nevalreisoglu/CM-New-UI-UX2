@@ -16,6 +16,9 @@
   "functions": {
     "api/send.js": {
       "maxDuration": 30
+    },
+    "api/site.js": {
+      "maxDuration": 10
     }
   }
 }

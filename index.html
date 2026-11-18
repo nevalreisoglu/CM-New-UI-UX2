@@ -2083,6 +2083,11 @@ journey's execution log in a dialog.
   an SMS, an e-mail and a push to the recipients set up on that site — and the links in
   them open the offer page. The Send test view opens with a **Sent for real** line saying
   what went out. Resuming a paused journey does not send again.
+  Two more channels land on the **Demo Telco** website that the same site serves at
+  `/telco/`: a **WSC** delivery becomes the banner that appears after you sign in to
+  **My account**, and a **Web Push** delivery (now in the Delivery step's channel list)
+  shows as a browser notification while that site is open — press **Turn on
+  notifications** in My account once.
 - **The toolbar** has help, zoom out / in, fit to view, undo, redo,
   **Validate**, delete step, and the direction (horizontal or top to bottom).
   The right panel collapses with its own toggle.
@@ -2598,14 +2603,14 @@ const CONTENT_ITEMS=[
   {id:'SRV-902',ch:'survey',name:'Post-renewal CSAT',status:'Draft',updated:'2026-09-11',by:DEMO_USERS.me,dyn:'',variants:{en:'How easy was it to renew your package? (1–5)'}},
 ];
 const CONTENTS = {order:['— no content (order only)']};
-['sms','email','push','wsc','chatbot','tm'].forEach(ch=>{ CONTENTS[ch]=tplFor(ch).map(t=>`${t.id} · ${t.name}`); });
+['sms','email','push','webpush','wsc','chatbot','tm'].forEach(ch=>{ CONTENTS[ch]=tplFor(ch).map(t=>`${t.id} · ${t.name}`); });
 CONTENTS.whatsapp=tplFor('chatbot').map(t=>`${t.id} · ${t.name}`);
 CONTENTS.sms=CONTENTS.sms.concat(tplFor('isms').map(t=>`${t.id} · ${t.name}`));
 const PARAMS=['FIRST_NAME','MSISDN','PLAN','PACKAGE_EXPIRY_DATE','BALANCE_UAH','DATA_USAGE_GB','TENURE_DAYS','REGION'];
 function resolveParams(t,cust,mark){ const r=cust?cust.row:null; return String(t||'').replace(/\{\{(\w+)\}\}/g,(m,k)=>{ const v=r&&r[k]!==undefined?r[k]:(k==='AGENT'?'Olena':null); if(v===null) return mark?`<span class="param">{{${k}}}</span>`:m; const out=k==='PACKAGE_EXPIRY_DATE'||k.endsWith('_DATE')?String(v).split('-').reverse().join('.'):v; return mark?`<b class="rv">${esc(out)}</b>`:out; }); }
 function pickVariant(item,cust){ const vs=item.variants||{}; if(item.dyn==='LANGUAGE'&&cust&&vs[cust.row.LANGUAGE]) return cust.row.LANGUAGE; return Object.keys(vs)[0]||'en'; }
 const contentsFor=ch=>{ if(String(ch).startsWith('Preferred')) return ['Per-channel content set · Renewal','Per-channel content set · Reminder','Per-channel content set · Onboarding']; return CONTENTS[ch]||['— select content']; };
-const CHANNELS = ['Preferred cascade (push → sms → email)','sms','push','email','whatsapp','tm','wsc','chatbot','order'];
+const CHANNELS = ['Preferred cascade (push → sms → email)','sms','push','webpush','email','whatsapp','tm','wsc','chatbot','order'];
 const STOPS = ['1 channel','2 channels','3 channels','all preferred channels'];
 const CGS = ['off','5% per channel','10% per channel','exact 2,000 per channel','uploaded list CG-11'];
 const JOINS = ['wait for all','first branch wins'];
@@ -3770,7 +3775,7 @@ function tsRender(){ const st=tsState; if(!st) return; const cust=CUSTOMERS.find
         :`<div class="ts-win"><div class="ts-bar"><i></i><i></i><i></i><span>https://www.example.com/my-account</span></div><div class="ts-in">${x.html||''}</div></div>`}
         <div class="ts-empty">${x.state==='ok'?'':x.why}</div></div>
       <footer class="ts-st" data-state="${x.state}"><span class="ts-dot"></span><span class="ts-txt">${x.state==='ok'?'Sending…':x.why}</span></footer></section>`; }).join('')}</div>
-    ${liveLast&&!isCamp&&liveLast.jid===src.id?`<div class="ts-log ts-live"><b>Sent for real · ${liveLast.at}</b> ${liveLast.results.map(x=>`<span class="pill ${x.status==='sent'?'ok':x.status==='failed'?'bad':''}">${esc(({sms:'SMS',email:'Email',push:'Mobile push',web:'Website'})[x.channel]||x.channel)} · ${x.status==='sent'?'sent':x.status==='skipped'?'not set up':'failed'}</span> <span>${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener">open the page</a>`:esc(x.detail||'')}</span>`).join(' ')}</div>`:''}
+    ${liveLast&&!isCamp&&liveLast.jid===src.id?`<div class="ts-log ts-live"><b>Sent for real · ${liveLast.at}</b> ${liveLast.results.map(x=>`<span class="pill ${x.status==='sent'?'ok':x.status==='failed'?'bad':''}">${esc(({sms:'SMS',email:'Email',push:'Mobile push',webpush:'Web push',wsc:'Web self-care',web:'Website'})[x.channel]||x.channel)} · ${x.status==='sent'?'sent':x.status==='skipped'?'not set up':'failed'}</span> <span>${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener">open the page</a>`:esc(x.detail||'')}</span>`).join(' ')}</div>`:''}
     <div class="ts-log"><b>Send log</b> <span id="ts-log">${sent} of 4 surfaces${data.other.length?` · also on ${esc(data.other.join(', '))} — not shown here`:''}</span></div></div>`;
   m.querySelector('#ts-close').onclick=tsClose;
   m.querySelector('#ts-again').onclick=()=>tsRun(surf,cust);
@@ -3812,10 +3817,13 @@ function liveSendPackage(j,cust){ const data=tsFromJourney(j,cust); const R=t=>r
   const sms=first('sms'); if(sms) out.push({channel:'sms',step:sms.label,text:body(sms.item)+' '+link});
   const em=first('email'); if(em) out.push({channel:'email',step:em.label,subject:R((em.item.subject||{}).A||em.item.title||j.name),preheader:R(em.item.preheader||''),html:tsMailHtml(em.item,cust,link),text:[R(em.item.hero),R(em.item.lead),'',R(em.item.body)||body(em.item),'',(em.item.cta||'Open')+': '+link].join('\n')});
   const pu=first('push'); if(pu) out.push({channel:'push',step:pu.label,title:R(pu.item.title||j.name),text:body(pu.item),click:link});
+  /* the demo operator's website (sender/site/telco): a browser notification and the banner in My account */
+  const wp=data.msgs.find(m=>m.ch==='webpush'&&m.item); if(wp) out.push({channel:'webpush',step:wp.label,title:R(wp.item.title||j.name),text:body(wp.item)});
+  const ws=data.msgs.find(m=>(m.ch==='wsc'||m.ch==='banner')&&m.item); if(ws) out.push({channel:'wsc',step:ws.label,title:R(ws.item.title||j.name),text:body(ws.item),cta:ws.item.cta||'Renew'});
   if(out.length||offer) out.push({channel:'web',url:link});
-  return {journey:{id:j.id,name:j.name},recipient:cust.name,messages:out}; }
+  return {journey:{id:j.id,name:j.name},recipient:cust.name,site:{name:cust.name,plan:cust.row.PLAN||'',offer:offer?offer.name:'',days:offer&&offer.params&&offer.params.validityDays||''},messages:out}; }
 function liveSend(j){ if(!LIVE) return; const cust=tsDefaultCust(); const pkg=liveSendPackage(j,cust); if(!pkg.messages.length) return;
-  const names={sms:'SMS',email:'Email',push:'Mobile push',web:'Website'};
+  const names={sms:'SMS',email:'Email',push:'Mobile push',webpush:'Web push',wsc:'Web self-care',web:'Website'};
   const done=results=>{ liveLast={jid:j.id,at:new Date().toTimeString().slice(0,8),results}; const line=results.map(r=>`${names[r.channel]||r.channel} ${r.status==='sent'?'✓':r.status==='skipped'?'– not set up':'✕'}`).join(' · ');
     addLog(results.some(r=>r.status==='failed')?'warn':'ok',`${j.id}  live send · ${line}`,{j:j.id,node:j.nodes[0].id,kind:'system'}); toast('Sent for real',line,results.some(r=>r.status==='failed')?'warn':undefined); tsOpen('journey',j.id); };
   /* served by something that is not the sender (no /api/send), or by a sender that wants a key we were not given: stay quiet */
@@ -4158,7 +4166,7 @@ function renderCtEditor(card){
   g('ct-back').onclick=()=>{ ctMode='list'; renderContent(); };
   card.querySelectorAll('[data-dev]').forEach(b=>b.onclick=()=>{ ctDevice=b.dataset.dev; renderCtEditor(card); });
   card.querySelectorAll('[data-k]').forEach(el=>{ el.oninput=el.onchange=()=>{ const k=el.dataset.k; if(el.type==='checkbox') d[k]=el.checked; else if(k==='fixed') d.fixed=el.value.split(',').map(x=>x.trim()).filter(Boolean); else d[k]=el.value; if(k==='layout'||k==='status') renderCtEditor(card); else if(k==='fixed'){} }; });
-  g('ct-save').onclick=()=>{ if(!d.name.trim()){ toast('Template name is required','','bad'); return; } d.updated=TODAY; d.by=DEMO_USERS.me; if(d.dflt) tplFor(d.ch).forEach(t=>{ if(t.id!==d.id) t.dflt=false; }); const i=TEMPLATES.findIndex(x=>x.id===d.id); if(i>=0) TEMPLATES[i]=JSON.parse(JSON.stringify(d)); else TEMPLATES.push(JSON.parse(JSON.stringify(d))); ['sms','email','push','wsc','chatbot','tm'].forEach(ch=>{ CONTENTS[ch]=tplFor(ch).map(t=>`${t.id} · ${t.name}`); }); CONTENTS.whatsapp=tplFor('chatbot').map(t=>`${t.id} · ${t.name}`); ctSavedAt=new Date().toTimeString().slice(0,5); toast(`Saved · ${d.id}`,`${d.name} — available as a design when a marketer writes ${chn.n} content.`); renderCtEditor(card); };
+  g('ct-save').onclick=()=>{ if(!d.name.trim()){ toast('Template name is required','','bad'); return; } d.updated=TODAY; d.by=DEMO_USERS.me; if(d.dflt) tplFor(d.ch).forEach(t=>{ if(t.id!==d.id) t.dflt=false; }); const i=TEMPLATES.findIndex(x=>x.id===d.id); if(i>=0) TEMPLATES[i]=JSON.parse(JSON.stringify(d)); else TEMPLATES.push(JSON.parse(JSON.stringify(d))); ['sms','email','push','webpush','wsc','chatbot','tm'].forEach(ch=>{ CONTENTS[ch]=tplFor(ch).map(t=>`${t.id} · ${t.name}`); }); CONTENTS.whatsapp=tplFor('chatbot').map(t=>`${t.id} · ${t.name}`); ctSavedAt=new Date().toTimeString().slice(0,5); toast(`Saved · ${d.id}`,`${d.name} — available as a design when a marketer writes ${chn.n} content.`); renderCtEditor(card); };
   g('ct-saveclose').onclick=()=>{ if(!d.name.trim()){ toast('Template name is required','','bad'); return; } g('ct-save').onclick(); ctMode='list'; renderContent(); };
 }
 

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Demo Telco — mobile and internet, your way</title>
+<link rel="icon" href="/telco/icon.svg">
+<link rel="stylesheet" href="/telco/site.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/telco/"><i></i>Demo Telco</a>
+  <nav><a href="#plans">Mobile</a><a href="#plans">Internet</a><a href="#perks">Perks</a><a href="#help">Help</a></nav>
+  <span class="sp"></span>
+  <a class="btn ghost" href="/telco/account/">My account</a>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <div>
+    <span class="tag">No contract · change it every month</span>
+    <h1>Build the plan that fits you.</h1>
+    <p>Pick your data, add what you need, drop what you don't. Unused data rolls over, and you can gift it to a friend.</p>
+    <a class="btn big" href="#plans">See the plans</a>
+  </div>
+  <div class="builder" aria-label="Plan builder">
+    <h2>Your plan</h2><small>Tap to change — the price follows.</small>
+    <div class="chips" id="data" role="group" aria-label="Data"></div>
+    <div class="chips" id="extra" role="group" aria-label="Extras"></div>
+    <div class="price"><b id="price">₴ 0</b><span>/ month</span></div>
+    <a class="btn" href="/telco/account/">Continue</a>
+  </div>
+</div></div>
+
+<section id="plans"><div class="wrap">
+  <h2 class="t">Ready-made plans</h2><p class="s">Start from one of these, adjust later in My account.</p>
+  <div class="cards">
+    <div class="card"><h3>Smart 5GB</h3><div class="p">₴ 180</div><ul><li>5 GB data</li><li>Unlimited calls in network</li><li>Rollover data</li></ul><a class="btn ghost" href="/telco/account/">Choose</a></div>
+    <div class="card pop"><h3>Smart 15GB</h3><div class="p">₴ 260</div><ul><li>15 GB data</li><li>Unlimited calls</li><li>5G ready</li></ul><a class="btn" href="/telco/account/">Choose</a></div>
+    <div class="card"><h3>Unlimited</h3><div class="p">₴ 390</div><ul><li>Unlimited data</li><li>Unlimited calls</li><li>Hotspot included</li></ul><a class="btn ghost" href="/telco/account/">Choose</a></div>
+  </div>
+</div></section>
+
+<section class="perks" id="perks"><div class="wrap">
+  <h2 class="t">Perks that grow with you</h2><p class="s">The longer you stay, the more you get.</p>
+  <div class="cards">
+    <div class="perk"><i></i><b>Rollover</b><span>Data you did not use moves to next month.</span></div>
+    <div class="perk"><i></i><b>Gift data</b><span>Send spare gigabytes to anyone on Demo Telco.</span></div>
+    <div class="perk"><i></i><b>Offers for you</b><span>Personal offers wait in My account.</span></div>
+  </div>
+</div></section>
+
+<footer id="help"><div class="wrap">Demo Telco is a fictional operator used to show campaign and journey deliveries. Nothing on this site can be bought.</div></footer>
+
+<div class="toast" id="toast" role="status"><div class="a"><i></i>Demo Telco · now</div><b></b><span></span></div>
+<script src="/telco/site.js"></script>
+<script>
+  /* the plan builder — just enough to feel like a shop */
+  var DATA = [['5 GB', 180], ['15 GB', 260], ['30 GB', 320], ['Unlimited', 390]], EXTRA = [['5G', 40], ['Roaming', 60], ['Music', 30]];
+  var pick = 1, on = {};
+  function chip(box, label, pressed, click) { var b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', pressed); b.onclick = click; box.appendChild(b); }
+  function draw() {
+    var d = document.getElementById('data'), e = document.getElementById('extra'); d.textContent = ''; e.textContent = '';
+    DATA.forEach(function (x, i) { chip(d, x[0], i === pick, function () { pick = i; draw(); }); });
+    EXTRA.forEach(function (x, i) { chip(e, '+ ' + x[0], !!on[i], function () { on[i] = !on[i]; draw(); }); });
+    document.getElementById('price').textContent = '₴ ' + (DATA[pick][1] + EXTRA.reduce(function (t, x, i) { return t + (on[i] ? x[1] : 0); }, 0));
+  }
+  draw();
+</script>
+</body>
+</html>
