@@ -2,6 +2,9 @@
 
 Version numbers follow the published artifact versions.
 
+## v62 — 18 Nov 2026
+**The live send says what became of the SMS.** The sender asks Twilio for the message's status for a few seconds after sending: *delivered*, *accepted, delivery not confirmed yet*, or failed with Twilio's error code and what it means in plain words (unverified trial number, country switched off, filtered by the operator…). A refused request shows its code the same way. No recipient or key appears in the text.
+
 ## v61 — 18 Nov 2026
 **Live send without a special link** (decision X10). On the sender site, **Activate** sends from the plain address; `DEMO_SEND_KEY` is optional and, when set, still requires `?live=<key>`. The function refuses requests from another site's page. A page served without `/api/send`, or by a keyed site without the key, stays quiet. `tests/sender.js` covers both modes.
 
