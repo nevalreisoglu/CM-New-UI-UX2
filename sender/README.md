@@ -29,14 +29,15 @@ Without `?live=`, or opened from a file, the prototype requests nothing.
 - **The key is required.** A request without the right `x-live-key` is refused; with no
   `DEMO_SEND_KEY` set, nothing can be sent at all.
 - Subjects are prefixed `[TEST]`; results show masked recipients only.
-- Only `index.html` and `sender/site/` are published (`netlify.toml`) — docs, tests and meeting notes
+- Only `index.html` and `sender/site/` are published (`vercel.json`) — docs, tests and meeting notes
   are not. The site asks search engines not to index it.
 
-## Set-up (Netlify)
+## Set-up (Vercel)
 
-1. Netlify → **Add new site → Import an existing project** → this GitHub repository. The build settings
-   come from `netlify.toml`; leave them as they are.
-2. **Site configuration → Environment variables**, add:
+1. The repository's existing Vercel project picks up `vercel.json` on the next deploy: it publishes
+   only `index.html` and `sender/site/`, and `api/send.js` becomes `POST /api/send`. Leave the build
+   settings in the dashboard on their defaults so `vercel.json` decides.
+2. **Project → Settings → Environment Variables** (Production), add:
 
 | Variable | Value |
 | --- | --- |
@@ -49,7 +50,7 @@ Without `?live=`, or opened from a file, the prototype requests nothing.
 | `DEMO_SMS_TO` | the phone that receives the SMS, `+90…` (on a trial account: a verified number) |
 | `NTFY_TOPIC` | a long random topic name; subscribe to the same name in the ntfy app |
 
-3. **Deploys → Trigger deploy.** A channel whose variables are missing is reported as *not set up*
+3. **Deployments → Redeploy** — variables only apply to a new deployment. A channel whose variables are missing is reported as *not set up*
    and the others still send.
 
 ## Test

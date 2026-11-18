@@ -58,14 +58,21 @@ async function sendAll(pkg, env, fetchImpl) {
   return results;
 }
 
-exports.sendAll = sendAll;
-exports.handler = async (event) => {
-  const json = (statusCode, body) => ({ statusCode, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' }, body: JSON.stringify(body) });
-  if (event.httpMethod !== 'POST') return json(405, { error: 'POST only' });
-  const env = process.env;
-  if (!env.DEMO_SEND_KEY) return json(503, { error: 'The sender has no DEMO_SEND_KEY yet' });
-  const key = (event.headers || {})['x-live-key'] || '';
-  if (!sameKey(key, env.DEMO_SEND_KEY)) return json(401, { error: 'Wrong live key' });
-  let pkg; try { pkg = JSON.parse(event.body || ''); } catch (e) { return json(400, { error: 'Not JSON' }); }
-  return json(200, { results: await sendAll(pkg, env, fetch) });
+/** The request rules, apart from the host's request/response objects, so they can be tested. */
+async function handle(method, headers, rawBody, env, fetchImpl) {
+  if (method !== 'POST') return { statusCode: 405, body: { error: 'POST only' } };
+  if (!env.DEMO_SEND_KEY) return { statusCode: 503, body: { error: 'The sender has no DEMO_SEND_KEY yet' } };
+  if (!sameKey((headers || {})['x-live-key'] || '', env.DEMO_SEND_KEY)) return { statusCode: 401, body: { error: 'Wrong live key' } };
+  let pkg = rawBody;
+  if (typeof rawBody === 'string') { try { pkg = JSON.parse(rawBody); } catch (e) { return { statusCode: 400, body: { error: 'Not JSON' } }; } }
+  return { statusCode: 200, body: { results: await sendAll(pkg, env, fetchImpl) } };
+}
+
+/* Vercel serverless function: POST /api/send */
+module.exports = async (req, res) => {
+  const out = await handle(req.method, req.headers, req.body, process.env, fetch);
+  res.setHeader('cache-control', 'no-store');
+  res.status(out.statusCode).json(out.body);
 };
+module.exports.sendAll = sendAll;
+module.exports.handle = handle;

@@ -1,4 +1,4 @@
 tests/node_modules/
 tests/shots/
 dist/
-.netlify/
+.vercel/

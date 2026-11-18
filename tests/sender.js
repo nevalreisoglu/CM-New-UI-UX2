@@ -10,7 +10,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('@playwright/test');
-const sender = require('../netlify/functions/send.js');
+const sender = require('../api/send.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const errors = [];
@@ -45,11 +45,12 @@ const stub = (calls, status = 200) => async (url, opt) => { calls.push({ url: St
     const down = await sender.sendAll(pkg, ENV, stub([], 500));
     check(down.filter((r) => r.status === 'failed').length === 3, 'a provider error is reported as failed');
 
-    const call = (headers, env) => { const old = process.env; process.env = env; return sender.handler({ httpMethod: 'POST', headers, body: '{"messages":[]}' }).finally(() => { process.env = old; }); };
+    const call = (headers, env) => sender.handle('POST', headers, '{"messages":[]}', env, stub([]));
     check((await call({ 'x-live-key': 'wrong' }, ENV)).statusCode === 401, 'a wrong key is refused');
     check((await call({}, ENV)).statusCode === 401, 'a missing key is refused');
     check((await call({ 'x-live-key': '' }, {})).statusCode === 503, 'no key configured means nothing can be sent');
-    check((await sender.handler({ httpMethod: 'GET', headers: {} })).statusCode === 405, 'GET is refused');
+    check((await sender.handle('POST', { 'x-live-key': 'k-123' }, { messages: [{ channel: 'web', url: 'https://s.example/offer/?n=A' }] }, ENV, stub([]))).body.results[0].status === 'sent', 'a body the host already parsed is accepted');
+    check((await sender.handle('GET', {}, '', ENV, stub([]))).statusCode === 405, 'GET is refused');
   }
 
   console.log('\nend to end: activate a journey on the served prototype');
@@ -58,9 +59,8 @@ const stub = (calls, status = 200) => async (url, opt) => { calls.push({ url: St
   const server = http.createServer((req, res) => {
     const url = new URL(req.url, 'http://x');
     if (url.pathname === '/api/send') { let body = ''; req.on('data', (d) => { body += d; }); req.on('end', async () => {
-      posts.push(JSON.parse(body)); const old = process.env; process.env = Object.assign({}, ENV);
-      const out = await sender.handler({ httpMethod: req.method, headers: req.headers, body }); process.env = old;
-      res.writeHead(out.statusCode, out.headers); res.end(out.body); }); return; }
+      posts.push(JSON.parse(body)); const out = await sender.handle(req.method, req.headers, body, ENV, global.fetch);
+      res.writeHead(out.statusCode, { 'content-type': 'application/json' }); res.end(JSON.stringify(out.body)); }); return; }
     const file = url.pathname.startsWith('/offer/') ? 'sender/site/offer/index.html' : 'index.html';
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }); res.end(fs.readFileSync(path.join(ROOT, file)));
   });
