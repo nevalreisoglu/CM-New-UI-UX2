@@ -2,6 +2,9 @@
 
 Version numbers follow the published artifact versions.
 
+## v61 — 18 Nov 2026
+**Live send without a special link** (decision X10). On the sender site, **Activate** sends from the plain address; `DEMO_SEND_KEY` is optional and, when set, still requires `?live=<key>`. The function refuses requests from another site's page. A page served without `/api/send`, or by a keyed site without the key, stays quiet. `tests/sender.js` covers both modes.
+
 ## v60 — 18 Nov 2026
 **Live send: a hosted sender app beside the prototype** (decision X9).
 - `vercel.json`, `api/send.js` and `sender/site/offer/` turn the existing Vercel project into a small site that serves the prototype and a *Demo Telco* offer page and sends through Resend (e-mail), Twilio (SMS) and ntfy (mobile push). Set-up is in `sender/README.md`.

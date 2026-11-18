@@ -569,8 +569,8 @@ journey's execution log in a dialog.
   hand out. A *preferred cascade* step lands on the recipient's first
   reachable channel — switch to a recipient without the app and it moves to
   SMS. A delivery step's own **Send test** opens the same view.
-- **Sending for real.** When the product is opened from the hosted sender site with its
-  `?live=` key, **Activate** also sends one real message per channel the journey uses —
+- **Sending for real.** When the product is opened from the hosted sender site, **Activate**
+  also sends one real message per channel the journey uses —
   an SMS, an e-mail and a push to the recipients set up on that site — and the links in
   them open the offer page. The Send test view opens with a **Sent for real** line saying
   what went out. Resuming a paused journey does not send again.

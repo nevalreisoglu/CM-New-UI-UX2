@@ -524,7 +524,7 @@ prototype runs three simulated days at load so the monitor is not empty.
 Also demo-only: 30 customers, 18 campaigns (one waiting for approval, one
 sent back by the approver), 3 journeys of fixed sample data;
 Send test draws what a test recipient would receive instead of sending it — unless the page is
-served by the hosted sender app and opened with its key, in which case activating a journey also
+served by the hosted sender app, in which case activating a journey also
 sends one real message per channel to the recipients configured in that app (decision X9,
 `sender/README.md`). Operation analysis exports
 a real CSV of its demo rows; Excel export and Open customer are concepts. The data names

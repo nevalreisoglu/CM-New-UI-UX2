@@ -12,22 +12,23 @@ page, and one function that sends **one real message per channel** when a journe
 
 ## How it works
 
-1. Open the site as `https://<site>/?live=<DEMO_SEND_KEY>`.
+1. Open the site at its normal address.
 2. Build a journey and press **Activate**.
 3. The prototype posts the journey's first SMS, e-mail and push delivery — resolved for the test
    recipient, the e-mail exactly as the preview draws it — to `/api/send`.
 4. The function sends each to the recipient configured **in the site's environment**, and the Send test
    dialog shows *Sent for real* with the result per channel.
 
-Without `?live=`, or opened from a file, the prototype requests nothing.
+Opened from a file, the prototype requests nothing.
 
 ## Rules it keeps
 
 - **Recipients and keys live only in the site's environment variables.** The page cannot name a
   recipient; a `to` in the request is ignored. Nothing real is committed to the repository.
 - **One message per channel per activation.** Resuming a paused journey does not send again.
-- **The key is required.** A request without the right `x-live-key` is refused; with no
-  `DEMO_SEND_KEY` set, nothing can be sent at all.
+- **The key is optional** (decision X10). Without `DEMO_SEND_KEY`, anyone who has the site address can
+  trigger one test message per channel — to the configured recipients only. Set `DEMO_SEND_KEY` to
+  require opening the site as `/?live=<key>` instead. Requests from another site's page are refused.
 - Subjects are prefixed `[TEST]`; results show masked recipients only.
 - Only `index.html` and `sender/site/` are published (`vercel.json`) — docs, tests and meeting notes
   are not. The site asks search engines not to index it.
@@ -41,7 +42,7 @@ Without `?live=`, or opened from a file, the prototype requests nothing.
 
 | Variable | Value |
 | --- | --- |
-| `DEMO_SEND_KEY` | a long random passphrase — it goes in the `?live=` link |
+| `DEMO_SEND_KEY` | optional — leave it out to send from the plain address; set a passphrase to require `/?live=<passphrase>` |
 | `RESEND_API_KEY` | Resend → API Keys |
 | `DEMO_EMAIL_TO` | the address that receives the e-mail (on a Resend account without a verified domain: the account's own address) |
 | `DEMO_EMAIL_FROM` | optional, e.g. `Demo Telco <hello@your-domain>` once a domain is verified |
