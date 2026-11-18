@@ -13,12 +13,14 @@ const sameKey = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(St
 
 /* which variables this deployment does not have — names only, never a value */
 const missing = (env, names) => { const m = names.filter((n) => !String(env[n] || '').trim()); return m.length ? `missing in this deployment: ${m.join(', ')}` : ''; };
+const siteTopic = (env) => env.SITE_TOPIC || `${env.NTFY_TOPIC}-site`;
 const readJson = async (r) => { try { return (r && typeof r.json === 'function' && (await r.json())) || {}; } catch (e) { return {}; } };
 /* the Twilio error codes a first set-up runs into, in plain words; the code itself is always shown */
 const TWILIO_CODES = {
   20003: 'the Account SID or Auth Token is wrong', 21211: 'DEMO_SMS_TO is not a valid number — use +90…', 21408: 'sending to this country is switched off — enable it under Messaging › Settings › Geo permissions',
   21606: 'TWILIO_FROM is not a number of this account that can send SMS', 21608: 'a trial account can only send to verified numbers — verify the phone in Twilio', 21610: 'this phone has opted out (replied STOP)',
   21612: 'this Twilio number cannot send to this destination', 21614: 'the destination is not a mobile number',
+  572006: 'a Twilio trial account can only send its predefined templates, not your own text — upgrade the account or use another SMS provider',
   30003: 'the phone is unreachable', 30004: 'the message was blocked', 30005: 'the number is unknown', 30006: 'the number is a landline or unreachable carrier',
   30007: 'the operator filtered the message', 30008: 'the operator did not deliver it and gave no reason — common for foreign numbers sending links to Türkiye',
 };
@@ -67,6 +69,17 @@ const CHANNELS = {
     });
     return r.ok ? { status: 'sent', detail: 'to the subscribed phone' } : { status: 'failed', detail: `push service answered ${r.status}` };
   },
+  /* web push and the self-care banner are shown by the demo operator's site, which reads them from the site store */
+  async webpush(m, env, fetchImpl, state) {
+    const miss = missing(env, ['NTFY_TOPIC']); if (miss) return { status: 'skipped', detail: `web push is not set up — ${miss}` };
+    state.webpush = { title: cut(m.title, MAX.title), text: cut(m.text, 300) };
+    return { status: 'sent', detail: 'shows as a browser notification while the Demo Telco site is open' };
+  },
+  async wsc(m, env, fetchImpl, state) {
+    const miss = missing(env, ['NTFY_TOPIC']); if (miss) return { status: 'skipped', detail: `web self-care is not set up — ${miss}` };
+    state.banner = { title: cut(m.title, MAX.title), text: cut(m.text, 300), cta: cut(m.cta, 30) };
+    return { status: 'sent', detail: 'banner is in My account', url: '/telco/account/' };
+  },
   async web(m) {
     return /^https?:\/\/[^\s]+\/offer\/\?/.test(m.url || '') ? { status: 'sent', url: m.url, detail: 'offer page is live' } : { status: 'failed', detail: 'no offer page link' };
   },
@@ -74,11 +87,17 @@ const CHANNELS = {
 
 /** One send per channel, whatever the page asks for. */
 async function sendAll(pkg, env, fetchImpl) {
-  const seen = new Set(); const results = [];
+  const seen = new Set(); const results = []; const state = {}; const site = (pkg && pkg.site) || {};
   for (const m of Array.isArray(pkg && pkg.messages) ? pkg.messages.slice(0, 8) : []) {
     const send = CHANNELS[m && m.channel]; if (!send || seen.has(m.channel)) continue; seen.add(m.channel);
-    let res; try { res = await send(m, env, fetchImpl); } catch (e) { res = { status: 'failed', detail: 'could not reach the service' }; }
+    let res; try { res = await send(m, env, fetchImpl, state); } catch (e) { res = { status: 'failed', detail: 'could not reach the service' }; }
     results.push(Object.assign({ channel: m.channel }, res));
+  }
+  /* what the demo site shows next: kept for 12 hours in a second ntfy topic, so the sender needs no database */
+  if (env.NTFY_TOPIC && (state.banner || state.webpush || site.offer)) {
+    const doc = Object.assign({ at: Date.now(), journey: cut(pkg.journey && pkg.journey.name, 80), name: cut(site.name, 40), plan: cut(site.plan, 40), offer: cut(site.offer, 80), days: parseInt(site.days, 10) || 0 }, state);
+    let ok = false; try { ok = (await fetchImpl(env.NTFY_SERVER || 'https://ntfy.sh', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ topic: siteTopic(env), message: JSON.stringify(doc) }) })).ok; } catch (e) { /* reported below */ }
+    if (!ok) results.forEach((r) => { if ((r.channel === 'webpush' || r.channel === 'wsc') && r.status === 'sent') { r.status = 'failed'; r.detail = 'could not reach the site store'; delete r.url; } });
   }
   return results;
 }
@@ -104,3 +123,4 @@ module.exports = async (req, res) => {
 };
 module.exports.sendAll = sendAll;
 module.exports.handle = handle;
+module.exports.siteTopic = siteTopic;

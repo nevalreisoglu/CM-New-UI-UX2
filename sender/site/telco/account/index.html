@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>My account — Demo Telco</title>
+<link rel="icon" href="/telco/icon.svg">
+<link rel="stylesheet" href="/telco/site.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/telco/"><i></i>Demo Telco</a>
+  <nav><a href="/telco/#plans">Mobile</a><a href="/telco/#plans">Internet</a><a href="/telco/#perks">Perks</a></nav>
+  <span class="sp"></span>
+  <button class="btn ghost" id="out" type="button" hidden>Sign out</button>
+</div></header>
+
+<main class="acct"><div class="wrap">
+  <!-- signed out: one button, no credentials are asked for or collected -->
+  <div class="signin" id="signin">
+    <div class="card">
+      <h1>My account</h1>
+      <p>Sign in to see your plan, your usage and the offers waiting for you.</p>
+      <button class="btn big" id="in" type="button">Continue as <span id="who">Oksana</span></button>
+      <p class="muted" style="margin:14px 0 0">Test account — no password needed.</p>
+    </div>
+  </div>
+
+  <div id="home" hidden>
+    <div class="hello"><h1 id="hi">Hi</h1><span id="plan"></span></div>
+
+    <div class="banner" id="banner" hidden>
+      <div><span class="k">For you</span><h2 id="b-title"></h2><p id="b-text"></p></div>
+      <div><button class="btn" id="b-cta" type="button">Renew</button><span class="ok" id="b-ok" hidden>✓ Done</span></div>
+    </div>
+
+    <div class="grid">
+      <div class="card tile"><small>Data this month</small><b>3.1 of 5 GB</b><div class="bar"><i></i></div></div>
+      <div class="card tile"><small>Balance</small><b>₴ 42</b><span class="muted">Top up any time</span></div>
+      <div class="card tile"><small>Package ends</small><b>in 2 days</b><span class="muted">Renews when you say so</span></div>
+    </div>
+
+    <div class="two">
+      <div class="card offer" id="offer" hidden>
+        <span class="pill">Offer for you</span>
+        <h3 id="o-name" style="margin:8px 0 4px;font-size:20px"></h3>
+        <p class="muted" id="o-meta" style="margin:0 0 14px"></p>
+        <button class="btn" id="o-cta" type="button">Activate</button><span class="pill" id="o-ok" hidden>✓ Activated</span>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 4px">Notifications</h3>
+        <p class="muted" id="n-text" style="margin:0 0 14px">Get offers and reminders from Demo Telco in this browser.</p>
+        <button class="btn ghost" id="n-on" type="button">Turn on notifications</button>
+      </div>
+    </div>
+  </div>
+</div></main>
+
+<div class="toast" id="toast" role="status"><div class="a"><i></i>Demo Telco · now</div><b></b><span></span></div>
+<script src="/telco/site.js"></script>
+<script>
+  var $ = function (id) { return document.getElementById(id); }, signedIn = false, shownAt = 0;
+  function banner(s, delay) {
+    if (!signedIn || !s.banner || !s.banner.title || shownAt === s.at) return; shownAt = s.at;
+    $('b-title').textContent = s.banner.title; $('b-text').textContent = s.banner.text || ''; $('b-cta').textContent = s.banner.cta || 'Renew';
+    $('b-cta').hidden = false; $('b-ok').hidden = true;
+    var b = $('banner'); b.hidden = false; b.classList.remove('in'); setTimeout(function () { b.classList.add('in'); }, delay); /* it arrives after you are in */
+  }
+  function profile(s) {
+    var name = s.name || 'Oksana'; $('who').textContent = name; $('hi').textContent = 'Hi ' + name; $('plan').textContent = (s.plan || 'Smart 5GB') + ' plan';
+    if (s.offer) { $('offer').hidden = false; $('o-name').textContent = s.offer; $('o-meta').textContent = [s.days > 0 ? 'Valid ' + s.days + ' days' : '', s.journey || ''].filter(Boolean).join(' · '); }
+  }
+  function notifText() {
+    var st = !('Notification' in window) ? 'unsupported' : Notification.permission;
+    $('n-on').hidden = st !== 'default';
+    $('n-text').textContent = st === 'granted' ? 'On — offers and reminders from Demo Telco show up in this browser.' : st === 'denied' ? 'Blocked in this browser. Allow notifications for this site in the address bar to turn them on.' : st === 'unsupported' ? 'This browser does not show notifications; messages appear on the page instead.' : 'Get offers and reminders from Demo Telco in this browser.';
+  }
+  $('in').onclick = function () { signedIn = true; $('signin').hidden = true; $('home').hidden = false; $('out').hidden = false; profile(Telco.state); banner(Telco.state, 900); };
+  $('out').onclick = function () { signedIn = false; shownAt = 0; $('signin').hidden = false; $('home').hidden = true; $('out').hidden = true; $('banner').hidden = true; };
+  $('b-cta').onclick = function () { this.hidden = true; $('b-ok').hidden = false; };
+  $('o-cta').onclick = function () { this.hidden = true; $('o-ok').hidden = false; };
+  $('n-on').onclick = function () { Telco.askNotify().then(notifText); };
+  Telco.onState(function (s) { profile(s); banner(s, 300); });
+  profile({}); notifText();
+</script>
+</body>
+</html>

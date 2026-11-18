@@ -9,6 +9,21 @@ page, and one function that sends **one real message per channel** when a journe
 | SMS | Twilio | the number in `DEMO_SMS_TO` |
 | Mobile push | ntfy | the phone subscribed to `NTFY_TOPIC` in the ntfy app |
 | Website | this site | `/offer/?…` — the link the SMS, the e-mail button and the push open |
+| Web self-care | this site | the banner in **My account** of the Demo Telco site, `/telco/account/` |
+| Web push | this site | a browser notification from the Demo Telco site, while it is open in a tab |
+
+## The Demo Telco site (`/telco/`)
+
+A fictional operator's website (decision X11): home page with a plan builder, and **My account** with a
+one-button test sign-in. On activation the sender publishes the journey's first *WSC* and *Web Push*
+delivery and its offer to a second ntfy topic, `<NTFY_TOPIC>-site` (kept 12 hours); the site reads the
+latest through `GET /api/site`.
+
+- **Banner** — open `/telco/account/`, press **Continue as …**: the banner slides in.
+- **Web push** — keep any `/telco/` page open and press **Turn on notifications** in My account once.
+  The notification appears when the journey is activated. Without the permission it still appears as a
+  card on the page. It is shown by the open page, not pushed to a closed browser.
+- Both need `NTFY_TOPIC`; no other set-up.
 
 ## How it works
 

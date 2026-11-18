@@ -11,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const { chromium } = require('@playwright/test');
 const sender = require('../api/send.js');
+const site = require('../api/site.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const errors = [];
@@ -59,6 +60,20 @@ const stub = (calls, status = 200) => async (url, opt) => { calls.push({ url: St
     r1 = (await sender.sendAll(one, FAST, twilio({ ok: false, status: 400, body: { code: 21608, message: 'x' } }, [])))[0];
     check(r1.status === 'failed' && /21608/.test(r1.detail) && /verified/.test(r1.detail) && !/1112233/.test(r1.detail), `a refused SMS explains why (${r1.detail})`);
 
+    // the demo site's store: published on send, read back by /api/site
+    const store = []; const ntfy = async (url, opt) => { if (String(url).includes('/json?poll')) return { ok: true, status: 200, text: async () => store.join('\n') };
+      const b = JSON.parse(opt.body); if (b.topic === 'topic-x-site') store.push(JSON.stringify({ event: 'message', message: b.message })); return { ok: true, status: 200 }; };
+    const web = { journey: { name: 'J' }, site: { name: 'Oksana', plan: 'Smart 5GB', offer: 'Bonus', days: 7 }, messages: [{ channel: 'webpush', title: 'WP', text: 'wp text' }, { channel: 'wsc', title: 'Banner', text: 'b text', cta: 'Renew' }] };
+    const wr = await sender.sendAll(web, ENV, ntfy);
+    check(wr.map((r) => r.channel + ':' + r.status).join() === 'webpush:sent,wsc:sent', 'web push and the self-care banner are accepted');
+    const doc = await site.latest(ENV, ntfy);
+    check(doc.banner && doc.banner.title === 'Banner' && doc.webpush.title === 'WP' && doc.offer === 'Bonus' && doc.name === 'Oksana' && doc.at > 0, '/api/site returns the latest banner, web push and offer');
+    check(JSON.stringify(await site.latest({}, ntfy)) === '{}', '/api/site is empty when nothing is set up');
+    const noTopic = await sender.sendAll(web, { DEMO_EMAIL_TO: 'x' }, ntfy);
+    check(noTopic.every((r) => r.status === 'skipped' && /NTFY_TOPIC/.test(r.detail)), 'without NTFY_TOPIC both say what is missing');
+    const storeDown = await sender.sendAll(web, ENV, stub([], 500));
+    check(storeDown.every((r) => r.status === 'failed'), 'if the site store cannot be reached, they are reported as failed');
+
     const call = (headers, env) => sender.handle('POST', headers, '{"messages":[]}', env, stub([]));
     check((await call({ 'x-live-key': 'wrong' }, ENV)).statusCode === 401, 'a wrong key is refused');
     check((await call({}, ENV)).statusCode === 401, 'a missing key is refused');
@@ -70,15 +85,23 @@ const stub = (calls, status = 200) => async (url, opt) => { calls.push({ url: St
   }
 
   console.log('\nend to end: activate a journey on the served prototype');
-  const provider = []; const realFetch = global.fetch; global.fetch = stub(provider);
+  const provider = []; const realFetch = global.fetch; const siteStore = [];
+  global.fetch = async (url, opt) => { url = String(url);
+    if (url.includes('/json?poll')) return { ok: true, status: 200, text: async () => siteStore.join('\n') };
+    if (url === 'https://ntfy.sh') { const b = JSON.parse(opt.body); if (/-site$/.test(b.topic)) { siteStore.push(JSON.stringify({ event: 'message', message: b.message })); return { ok: true, status: 200 }; } }
+    provider.push({ url, opt }); return { ok: true, status: 200 }; };
+  const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml' };
   const posts = []; let serverEnv = ENV;
   const server = http.createServer((req, res) => {
     const url = new URL(req.url, 'http://x');
     if (url.pathname === '/api/send') { let body = ''; req.on('data', (d) => { body += d; }); req.on('end', async () => {
       posts.push(JSON.parse(body)); const out = await sender.handle(req.method, req.headers, body, serverEnv, global.fetch);
       res.writeHead(out.statusCode, { 'content-type': 'application/json' }); res.end(JSON.stringify(out.body)); }); return; }
-    const file = url.pathname.startsWith('/offer/') ? 'sender/site/offer/index.html' : 'index.html';
-    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }); res.end(fs.readFileSync(path.join(ROOT, file)));
+    if (url.pathname === '/api/site') { site.latest(serverEnv, global.fetch).then((d) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify(d)); }); return; }
+    let file = 'index.html';
+    if (/^\/(offer|telco)\//.test(url.pathname)) { file = path.join('sender/site', path.normalize(url.pathname)); if (file.endsWith(path.sep) || file.endsWith('/')) file = path.join(file, 'index.html'); }
+    if (!fs.existsSync(path.join(ROOT, file))) { res.writeHead(404); res.end('not found'); return; }
+    res.writeHead(200, { 'content-type': TYPES[path.extname(file)] || 'text/plain' }); res.end(fs.readFileSync(path.join(ROOT, file)));
   });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
   const base = `http://127.0.0.1:${server.address().port}`;
@@ -138,6 +161,34 @@ const stub = (calls, status = 200) => async (url, opt) => { calls.push({ url: St
     await page.evaluate(() => { showView('journeys'); jOpen('JRN-07'); const j = JOURNEYS.find((x) => x.id === 'JRN-07'); j.status = 'Draft'; activateJourney(j, false); }); await page.waitForTimeout(400);
     check(reqs.length === 0, `opened from a file, the prototype requests nothing even with ?live= (${reqs.length})`);
     await page.close();
+  }
+  console.log('\nthe demo operator site: web push and the self-care banner');
+  {
+    const page = await open('&live=k-123');
+    const tab = await browser.newPage({ viewport: { width: 1280, height: 900 } }); tab.on('pageerror', (e) => errors.push('site pageerror: ' + e.message));
+    await tab.goto(`${base}/telco/account/`); await tab.waitForSelector('#in');
+    check(await tab.isHidden('#home') && await tab.isHidden('#banner'), 'My account starts signed out, with no banner');
+    await page.evaluate(() => { showView('journeys'); jOpen('JRN-12'); const j = JOURNEYS.find((x) => x.id === 'JRN-12'); j.status = 'Draft';
+      j.nodes.push({ id: 'w1', type: 'delivery', x: 0, y: 0, label: 'Renewal banner', cfg: { channel: 'wsc', content: 'TPL-WSC-1 · Self-care banner', text: 'Renew {{PLAN}} today, {{FIRST_NAME}}.', variant: 'Single content', stopAfter: '1 channel', controlGroup: 'off' }, next: [] },
+                   { id: 'w2', type: 'delivery', x: 0, y: 0, label: 'Your offer is waiting', cfg: { channel: 'webpush', content: 'TPL-WPN-1 · Default', text: 'Open My account to see it, {{FIRST_NAME}}.', variant: 'Single content', stopAfter: '1 channel', controlGroup: 'off' }, next: [] });
+      activateJourney(j, false); });
+    await page.waitForSelector('#ts-modal .ts-live', { timeout: 8000 }).catch(() => {});
+    const live = await page.textContent('#ts-modal .ts-live').catch(() => '');
+    check(/Web push · sent/.test(live) && /Web self-care · sent/.test(live), `the dialog reports web push and web self-care (${live.replace(/\s+/g, ' ').slice(0, 160)})`);
+    await tab.waitForFunction(() => document.getElementById('toast').classList.contains('in'), null, { timeout: 8000 }).catch(() => {});
+    check((await tab.textContent('#toast b')) === 'Your offer is waiting' && /Oksana/.test(await tab.textContent('#toast span')), 'the open site shows the web push, personalised');
+    await tab.click('#in'); await tab.waitForSelector('#banner.in', { timeout: 5000 }).catch(() => {});
+    check(await tab.isVisible('#banner') && (await tab.textContent('#b-title')) === 'Renewal banner' && /Renew Smart 5GB today, Oksana/.test(await tab.textContent('#b-text')), 'after signing in, the banner arrives with the journey text');
+    check((await tab.textContent('#hi')) === 'Hi Oksana' && await tab.isVisible('#offer'), 'My account greets the recipient and shows the offer');
+    await tab.waitForTimeout(500); await tab.screenshot({ path: path.join(__dirname, 'shots', 'telco-account.png') });
+    await tab.click('#b-cta'); check(await tab.isVisible('#b-ok'), 'the banner button confirms');
+    await tab.goto(`${base}/telco/`); await tab.waitForSelector('#price');
+    const p0 = await tab.textContent('#price'); await tab.click('#data button:nth-child(4)'); await tab.click('#extra button:nth-child(1)');
+    check(p0 === '₴ 260' && (await tab.textContent('#price')) === '₴ 430', 'the home page plan builder prices the choice');
+    await tab.screenshot({ path: path.join(__dirname, 'shots', 'telco-home.png') });
+    const ext = []; tab.on('request', (r) => { if (!r.url().startsWith(base)) ext.push(r.url()); }); await tab.reload(); await tab.waitForTimeout(300);
+    check(ext.length === 0, `the site requests nothing outside itself (${ext.length})`);
+    await tab.close(); await page.close();
   }
   await browser.close(); server.close(); global.fetch = realFetch;
   console.log(`\nerrors: ${errors.length ? errors.join(' | ') : 'none'}`);

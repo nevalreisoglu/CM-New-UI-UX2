@@ -2,6 +2,15 @@
 
 Version numbers follow the published artifact versions.
 
+## v63 — 18 Nov 2026
+**Demo Telco: a sample operator website for web self-care and web push** (decision X11).
+- The sender site serves a fictional operator's website at `/telco/`: a home page with a plan builder, ready-made plans and perks, and **My account** with a one-button test sign-in (no credentials).
+- **Web self-care**: on a live send, the journey's first *WSC* delivery becomes the banner that slides in after signing in to My account, with the journey's offer below it.
+- **Web push**: the journey's first *Web Push* delivery shows as a browser notification from the site while it is open (and as a card on the page). The journey Delivery step's channel list gains **webpush**.
+- No database: the last activation's content is kept 12 hours in a second ntfy topic and read through `GET /api/site`. Both channels need only `NTFY_TOPIC`.
+- The *Sent for real* line reports **Web push** and **Web self-care**; Twilio's 572006 (trial accounts cannot send their own text) is explained in plain words.
+- Tests: `tests/sender.js` covers the site store, `/api/site`, the banner after sign-in, the notification card and the plan builder.
+
 ## v62 — 18 Nov 2026
 **The live send says what became of the SMS.** The sender asks Twilio for the message's status for a few seconds after sending: *delivered*, *accepted, delivery not confirmed yet*, or failed with Twilio's error code and what it means in plain words (unverified trial number, country switched off, filtered by the operator…). A refused request shows its code the same way. No recipient or key appears in the text.
 

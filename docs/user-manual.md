@@ -574,6 +574,11 @@ journey's execution log in a dialog.
   an SMS, an e-mail and a push to the recipients set up on that site — and the links in
   them open the offer page. The Send test view opens with a **Sent for real** line saying
   what went out. Resuming a paused journey does not send again.
+  Two more channels land on the **Demo Telco** website that the same site serves at
+  `/telco/`: a **WSC** delivery becomes the banner that appears after you sign in to
+  **My account**, and a **Web Push** delivery (now in the Delivery step's channel list)
+  shows as a browser notification while that site is open — press **Turn on
+  notifications** in My account once.
 - **The toolbar** has help, zoom out / in, fit to view, undo, redo,
   **Validate**, delete step, and the direction (horizontal or top to bottom).
   The right panel collapses with its own toggle.

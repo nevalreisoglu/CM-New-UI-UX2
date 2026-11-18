@@ -526,7 +526,9 @@ sent back by the approver), 3 journeys of fixed sample data;
 Send test draws what a test recipient would receive instead of sending it — unless the page is
 served by the hosted sender app, in which case activating a journey also
 sends one real message per channel to the recipients configured in that app (decision X9,
-`sender/README.md`). Operation analysis exports
+`sender/README.md`). The same app serves a fictional operator's website, *Demo Telco* (`/telco/`),
+where a journey's self-care delivery appears as the banner in My account and its web push as a
+browser notification (decision X11). Operation analysis exports
 a real CSV of its demo rows; Excel export and Open customer are concepts. The data names
 no real person: users come from one fictional list (the signed-in user is Ayşe
 Demir in every role view), and sample customers have masked ids

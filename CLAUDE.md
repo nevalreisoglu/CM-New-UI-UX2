@@ -70,7 +70,7 @@ Olgay Bey, then the customer.
   journeys, and a Gantt timeline (`.gantt`).
 - **Send test** (`tsOpen`, `tsFromCampaign`, `tsFromJourney`) draws what a test recipient gets on four
   surfaces. **Live send** (`LIVE_KEY`, `liveSend`, `liveSendPackage`) is the hosted sender in
-  `api/send.js` + `vercel.json` + `sender/` — see `sender/README.md`; test with `node tests/sender.js`.
+  `api/send.js` + `api/site.js` + `vercel.json` + `sender/` (incl. the Demo Telco site, `sender/site/telco/`, X11) — see `sender/README.md`; test with `node tests/sender.js`.
 - Design tokens are CSS custom properties in `:root`. Some names are historical
   (`--green` is the primary, not a green) — change values, keep names.
 
