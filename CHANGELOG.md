@@ -2,6 +2,13 @@
 
 Version numbers follow the published artifact versions.
 
+## v60 — 18 Nov 2026
+**Live send: a hosted sender app beside the prototype** (decision X9).
+- `netlify.toml`, `netlify/functions/send.js` and `sender/site/offer/` make a small site that serves the prototype and a *Demo Telco* offer page and sends through Resend (e-mail), Twilio (SMS) and ntfy (mobile push). Set-up is in `sender/README.md`.
+- Opened from that site with `?live=<key>`, **Activate** on a journey sends one real message per channel the journey uses — the first SMS, e-mail and push delivery, personalised for the test recipient, the e-mail exactly as the preview draws it — and the links open the offer page. The Send test dialog opens with **Sent for real** and the result per channel.
+- Recipients and keys are only in the site's environment; the page cannot name a recipient, results are masked, a wrong or missing key is refused. From a file, or without the key, the prototype still requests nothing.
+- Tests: `tests/sender.js` — the function alone and end to end with the services stubbed.
+
 ## v59 — 18 Nov 2026
 **Send test on four surfaces** (decisions C21, J3, C22), for showing a campaign or a journey end to end in a customer demo.
 - **Send test** in the campaign header and in the Journey Builder toolbar opens one dialog with four surfaces side by side: **Messages** (SMS, Interactive SMS, MMS on a phone), **Mobile push & app** (lock-screen notification, in-app card), **Email** (inbox with the mail opened) and **Website** (`www.example.com` self-care with *Offers for you*, and web push).

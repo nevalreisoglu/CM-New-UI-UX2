@@ -1,0 +1,18 @@
+# The sender app (decision X9, sender/README.md): serves the prototype and the offer page, and one function
+# that sends. Only index.html and sender/site are published — docs, tests and notes stay in the repository.
+[build]
+  command = "rm -rf dist && mkdir -p dist && cp index.html dist/ && cp -r sender/site/. dist/"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/send"
+  to = "/.netlify/functions/send"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

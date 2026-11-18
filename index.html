@@ -321,6 +321,7 @@ pre.code{margin:0;background:var(--brand-navy);color:#E6E6F0;border-radius:6px;p
 .ts-surf.is-fail .ts-dot{background:var(--bad)}.ts-surf.is-fail .ts-st{color:var(--bad)}
 .ts-surf.is-empty .ts-dot{background:var(--orange)}.ts-surf.is-empty .ts-st{color:var(--warn)}
 .ts-log{padding:8px 20px 14px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--line-2)}.ts-log b{color:var(--ink);font-weight:600}
+.ts-live{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.ts-live a{color:var(--cta-hover)}
 .modal{width:min(1040px,94vw);max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
 .modal .ph{padding:16px 20px 8px;display:flex;align-items:center;gap:10px}
 .modal .ph h3{margin:0;font-size:17px;font-weight:400;color:var(--green)}
@@ -2077,6 +2078,11 @@ journey's execution log in a dialog.
   hand out. A *preferred cascade* step lands on the recipient's first
   reachable channel — switch to a recipient without the app and it moves to
   SMS. A delivery step's own **Send test** opens the same view.
+- **Sending for real.** When the product is opened from the hosted sender site with its
+  `?live=` key, **Activate** also sends one real message per channel the journey uses —
+  an SMS, an e-mail and a push to the recipients set up on that site — and the links in
+  them open the offer page. The Send test view opens with a **Sent for real** line saying
+  what went out. Resuming a paused journey does not send again.
 - **The toolbar** has help, zoom out / in, fit to view, undo, redo,
   **Validate**, delete step, and the direction (horizontal or top to bottom).
   The right panel collapses with its own toggle.
@@ -3359,6 +3365,7 @@ function activateJourney(j,validate){
   if(jsel.value===j.id) jsel.options[jsel.selectedIndex].text=`${j.id} · ${j.name}`;
   render();
   toast(wasPaused?`Resumed · ${j.id}`:`Activated · ${j.id} v${j.version}`, wasPaused?'The journey admits events again.':republish?`Previous version v${j.version-1} is kept for rollback. Status and activation time are visible in Journey Monitor.`:'First activation — the journey now admits customers from its entry rule. See Journey Monitor for status and activation time.');
+  if(!wasPaused) liveSend(j);
 }
 function pauseJourney(j){ j.status='Paused'; addLog('warn',`${j.id}  paused · v${j.version} · by ${DEMO_USERS.me} — active customers keep their state, no new entries or sends`,{j:j.id,node:j.nodes[0].id,kind:'system'}); render(); toast(`Paused · ${j.id}`,'Events for this journey are ignored until it is activated again.','warn'); }
 document.getElementById('btn-activate').onclick=()=>activateJourney(JOURNEYS.find(x=>x.id===curJ),true);
@@ -3763,6 +3770,7 @@ function tsRender(){ const st=tsState; if(!st) return; const cust=CUSTOMERS.find
         :`<div class="ts-win"><div class="ts-bar"><i></i><i></i><i></i><span>https://www.example.com/my-account</span></div><div class="ts-in">${x.html||''}</div></div>`}
         <div class="ts-empty">${x.state==='ok'?'':x.why}</div></div>
       <footer class="ts-st" data-state="${x.state}"><span class="ts-dot"></span><span class="ts-txt">${x.state==='ok'?'Sending…':x.why}</span></footer></section>`; }).join('')}</div>
+    ${liveLast&&!isCamp&&liveLast.jid===src.id?`<div class="ts-log ts-live"><b>Sent for real · ${liveLast.at}</b> ${liveLast.results.map(x=>`<span class="pill ${x.status==='sent'?'ok':x.status==='failed'?'bad':''}">${esc(({sms:'SMS',email:'Email',push:'Mobile push',web:'Website'})[x.channel]||x.channel)} · ${x.status==='sent'?'sent':x.status==='skipped'?'not set up':'failed'}</span> <span>${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener">open the page</a>`:esc(x.detail||'')}</span>`).join(' ')}</div>`:''}
     <div class="ts-log"><b>Send log</b> <span id="ts-log">${sent} of 4 surfaces${data.other.length?` · also on ${esc(data.other.join(', '))} — not shown here`:''}</span></div></div>`;
   m.querySelector('#ts-close').onclick=tsClose;
   m.querySelector('#ts-again').onclick=()=>tsRun(surf,cust);
@@ -3780,6 +3788,38 @@ function tsRun(surf,cust){ const id=++tsRunId; const m=document.getElementById('
   if(!order.length){ fin(); return; }
   order.forEach((k,i)=>setTimeout(()=>{ if(id!==tsRunId) return; const s=m.querySelector(`.ts-surf[data-surf="${k}"]`); if(!s) return; const d=new Date(t0.getTime()+(i+1)*1000);
     s.classList.add('done'); s.querySelector('.ts-txt').textContent=`✓ ${hhmmss(d)} · ${surf[k].why.replace(/&amp;/g,'&')}`; lines.push(`${TS_SURF.find(x=>x[0]===k)[1]} ✓`); if(i===order.length-1) fin(); },380*(i+1))); }
+/* ---------- LIVE SEND (decision X9) — only when the page is served by the sender app (sender/README.md) and
+   opened with ?live=<key>. Activating a journey then posts one message per channel to the app's own /api/send,
+   which delivers them to the recipients configured there. From a file:// URL, or without the key, nothing is
+   requested: the prototype stays self-contained. ---------- */
+const LIVE_KEY=/^https?:$/.test(location.protocol)?(new URLSearchParams(location.search).get('live')||''):'';
+let liveLast=null;
+/* the e-mail as the preview draws it, with its styles inlined so a mail client shows the same thing */
+function tsMailHtml(item,cust,link){ const dv=ctDevice; ctDevice='desktop'; const host=document.createElement('div'); host.style.cssText='position:absolute;left:-9999px;top:0;width:600px'; document.body.appendChild(host);
+  host.innerHTML=ctPreviewHtml(item,cust); ctDevice=dv; const mail=host.querySelector('.mail'); mail.firstElementChild.remove(); /* the Subject row: a real mail carries it as a header */
+  const KEEP=['background-color','background-image','color','padding','margin','font-size','font-weight','line-height','border-top','border-bottom','border-left','border-right','border-radius','opacity'];
+  const styled=[mail,...mail.querySelectorAll('*')].map(el=>{ const cs=getComputedStyle(el); const st=KEEP.map(k=>{ const v=cs.getPropertyValue(k); if(!v||v==='none'||v==='0px'||v==='rgba(0, 0, 0, 0)'||(k==='opacity'&&v==='1')||(/^border-(top|bottom|left|right)$/.test(k)&&cs.getPropertyValue(k+'-style')==='none')) return ''; return `${k}:${v}`; }).filter(Boolean);
+    const disp=cs.display==='flex'||cs.display==='grid'?'block':cs.display; st.push('display:'+(el.tagName==='I'?'inline-block':disp),'font-family:Roboto,Arial,sans-serif'); if(el.tagName==='I') st.push(`width:${cs.width}`,`height:${cs.height}`,'vertical-align:-3px','margin-right:8px'); if(cs.backgroundImage.includes('gradient')) st.push('background-color:#3B3B66'); return [el,st.join(';')]; });
+  styled.forEach(([el,st])=>{ el.removeAttribute('class'); el.setAttribute('style',st); }); mail.style.overflow='hidden';
+  const cta=[...mail.querySelectorAll('span')].find(x=>x.textContent.trim()===(item.cta||'Open')); if(cta){ const a=document.createElement('a'); a.href=link; a.setAttribute('style',cta.getAttribute('style')+';text-decoration:none'); a.textContent=cta.textContent; cta.replaceWith(a); }
+  mail.querySelectorAll('i').forEach(i=>{ const sp=document.createElement('span'); sp.setAttribute('style',i.getAttribute('style')); i.replaceWith(sp); });
+  const html=`<div style="background:#F2F3F5;padding:24px 12px"><div style="max-width:600px;margin:0 auto">${mail.outerHTML}</div></div>`; host.remove(); return html; }
+/* one message per channel the journey uses, resolved for the test recipient; the website is the offer page the links open */
+function liveSendPackage(j,cust){ const data=tsFromJourney(j,cust); const R=t=>resolveParams(t,cust,false); const first=k=>data.msgs.find(m=>m.surf===k&&m.item&&m.ch!=='webpush');
+  const offer=(data.offers[0]||{}).o; const link=location.origin+'/offer/?'+new URLSearchParams({n:cust.name,p:cust.row.PLAN||'',o:offer?offer.name:'',d:offer&&offer.params&&offer.params.validityDays?offer.params.validityDays:'',j:j.name});
+  const body=it=>R((it.variants||{})[pickVariant(it,cust)]||it.body||''); const out=[];
+  const sms=first('sms'); if(sms) out.push({channel:'sms',step:sms.label,text:body(sms.item)+' '+link});
+  const em=first('email'); if(em) out.push({channel:'email',step:em.label,subject:R((em.item.subject||{}).A||em.item.title||j.name),preheader:R(em.item.preheader||''),html:tsMailHtml(em.item,cust,link),text:[R(em.item.hero),R(em.item.lead),'',R(em.item.body)||body(em.item),'',(em.item.cta||'Open')+': '+link].join('\n')});
+  const pu=first('push'); if(pu) out.push({channel:'push',step:pu.label,title:R(pu.item.title||j.name),text:body(pu.item),click:link});
+  if(out.length||offer) out.push({channel:'web',url:link});
+  return {journey:{id:j.id,name:j.name},recipient:cust.name,messages:out}; }
+function liveSend(j){ if(!LIVE_KEY) return; const cust=tsDefaultCust(); const pkg=liveSendPackage(j,cust); if(!pkg.messages.length) return;
+  const names={sms:'SMS',email:'Email',push:'Mobile push',web:'Website'};
+  const done=results=>{ liveLast={jid:j.id,at:new Date().toTimeString().slice(0,8),results}; const line=results.map(r=>`${names[r.channel]||r.channel} ${r.status==='sent'?'✓':r.status==='skipped'?'– not set up':'✕'}`).join(' · ');
+    addLog(results.some(r=>r.status==='failed')?'warn':'ok',`${j.id}  live send · ${line}`,{j:j.id,node:j.nodes[0].id,kind:'system'}); toast('Sent for real',line,results.some(r=>r.status==='failed')?'warn':undefined); tsOpen('journey',j.id); };
+  fetch('/api/send',{method:'POST',headers:{'content-type':'application/json','x-live-key':LIVE_KEY},body:JSON.stringify(pkg)})
+    .then(r=>r.json().then(b=>r.ok?b.results:[{channel:'send',status:'failed',detail:b.error||('HTTP '+r.status)}]))
+    .catch(e=>[{channel:'send',status:'failed',detail:String(e.message||e)}]).then(done); }
 const PLAN_RULES=[['cg','Control group','from the campaign: size and method'],['cooldown','Channel cooldown','days between two sends on the same channel, any campaign'],['type','Campaign Type (overlap)','max. Information / Offer sends per day'],['presend','Campaign pre-sent','days between two sends of this same campaign to one customer (default from Parameters)']];
 const PLAN_STATUS_CLS={Draft:'warn','Waiting for approval':'warn',Scheduled:'acc',Running:'ok',Paused:'',Completed:'',Stopped:'bad'};
 const defaultRules=c=>({cg:{use:c.cg!=='No Control Group',log:true},cooldown:{use:true,log:true},type:{use:true,log:true},presend:{use:true,log:true}});
