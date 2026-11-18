@@ -362,12 +362,34 @@ One card per channel you picked. For each:
 4. **Copy content from campaign…** pulls wording from another campaign.
 5. **Attach survey** adds a survey to the message (not on telemarketing) — see
    *Surveys* below.
-6. **Send test** sends the content to the test users (shown as a toast
-   here).
+6. **Send test** on the card opens the test send with this channel's surface
+   highlighted — see **Send a test** below.
 
 Under **Variants**, **A/B test** and **Dynamic by column** are independent
 switches — you can use either, both, or neither. A/B adds a second set of
 slots and the share each variant gets.
+
+#### Send a test
+
+**Send test** in the campaign header (or on a channel card) sends the campaign
+to one test recipient and shows what they receive, side by side:
+
+| Surface | What you see |
+| --- | --- |
+| Messages | the SMS, Interactive SMS or MMS on a phone |
+| Mobile push & app | the push notification on the lock screen, or the in-app card |
+| Email | the inbox with the new mail, opened below it |
+| Website | the self-care site the customer signs in to, with **Offers for you** |
+
+The surfaces fill one after another and each says when it was delivered and
+to which number, address or app. A channel the campaign does not use says so.
+An Offer campaign's offer always appears on the website, even when the
+campaign itself sends by SMS; an Information campaign shows nothing there.
+
+Pick another **Test recipient** at the top to see the message with their name,
+plan and language — the personalised values are in bold. A recipient without
+the app does not get a push, and the surface says why. **Send again** replays
+the send. Nothing reaches a real customer, a report or a contact rule.
 
 #### 5 · Communication rules
 
@@ -541,6 +563,12 @@ journey's execution log in a dialog.
 - **Click a step** to open its panel on the right and configure it — for a
   delivery step, that is where its channel, template, content and survey live.
   The panel also has **Disable step** and **Delete step**.
+- **Send test** in the top bar sends the whole journey to a test recipient: every
+  delivery step lands on the phone, in the mailbox or on the website, in
+  order, and the website shows the offers the journey's Offer and NBO steps
+  hand out. A *preferred cascade* step lands on the recipient's first
+  reachable channel — switch to a recipient without the app and it moves to
+  SMS. A delivery step's own **Send test** opens the same view.
 - **The toolbar** has help, zoom out / in, fit to view, undo, redo,
   **Validate**, delete step, and the direction (horizontal or top to bottom).
   The right panel collapses with its own toggle.
@@ -786,7 +814,8 @@ branching rule skipped.
 ## Things worth knowing
 
 - **Nothing is saved.** Reloading starts over from the sample data.
-- **Nothing is sent.** Test sends raise a toast instead. Operation analysis
+- **Nothing is sent.** Send test shows what a test recipient would receive, on
+  screen. Operation analysis
   exports a real CSV — of demo rows.
 - The sample data is 30 customers, 18 campaigns and 3 journeys. Two of the
   campaigns are in the approval loop: **2004** is waiting for approval and

@@ -2,6 +2,15 @@
 
 Version numbers follow the published artifact versions.
 
+## v59 — 18 Nov 2026
+**Send test on four surfaces** (decisions C21, J3, C22), for showing a campaign or a journey end to end in a customer demo.
+- **Send test** in the campaign header and in the Journey Builder toolbar opens one dialog with four surfaces side by side: **Messages** (SMS, Interactive SMS, MMS on a phone), **Mobile push & app** (lock-screen notification, in-app card), **Email** (inbox with the mail opened) and **Website** (`www.example.com` self-care with *Offers for you*, and web push).
+- A campaign fills the surfaces of its channels; an **Offer campaign's offer also shows on the website** (NBO picks one per recipient); an Information campaign shows nothing there. A journey sends every Delivery step in canvas order and shows the offers of its Offer and NBO steps; a *Preferred cascade* step lands on the recipient's first reachable channel.
+- Surfaces fill one after another with a delivered time and the destination; a send log sums up; **Send again** replays it. **Test recipient** switches the sample customer — name, plan, language variant and cascade follow; a recipient without the app gets no push and the surface says why.
+- The channel cards' and the Delivery step's **Send test** buttons open the same dialog with their surface highlighted, instead of a toast.
+- Fixed: personalised values in a push preview no longer break onto their own lines, and the push card's app line no longer stretches to the window height. The e-mail template's button is turquoise (`--cta`, 4.63:1) instead of white on orange (2.59:1), as V3/V4 require.
+- Tests: `tests/specs/testsend.spec.js` (5 specs); the brand audit adds the campaign, journey and no-app test sends.
+
 ## v58 — 23 Oct 2026
 **Prototype wording removed** (decision X8). The *Prototype* pill in the top bar and on the user manual, the *⚗ Simulation · demo only* badge and its dashed strip on the Journey Builder and Journey Monitor, and every on-screen "prototype" sentence (hints, toasts, tour notes, Release & licences, the embedded manual) are gone. The event and clock controls (Send event, Advance 1 day / 5 days, Reset, Day n) stay as a plain toolbar row. Ids, classes and `data-tour` hooks are unchanged; `tests/specs/journey.spec.js` and `manual.spec.js` now assert the absence of the badge and the word.
 

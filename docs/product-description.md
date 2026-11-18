@@ -157,6 +157,16 @@ Step by step:
 8. **Summary** — *Before you can submit* at the top, then everything on one page
    for the final read.
 
+**Send test** (in the editor header, and on every channel card) shows the
+campaign as one test recipient receives it, on four surfaces side by side: the
+phone's messages, the phone's lock screen and app, the mailbox, and the
+operator's self-care website. A campaign fills the surfaces of its own
+channels; an Offer campaign's offer also appears on the website under *Offers
+for you*, because that is where the customer finds it after the message. The
+surfaces fill in turn with a delivered time; the recipient can be changed, and
+the personalised values follow their profile. Journeys have the same **Send
+test**, sending every delivery step in order (decisions C21, J3, C22).
+
 ---
 
 ## 5. Template is design, content is text
@@ -513,7 +523,7 @@ prototype runs three simulated days at load so the monitor is not empty.
 
 Also demo-only: 30 customers, 18 campaigns (one waiting for approval, one
 sent back by the approver), 3 journeys of fixed sample data;
-test sends raise a toast instead of doing anything. Operation analysis exports
+Send test draws what a test recipient would receive instead of sending it. Operation analysis exports
 a real CSV of its demo rows; Excel export and Open customer are concepts. The data names
 no real person: users come from one fictional list (the signed-in user is Ayşe
 Demir in every role view), and sample customers have masked ids

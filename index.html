@@ -272,6 +272,55 @@ pre.code{margin:0;background:var(--brand-navy);color:#E6E6F0;border-radius:6px;p
 /* modal */
 .modal-bg{position:fixed;inset:0;background:rgba(31,41,55,.35);display:grid;place-items:center;z-index:40}
 .modal-bg[hidden]{display:none!important}
+/* test send */
+.ts-modal{width:min(1320px,97vw);max-height:94vh}
+.ts-modal .ph{flex-wrap:wrap}
+.ts-src{font-size:13px;color:var(--ink-2)}
+.ts-lbl{font-size:12px;color:var(--ink-2)}
+.ts-modal select{max-width:260px}
+.ts-sub{padding:0 20px 10px;font-size:12px;color:var(--ink-2)}
+.ts-stage{display:grid;grid-template-columns:250px 250px minmax(0,1fr) minmax(0,1fr);gap:12px;padding:0 20px 12px;overflow:auto;min-height:0}
+@media (max-width:1180px){.ts-stage{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ts-surf{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);min-width:0;overflow:hidden}
+.ts-surf.focus{box-shadow:0 0 0 2px var(--acc)}
+.ts-surf header{padding:8px 12px;background:var(--sec-soft);color:var(--sec-ink);display:flex;flex-direction:column}
+.ts-surf header b{font-size:13px;font-weight:600}.ts-surf header small{font-size:11px;color:var(--ink-2)}
+.ts-body{flex:1;position:relative;padding:10px;height:min(54vh,520px);overflow:auto}
+.ts-body .phone.ts-phone{width:100%;min-height:100%;padding:32px 10px 14px;border-width:7px;border-radius:24px}
+.ts-phone .ts-in{display:flex;flex-direction:column;gap:8px}
+.ts-phone .bubble,.ts-phone .pushcard{max-width:100%}
+.ts-clock{text-align:center;font-size:30px;font-weight:300;color:var(--ink);line-height:1}
+.ts-tag{font-size:10.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.ts-win{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;min-height:100%}
+.ts-bar{display:flex;align-items:center;gap:5px;padding:6px 10px;background:var(--grey-2);font-size:11px;color:var(--ink-2)}
+.ts-bar i{width:8px;height:8px;border-radius:50%;background:var(--grey-1);display:inline-block}.ts-bar span{margin-left:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ts-win .ts-in{padding:8px}
+.ts-win .mail{max-width:100%}
+.ts-inbox{display:flex;flex-direction:column;border:1px solid var(--line-2);border-radius:6px;margin-bottom:8px;overflow:hidden}
+.ts-mrow{display:grid;grid-template-columns:auto 1fr;gap:0 8px;text-align:left;border:0;border-bottom:1px solid var(--line-2);background:#fff;padding:7px 9px;font:inherit;font-size:12px;color:var(--ink);cursor:pointer}
+.ts-mrow:last-child{border-bottom:0}.ts-mrow.on{background:var(--acc-soft)}
+.ts-mrow span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ts-mrow small{grid-column:1/-1;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ts-site{display:flex;flex-direction:column;gap:8px}
+.ts-nav{display:flex;gap:12px;align-items:center;font-size:12px;color:var(--ink-2);padding-bottom:6px;border-bottom:1px solid var(--line-2);flex-wrap:wrap}
+.ts-nav .lg{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--ink);margin-right:auto}.ts-nav .lg i{width:14px;height:14px;border-radius:4px;background:var(--orange);display:inline-block}
+.ts-hi{font-size:15px;font-weight:500;color:var(--ink);display:flex;flex-direction:column}.ts-hi small{font-size:12px;font-weight:400;color:var(--ink-2)}
+.ts-oh{font-size:14px;font-weight:500;color:var(--green-ink);margin-top:4px}
+.ts-offer{display:flex;flex-direction:column;align-items:flex-start;gap:4px;border:1px solid var(--line);border-left:3px solid var(--sec);border-radius:6px;padding:10px 12px;background:#fff}
+.ts-offer b{font-size:14px;color:var(--ink)}.ts-offer small{font-size:11.5px;color:var(--ink-2)}
+.ts-cta{margin-top:4px;background:var(--cta);color:#fff;border-radius:6px;padding:6px 14px;font-size:12.5px;font-weight:500}
+.ts-wpush{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:0 0 8px auto;max-width:260px;background:#fff;box-shadow:var(--shadow);font-size:12px}
+.ts-wpush .app{font-size:10.5px;color:var(--ink-3);margin-bottom:2px}.ts-wpush b{display:block}
+.ts-empty{display:none;position:absolute;inset:10px;place-items:center;text-align:center;padding:20px;font-size:12.5px;color:var(--ink-2);background:var(--surface-2)}
+.ts-surf:not(.is-ok) .ts-empty{display:grid}
+.ts-surf:not(.is-ok) .ts-phone,.ts-surf:not(.is-ok) .ts-win{visibility:hidden}
+.ts-surf.is-ok .ts-in{opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
+.ts-surf.is-ok.done .ts-in{opacity:1;transform:none}
+.ts-st{display:flex;align-items:center;gap:6px;padding:7px 12px;border-top:1px solid var(--line-2);background:#fff;font-size:12px;color:var(--ink-2);min-height:34px}
+.ts-dot{width:8px;height:8px;border-radius:50%;background:#8A8AA0;flex:none}
+.ts-surf.is-ok .ts-dot{background:var(--acc)}.ts-surf.is-ok.done .ts-dot{background:var(--ok)}.ts-surf.is-ok.done .ts-st{color:var(--ok)}
+.ts-surf.is-fail .ts-dot{background:var(--bad)}.ts-surf.is-fail .ts-st{color:var(--bad)}
+.ts-surf.is-empty .ts-dot{background:var(--orange)}.ts-surf.is-empty .ts-st{color:var(--warn)}
+.ts-log{padding:8px 20px 14px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--line-2)}.ts-log b{color:var(--ink);font-weight:600}
 .modal{width:min(1040px,94vw);max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
 .modal .ph{padding:16px 20px 8px;display:flex;align-items:center;gap:10px}
 .modal .ph h3{margin:0;font-size:17px;font-weight:400;color:var(--green)}
@@ -371,8 +420,10 @@ pre.code{margin:0;background:var(--brand-navy);color:#E6E6F0;border-radius:6px;p
 .bubble .from{font-size:10.5px;color:var(--ink-3);margin-bottom:3px;font-weight:600}
 .pushcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:var(--shadow);font-size:12.5px}
 .pushcard .app{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--ink-3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.pushcard .app,.ts-wpush .app{height:auto;min-height:0}
 .pushcard .app i{width:14px;height:14px;border-radius:4px;background:var(--orange);display:inline-block}
 .pushcard b{display:block;margin-bottom:2px}
+.pushcard b.rv{display:inline;margin:0}
 .mail{width:100%;max-width:600px;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:13px}
 .mail.m{max-width:340px;border-radius:12px;font-size:12px;box-shadow:0 0 0 9px var(--brand-navy),0 8px 24px rgba(0,0,0,.2)}
 .mail .hd{background:var(--brand-navy);color:#fff;padding:14px 22px;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px}
@@ -383,7 +434,7 @@ pre.code{margin:0;background:var(--brand-navy);color:#E6E6F0;border-radius:6px;p
 .mail .hero p{margin:0;opacity:.95}
 .rv{color:var(--green-ink)} .mail .hero .rv{color:#fff;text-decoration:underline dotted rgba(255,255,255,.7);text-underline-offset:3px}
 .mail .bd{padding:18px 22px;color:var(--ink);line-height:1.55}
-.mail .cta{display:inline-block;background:var(--orange);color:#fff;padding:10px 18px;border-radius:6px;font-weight:600;margin-top:10px}
+.mail .cta{display:inline-block;background:var(--cta);color:#fff;padding:10px 18px;border-radius:6px;font-weight:600;margin-top:10px}
 .mail .ft{padding:12px 22px;font-size:11px;color:var(--ink-3);border-top:1px solid var(--line-2)}
 .param{background:var(--sec-soft);border:1px solid var(--sec-light);border-radius:3px;padding:0 4px;font-family:var(--mono);font-size:11px;cursor:pointer}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
@@ -1159,6 +1210,7 @@ i.pro,.tb .tc i.pro{background:var(--ok)} i.pas,.tb .tc i.pas{background:#9595B0
                 <select id="jsel" class="btn sm outline" style="background:#fff" title="Quick switch to another journey"></select><button class="btn sm primary" id="btn-jnew" style="white-space:nowrap">+ New journey</button>
                 <div class="meta" id="jmeta" style="display:flex;gap:6px;flex-wrap:wrap"></div>
                 <div class="grow"></div>
+                <button class="btn sm outline" id="btn-jtestsend" title="Send this journey's deliveries to a test recipient and see them on the phone, in the mailbox and on the website">Send test</button>
                 <button class="btn sm outline" id="btn-report">Execution report</button>
               </div>
               <div class="ctool evbar simbar" data-tour="j-sim">
@@ -1818,12 +1870,34 @@ One card per channel you picked. For each:
 4. **Copy content from campaign…** pulls wording from another campaign.
 5. **Attach survey** adds a survey to the message (not on telemarketing) — see
    *Surveys* below.
-6. **Send test** sends the content to the test users (shown as a toast
-   here).
+6. **Send test** on the card opens the test send with this channel's surface
+   highlighted — see **Send a test** below.
 
 Under **Variants**, **A/B test** and **Dynamic by column** are independent
 switches — you can use either, both, or neither. A/B adds a second set of
 slots and the share each variant gets.
+
+#### Send a test
+
+**Send test** in the campaign header (or on a channel card) sends the campaign
+to one test recipient and shows what they receive, side by side:
+
+| Surface | What you see |
+| --- | --- |
+| Messages | the SMS, Interactive SMS or MMS on a phone |
+| Mobile push & app | the push notification on the lock screen, or the in-app card |
+| Email | the inbox with the new mail, opened below it |
+| Website | the self-care site the customer signs in to, with **Offers for you** |
+
+The surfaces fill one after another and each says when it was delivered and
+to which number, address or app. A channel the campaign does not use says so.
+An Offer campaign's offer always appears on the website, even when the
+campaign itself sends by SMS; an Information campaign shows nothing there.
+
+Pick another **Test recipient** at the top to see the message with their name,
+plan and language — the personalised values are in bold. A recipient without
+the app does not get a push, and the surface says why. **Send again** replays
+the send. Nothing reaches a real customer, a report or a contact rule.
 
 #### 5 · Communication rules
 
@@ -1997,6 +2071,12 @@ journey's execution log in a dialog.
 - **Click a step** to open its panel on the right and configure it — for a
   delivery step, that is where its channel, template, content and survey live.
   The panel also has **Disable step** and **Delete step**.
+- **Send test** in the top bar sends the whole journey to a test recipient: every
+  delivery step lands on the phone, in the mailbox or on the website, in
+  order, and the website shows the offers the journey's Offer and NBO steps
+  hand out. A *preferred cascade* step lands on the recipient's first
+  reachable channel — switch to a recipient without the app and it moves to
+  SMS. A delivery step's own **Send test** opens the same view.
 - **The toolbar** has help, zoom out / in, fit to view, undo, redo,
   **Validate**, delete step, and the direction (horizontal or top to bottom).
   The right panel collapses with its own toggle.
@@ -2242,7 +2322,8 @@ branching rule skipped.
 ## Things worth knowing
 
 - **Nothing is saved.** Reloading starts over from the sample data.
-- **Nothing is sent.** Test sends raise a toast instead. Operation analysis
+- **Nothing is sent.** Send test shows what a test recipient would receive, on
+  screen. Operation analysis
   exports a real CSV — of demo rows.
 - The sample data is 30 customers, 18 campaigns and 3 journeys. Two of the
   campaigns are in the approval loop: **2004** is waiting for approval and
@@ -3070,7 +3151,7 @@ function renderNodePanel(){
   body.querySelectorAll('[data-jins]').forEach(sp=>sp.onclick=()=>{ const ta=body.querySelector('#f-text'); if(!ta) return; const v=`{{${sp.dataset.jins}}}`; const st=ta.selectionStart||ta.value.length; ta.value=ta.value.slice(0,st)+v+ta.value.slice(st); ta.dispatchEvent(new Event('input')); ta.focus(); });
   const abr=body.querySelector('input[data-k="abSplit"]'); if(abr){ abr.oninput=()=>{ n.cfg.abSplit=+abr.value; body.querySelector('#ab-out').textContent=abr.value+'%'; }; }
   const bt=body.querySelector('#btn-addtest'); if(bt) bt.onclick=()=>{ n.cfg.tests.push('Test user '+(n.cfg.tests.length+1)); renderNodePanel(); };
-  const bs=body.querySelector('#btn-testsend'); if(bs) bs.onclick=()=>toast('Test send',`${n.id} · ${String(n.cfg.content).split(' ·')[0]} rendered for ${n.cfg.tests.join(', ')} — test delivery is not enabled in this environment.`,'warn');
+  const bs=body.querySelector('#btn-testsend'); if(bs) bs.onclick=()=>{ const ch=String(n.cfg.channel||''); tsOpen('journey',j.id,tsSurfOf(ch.startsWith('Preferred')?tsCascade(tsDefaultCust()):ch)); };
   const go=body.querySelector('#goto-offer'); if(go) go.onclick=()=>{ selOffer=n.cfg.offer; showView('offers'); };
   const bd=body.querySelector('#btn-delete-step'); if(bd) bd.onclick=()=>deleteNode(n.id);
   body.querySelector('#btn-disable').onclick=()=>{ n.label=n.label.startsWith('[off] ')?n.label.slice(6):'[off] '+n.label; renderCanvas(); renderNodePanel(); };
@@ -3249,6 +3330,7 @@ function renderReport(){
 }
 repModal=document.getElementById('rep-modal');
 document.getElementById('btn-report').onclick=()=>{ renderReport(); repModal.hidden=false; };
+document.getElementById('btn-jtestsend').onclick=()=>{ if(curJ) tsOpen('journey',curJ); };
 document.getElementById('rep-close').onclick=document.getElementById('rep-close2').onclick=()=>{ repModal.hidden=true; };
 repModal.addEventListener('click',e=>{ if(e.target===repModal) repModal.hidden=true; });
 window.addEventListener('keydown',e=>{ if(e.key==='Escape'){ repModal.hidden=true; const nl=document.getElementById('seg-nl-modal'); if(nl) nl.hidden=true; } });
@@ -3595,12 +3677,109 @@ const campKind=c=>{ const chs=c.channels||[]; return chs.some(ch=>CH_KIND[ch]===
 const prioRelevant=c=>(c.channels||[]).some(ch=>CH_KIND[ch]==='pull'||ch==='tm');
 const planModeText=p=>[p.ab?'A/B':'',p.dynOn?'Dynamic · '+p.dyn:''].filter(Boolean).join(' · ')||'Single';
 /* render the picked template with this campaign's edited text — the marketer sees what the customer sees */
-function planPreviewHtml(p,cust,variant){ let sl=variant==='B'?p.slotsB:p.slots; if(!p.content) return '<div class="empty" style="padding:14px">No template.</div>';
+function planItem(p,cust,variant){ let sl=variant==='B'?p.slotsB:p.slots;
   /* an attached survey: push channels print the personal link, pull channels render the questions inside the card */
   const sv=p.survey&&typeof srvById==='function'&&srvById(p.survey); if(sv) sl=Object.fromEntries(Object.entries(sl||{}).map(([k,v])=>[k,String(v||'').replace(/\{\{SURVEY_LINK\}\}/g,srvLink(sv))]));
-  const d=contentToItem(p.ch,p.content,sl); if(p.dynOn&&cust&&cust.row.LANGUAGE==='uk'&&p.bodyAlt){ d.variants={uk:p.bodyAlt}; d.body=p.bodyAlt; }
+  const d=contentToItem(p.ch,p.content,sl); if(p.dynOn&&cust&&cust.row.LANGUAGE==='uk'&&p.bodyAlt){ d.variants={uk:p.bodyAlt}; d.body=p.bodyAlt; } return d; }
+function planPreviewHtml(p,cust,variant){ if(!p.content) return '<div class="empty" style="padding:14px">No template.</div>';
+  const sv=p.survey&&typeof srvById==='function'&&srvById(p.survey); const d=planItem(p,cust,variant);
   let html=ctPreviewHtml(d,cust); if(sv&&CH_KIND[p.ch]==='pull'){ const k=html.lastIndexOf('</div>'); html=html.slice(0,k)+srvFormHtml(sv,'en','inline')+html.slice(k); }
   return `<div class="prev-wrap" style="margin:0;padding:10px;overflow:hidden">${html}</div>`; }
+/* ---------- TEST SEND — what one test recipient receives, on the four places a customer sees a campaign:
+   the phone's messages, the phone's notifications and app, the mailbox and the operator's website.
+   A campaign sends on its own channels; an Offer campaign's offer is also shown on the website
+   (decision C21). A journey sends every Delivery step in order, and the website shows the offers its
+   Offer / NBO steps hand out (J3). Nothing reaches a real customer, a report or a contact rule. ---------- */
+let tsState=null, tsRunId=0;
+const TS_SURF=[['sms','Messages','SMS · Interactive SMS · MMS'],['push','Mobile push & app','Push notification · in-app card'],['email','Email','Inbox'],['web','Website','www.example.com · self-care']];
+const tsSurfOf=ch=>({sms:'sms',isms:'sms',mms:'sms',push:'push',inapp:'push',email:'email',webpush:'web',wsc:'web',banner:'web'})[ch]||'';
+const tsRecipients=()=>CUSTOMERS.filter(c=>c.row.EMAIL);
+const tsDefaultCust=()=>tsRecipients().find(c=>c.row.APP_INSTALLED==='Y')||tsRecipients()[0]||CUSTOMERS[0];
+const tsNbo=cust=>OFFERS.find(o=>o.status==='Active'&&(o.tags||[]).includes(cust.attrs.customerType==='prepaid'?'Prepaid':'Postpaid'))||OFFERS.find(o=>o.status==='Active')||OFFERS[0];
+/* the cascade picks the first channel the customer can be reached on */
+const tsCascade=cust=>cust.pref[0]||'sms';
+function tsFromCampaign(c,cust){ const out={msgs:[],offers:[],other:[]};
+  (c.plans||[]).forEach(p=>{ const k=tsSurfOf(p.ch); if(!k){ out.other.push(chName(p.ch)); return; }
+    out.msgs.push({surf:k,ch:p.ch,label:chName(p.ch),item:planFilled(p)&&p.content?planItem(p,cust,'A'):null}); });
+  if(c.type==='Offer') out.offers=c.strategy==='NBO'?[{o:tsNbo(cust),why:'Picked for you by Next Best Offer'}]:(c.offers||[]).map(id=>({o:OFFERS.find(x=>x.id===id),why:esc(c.name)})).filter(x=>x.o);
+  return out; }
+function tsFromJourney(j,cust){ const out={msgs:[],offers:[],other:[]};
+  j.nodes.forEach(n=>{
+    if(n.type==='delivery'){ const orig=String(n.cfg.content||''); jPlanEnsure(n); let ch=String(n.cfg.channel||''); if(ch.startsWith('Preferred')) ch=tsCascade(cust); const k=tsSurfOf(ch);
+      if(!k){ out.other.push(`${chName(ch)} (step ${n.id})`); return; }
+      /* the journey's own text; a library item with the same text lends its title / subject */
+      const id=String(n.cfg.content||'').split(' ·')[0]; const txt=n.cfg.text||''; const ci=CONTENT_ITEMS.find(x=>x.id===id)||CONTENT_ITEMS.find(x=>x.ch===ch&&txt&&(Object.values(x.variants||{}).includes(txt)||contentTextOf(x.id)===txt));
+      /* a cascade step carries a per-channel content set, not one text: take the set's item for the channel it lands on */
+      if(!txt&&!ci){ const kw=(orig.match(/content set · (\w+)/)||[])[1]||String(j.name).split(/\W/)[0]; const set=CONTENT_ITEMS.filter(x=>x.ch===ch); const hit=set.find(x=>new RegExp(kw,'i').test(x.name))||set[0];
+        if(hit){ out.msgs.push({surf:k,ch,label:`Step ${n.id} · ${esc(n.label)} · cascade → ${chName(ch)}`,item:hit}); return; } }
+      const item=ci?Object.assign({},ci,ch==='email'||!txt?{}:{variants:Object.assign({},ci.variants,{en:txt})}):contentToItem(ch,id,{body:txt,title:n.label,subject:j.name,headline:n.label,cta:'Open'});
+      out.msgs.push({surf:k,ch,label:`Step ${n.id} · ${esc(n.label)}`,item:(n.cfg.text||ci)?item:null}); }
+    if(n.type==='offer'){ const o=OFFERS.find(x=>x.id===n.cfg.offer); if(o) out.offers.push({o,why:`Step ${n.id} · ${esc(n.label)}`}); }
+    if(n.type==='nbo') out.offers.push({o:tsNbo(cust),why:`Step ${n.id} · picked by Next Best Offer`});
+  });
+  return out; }
+/* keep a preview's message, drop the phone it was drawn in — the test send draws one phone per surface */
+function tsInner(html){ const t=document.createElement('template'); t.innerHTML=html; const ph=t.content.querySelector('.phone'); if(!ph) return html; const tm=ph.querySelector(':scope>.time'); if(tm) tm.remove(); return ph.innerHTML; }
+function tsOpen(kind,ref,focus){ tsState={kind,ref,focus:focus||'',cust:(tsState&&tsState.cust)||tsDefaultCust().id,mail:0}; tsRender(); }
+function tsClose(){ tsRunId++; const m=document.getElementById('ts-modal'); if(m) m.remove(); document.removeEventListener('keydown',tsKey); tsState=null; }
+function tsKey(e){ if(e.key==='Escape') tsClose(); }
+function tsRender(){ const st=tsState; if(!st) return; const cust=CUSTOMERS.find(c=>c.id===st.cust)||tsDefaultCust(); const r=cust.row;
+  const src=st.kind==='campaign'?st.ref:JOURNEYS.find(x=>x.id===st.ref); if(!src){ tsClose(); return; }
+  const data=st.kind==='campaign'?tsFromCampaign(src,cust):tsFromJourney(src,cust); const isCamp=st.kind==='campaign';
+  const by=k=>data.msgs.filter(m=>m.surf===k); const to={sms:r.MSISDN,push:r.APP_INSTALLED==='Y'?`Demo Telco app · ${r.PUSH_TOKEN||'device'}`:'',email:r.EMAIL,web:`signed in as ${cust.name}`};
+  /* each surface: html and its outcome (ok · none · empty · fail) */
+  const surf={};
+  ['sms','push'].forEach(k=>{ const ms=by(k);
+    if(!ms.length){ surf[k]={state:'none',why:isCamp?`Not a channel of this campaign`:'No delivery step on this channel'}; return; }
+    if(k==='push'&&r.APP_INSTALLED!=='Y'){ surf[k]={state:'fail',why:`Not delivered — ${esc(cust.name)} has no app installed`}; return; }
+    const ok=ms.filter(m=>m.item); if(!ok.length){ surf[k]={state:'empty',why:'No content yet — write it in Channel &amp; content'}; return; }
+    surf[k]={state:'ok',why:`Delivered to ${esc(to[k])}`,n:ok.length,html:ok.map(m=>`<div class="ts-tag">${m.label}</div>${tsInner(ctPreviewHtml(m.item,cust))}`).join('')}; });
+  { const ms=by('email'), ok=ms.filter(m=>m.item);
+    if(!ms.length) surf.email={state:'none',why:isCamp?'Not a channel of this campaign':'No delivery step on this channel'};
+    else if(!ok.length) surf.email={state:'empty',why:'No content yet — write it in Channel &amp; content'};
+    else { const R=t=>resolveParams(t,cust,false); const sel=Math.min(st.mail||0,ok.length-1);
+      surf.email={state:'ok',why:`Delivered to ${esc(to.email)}`,n:ok.length,html:`<div class="ts-inbox">${ok.map((m,i)=>`<button type="button" class="ts-mrow ${i===sel?'on':''}" data-tsmail="${i}"><b>Demo Telco</b><span>${esc(R((m.item.subject||{}).A||m.item.title||'(no subject)'))}</span><small>${esc(R(m.item.preheader||''))}</small></button>`).join('')}</div>${ctPreviewHtml(ok[sel].item,cust)}`}; } }
+  { const pulls=by('web').filter(m=>m.item), wp=pulls.filter(m=>m.ch==='webpush'), cards=pulls.filter(m=>m.ch!=='webpush'), offers=data.offers;
+    const any=offers.length||pulls.length;
+    const R=t=>resolveParams(t,cust,true);
+    surf.web={state:any?'ok':'none',why:any?`Visible when ${esc(cust.name)} signs in`:(isCamp?(src.type==='Offer'?'No offer picked yet — choose one in the Offer step':'An Information campaign shows nothing on the website'):'No offer or website step in this journey'),
+      html:any?`${wp.map(m=>`<div class="ts-wpush"><div class="app">www.example.com · now</div><b>${R(m.item.title)}</b>${R(m.item.variants.en||'')}</div>`).join('')}
+        <div class="ts-site"><div class="ts-nav"><span class="lg"><i></i>Demo Telco</span><span>My plan</span><span>Offers</span></div>
+        <div class="ts-hi">Hi ${esc(cust.name)}<small>${esc(r.PLAN||'')} plan</small></div>
+        ${cards.map(m=>`<div class="ts-tag">${m.label}</div>${ctPreviewHtml(m.item,cust)}`).join('')}
+        ${offers.length?`<div class="ts-oh">Offers for you</div>${offers.map(({o,why})=>`<div class="ts-offer"><span class="pill acc">For you</span><b>${esc(o.name)}</b><small>${o.params&&o.params.validityDays?`Valid ${o.params.validityDays} days · `:''}${why}</small><span class="ts-cta">Activate</span></div>`).join('')}`:''}</div>`:''}; }
+  let m=document.getElementById('ts-modal'); const fresh=!m;
+  if(fresh){ m=document.createElement('div'); m.className='modal-bg'; m.id='ts-modal'; document.body.appendChild(m); document.addEventListener('keydown',tsKey); m.onclick=e=>{ if(e.target===m) tsClose(); }; }
+  const sent=TS_SURF.filter(([k])=>surf[k].state==='ok').length;
+  m.innerHTML=`<div class="card modal ts-modal" role="dialog" aria-modal="true" aria-labelledby="ts-h">
+    <div class="ph"><h3 id="ts-h">Test send</h3><span class="ts-src">${isCamp?'Campaign':'Journey'} ${esc(isCamp?(src.id||''):src.id)} · ${esc(src.name||'(no name yet)')}</span><div class="grow" style="flex:1"></div>
+      <label for="ts-cust" class="ts-lbl">Test recipient</label><select id="ts-cust">${tsRecipients().map(c=>`<option value="${esc(c.id)}" ${c.id===cust.id?'selected':''}>${esc(c.name)} · ${esc(c.id)}${c.row.APP_INSTALLED==='Y'?'':' · no app'}</option>`).join('')}</select>
+      <button class="btn sm primary" id="ts-again">Send again</button><button class="btn sm outline" id="ts-close">Close</button></div>
+    <div class="ts-sub">Sent to one test recipient only — reports, contact rules and the control group are not touched. Personalised values are filled from ${esc(cust.name)}'s profile and shown in bold.</div>
+    <div class="ts-stage">${TS_SURF.map(([k,t,d])=>{ const x=surf[k]; return `<section class="ts-surf ${k} is-${x.state} ${st.focus===k?'focus':''}" data-surf="${k}" aria-label="${t}">
+      <header><b>${t}</b><small>${d}</small></header>
+      <div class="ts-body">${k==='sms'||k==='push'?`<div class="phone ts-phone">${k==='push'?`<div class="ts-clock">10:00</div>`:''}<div class="time">${k==='push'?'Lock screen':'Messages · DEMO-TELCO'}</div><div class="ts-in">${x.html||''}</div></div>`
+        :k==='email'?`<div class="ts-win"><div class="ts-bar"><i></i><i></i><i></i><span>Mail · ${esc(r.EMAIL||'')}</span></div><div class="ts-in">${x.html||''}</div></div>`
+        :`<div class="ts-win"><div class="ts-bar"><i></i><i></i><i></i><span>https://www.example.com/my-account</span></div><div class="ts-in">${x.html||''}</div></div>`}
+        <div class="ts-empty">${x.state==='ok'?'':x.why}</div></div>
+      <footer class="ts-st" data-state="${x.state}"><span class="ts-dot"></span><span class="ts-txt">${x.state==='ok'?'Sending…':x.why}</span></footer></section>`; }).join('')}</div>
+    <div class="ts-log"><b>Send log</b> <span id="ts-log">${sent} of 4 surfaces${data.other.length?` · also on ${esc(data.other.join(', '))} — not shown here`:''}</span></div></div>`;
+  m.querySelector('#ts-close').onclick=tsClose;
+  m.querySelector('#ts-again').onclick=()=>tsRun(surf,cust);
+  m.querySelector('#ts-cust').onchange=e=>{ tsState.cust=e.target.value; tsState.mail=0; tsRender(); };
+  m.querySelectorAll('[data-tsmail]').forEach(b=>b.onclick=()=>{ tsState.mail=+b.dataset.tsmail; tsRender(); m.querySelector('[data-surf="email"]').classList.add('done'); m.querySelectorAll('.ts-surf').forEach(s=>s.classList.add('done')); });
+  if(fresh) m.querySelector('#ts-close').focus();
+  tsRun(surf,cust); }
+/* the surfaces fill one after another, like the deliveries arriving */
+function tsRun(surf,cust){ const id=++tsRunId; const m=document.getElementById('ts-modal'); if(!m) return; const lines=[];
+  const t0=new Date(); const hhmmss=d=>d.toTimeString().slice(0,8);
+  m.querySelectorAll('.ts-surf').forEach(s=>{ s.classList.remove('done'); if(surf[s.dataset.surf].state==='ok') s.querySelector('.ts-txt').textContent='Sending…'; });
+  const order=TS_SURF.map(([k])=>k).filter(k=>surf[k].state==='ok');
+  const fin=()=>{ const lg=m.querySelector('#ts-log'); if(lg) lg.innerHTML=`${hhmmss(t0)} · test send to ${esc(cust.name)} · `+(lines.join(' · ')||'nothing to send'); m.querySelector('.ts-stage').classList.add('done'); };
+  m.querySelector('.ts-stage').classList.remove('done');
+  if(!order.length){ fin(); return; }
+  order.forEach((k,i)=>setTimeout(()=>{ if(id!==tsRunId) return; const s=m.querySelector(`.ts-surf[data-surf="${k}"]`); if(!s) return; const d=new Date(t0.getTime()+(i+1)*1000);
+    s.classList.add('done'); s.querySelector('.ts-txt').textContent=`✓ ${hhmmss(d)} · ${surf[k].why.replace(/&amp;/g,'&')}`; lines.push(`${TS_SURF.find(x=>x[0]===k)[1]} ✓`); if(i===order.length-1) fin(); },380*(i+1))); }
 const PLAN_RULES=[['cg','Control group','from the campaign: size and method'],['cooldown','Channel cooldown','days between two sends on the same channel, any campaign'],['type','Campaign Type (overlap)','max. Information / Offer sends per day'],['presend','Campaign pre-sent','days between two sends of this same campaign to one customer (default from Parameters)']];
 const PLAN_STATUS_CLS={Draft:'warn','Waiting for approval':'warn',Scheduled:'acc',Running:'ok',Paused:'',Completed:'',Stopped:'bad'};
 const defaultRules=c=>({cg:{use:c.cg!=='No Control Group',log:true},cooldown:{use:true,log:true},type:{use:true,log:true},presend:{use:true,log:true}});
@@ -3687,7 +3866,7 @@ function bindDelivery(card,c,step){
     card.querySelectorAll('[data-slot]').forEach(el=>{ el.onfocus=()=>{ lastTa=el; }; el.oninput=()=>{ const i=+el.dataset.pi; const p=c.plans[i]; const tgt=el.dataset.v==='B'?p.slotsB:p.slots; tgt[el.dataset.slot]=el.value; if(el.dataset.slot==='body'&&el.dataset.v==='A') p.text=el.value; const pv=card.querySelector((el.dataset.v==='B'?'#pvb-':'#pv-')+i); if(pv) pv.innerHTML=planPreviewHtml(p,CUSTOMERS[0],el.dataset.v); const pill=el.closest('.card').querySelector('.card-h .pill'); if(pill){ const ok=planReady(p); pill.className='pill '+(ok?'ok':'warn'); pill.textContent=ok?'content ready':'no content'; } const sn=card.querySelector('#srvnote-'+i); if(sn) sn.hidden=Object.values(p.slots).some(t=>String(t||'').includes('{{SURVEY_LINK}}')); }; });
     card.querySelectorAll('[data-ins]').forEach(sp=>sp.onclick=()=>{ const ta=lastTa&&lastTa.dataset.pi===sp.dataset.pi?lastTa:card.querySelector(`[data-slot="body"][data-pi="${sp.dataset.pi}"][data-v="A"]`); if(!ta) return; const v=`{{${sp.dataset.ins}}}`; const st=ta.selectionStart||ta.value.length; ta.value=ta.value.slice(0,st)+v+ta.value.slice(st); ta.dispatchEvent(new Event('input')); ta.focus(); });
     card.querySelectorAll('[data-copyfrom]').forEach(el=>el.onchange=()=>{ if(!el.value) return; const i=+el.dataset.pi; const p=c.plans[i]; const src=CAMPAIGNS.find(x=>x.id===el.value); const q=(src.plans||[]).find(q=>q.ch===p.ch); if(!q) return; Object.assign(p,JSON.parse(JSON.stringify({content:q.content,slots:q.slots,slotsB:q.slotsB,bodyAlt:q.bodyAlt,ab:q.ab,dynOn:q.dynOn,dyn:q.dyn,abSplit:q.abSplit,text:q.text}))); syncPlans(c); rerender(); toast('Content copied',`${chName(p.ch)} content of campaign ${src.id} copied — edit it for this campaign.`); });
-    card.querySelectorAll('[data-ptest]').forEach(b=>b.onclick=()=>{ const p=c.plans[+b.dataset.ptest]; toast('Test send',`${chName(p.ch)} content rendered for ${p.tests.join(', ')} — test delivery is not enabled in this environment.`,'warn'); });
+    card.querySelectorAll('[data-ptest]').forEach(b=>b.onclick=()=>{ const p=c.plans[+b.dataset.ptest]; tsOpen('campaign',c,tsSurfOf(p.ch)); });
   }
   if(step===4){
     card.querySelectorAll('[data-rmode]').forEach(b=>b.onclick=()=>{ c.rulesMode=b.dataset.rmode; if(c.rulesMode==='standard'){ c.rules=defaultRules(c); c.override=false; } rerender(); });
@@ -3821,13 +4000,14 @@ function renderCampDetail(card){
   const rd=campReady(c);
   const finalBtn=ROLE==='approver'?(c.status==='Pending approval'?'Approve & activate':c.status==='Active'?'Save & re-activate':'Activate'):ROLE==='marketer'?(c.status==='Pending approval'?'Waiting for approval':c.status==='Active'?'Submit change for approval':'Submit for approval'):(c.status==='Active'?'Save & re-activate':'Activate'); const finalDis=ROLE==='cmo'||(ROLE==='marketer'&&c.status==='Pending approval');
   const cur=steps.find(x=>x.i===campStep); const visible=steps.filter(x=>!x.skip); const pos=visible.findIndex(x=>x.i===campStep);
-  card.innerHTML=`<div class="card-h"><button class="btn sm outline" id="camp-back">‹ Campaign list</button><h2 style="font-size:16px">${campSel?`Campaign ${c.id}`:'New campaign'}</h2>${statusPill(c.status)}<span class="typechip ${c.type}">${c.type}</span><button type="button" class="goalchip${campGoal(c)?'':' unset'}" id="camp-goalchip" aria-haspopup="true" aria-expanded="false" title="${campGoal(c)?'The goal chosen when the campaign was created — click to change it':'No goal yet — click to choose what the campaign is for'}">${campGoal(c)?'Goal: '+esc(campGoal(c)):'Set goal'} ▾</button>${campSavedAt?`<span class="savebar">✓ Saved ${campSavedAt}</span>`:''}<div class="grow"></div><span style="color:var(--ink-3);font-size:11.5px">Created by ${esc(c.createdBy)} · ${c.created}</span>${campSel?`<button class="btn sm outline" id="camp-results" title="Operation analysis for this campaign: deliveries, eliminations, promotions, survey responses">Results</button>`:''}</div>
+  card.innerHTML=`<div class="card-h"><button class="btn sm outline" id="camp-back">‹ Campaign list</button><h2 style="font-size:16px">${campSel?`Campaign ${c.id}`:'New campaign'}</h2>${statusPill(c.status)}<span class="typechip ${c.type}">${c.type}</span><button type="button" class="goalchip${campGoal(c)?'':' unset'}" id="camp-goalchip" aria-haspopup="true" aria-expanded="false" title="${campGoal(c)?'The goal chosen when the campaign was created — click to change it':'No goal yet — click to choose what the campaign is for'}">${campGoal(c)?'Goal: '+esc(campGoal(c)):'Set goal'} ▾</button>${campSavedAt?`<span class="savebar">✓ Saved ${campSavedAt}</span>`:''}<div class="grow"></div><span style="color:var(--ink-3);font-size:11.5px">Created by ${esc(c.createdBy)} · ${c.created}</span><button class="btn sm outline" id="camp-testsend" title="Send this campaign to a test recipient and see it on the phone, in the mailbox and on the website">Send test</button>${campSel?`<button class="btn sm outline" id="camp-results" title="Operation analysis for this campaign: deliveries, eliminations, promotions, survey responses">Results</button>`:''}</div>
     <div class="stepper">${campStepperHtml(c)}</div>
     <div style="flex:1;overflow:auto;padding-right:20px"><div style="min-width:0"><h1 class="step-h">${CAMP_STEP_H[campStep]}</h1>${body}</div></div>
     <div class="toolrow" style="border-top:1px solid var(--line-2);justify-content:flex-end;padding:12px 20px"><button class="btn dark" id="camp-prev" ${pos===0?'disabled':''}>Back</button><button class="btn grey" id="camp-save">Save</button><button class="btn outline" id="camp-saveclose">Save &amp; close</button>${campStep===6?`<button class="btn primary" id="camp-activate" ${finalDis?'disabled':''}>${finalBtn}</button>`:''}${pos<visible.length-1?`<button class="btn ${campStep===6?'outline':'primary'}" id="camp-next">${campStep===6?'Summary ›':'Next'}</button>`:''}</div>`;
   const g=id=>card.querySelector('#'+id);
   g('camp-back').onclick=()=>{ campMode='list'; renderCampaigns(); };
   if(g('camp-results')) g('camp-results').onclick=()=>opsOpenFor(c.id);
+  if(g('camp-testsend')) g('camp-testsend').onclick=()=>tsOpen('campaign',c);
   campStepperBind(card); campMarkMissing(card); campBindGoto(card,card);
   g('camp-goalchip').onclick=e=>campGoalPop(card,e.currentTarget);
   if(!card._stepSync){ card._stepSync=true; const sync=e=>{ if(e.target.closest('.stepper,#camp-goalchip,[data-goto]')) return; setTimeout(()=>campStepSync(card),0); }; ['input','change','click'].forEach(t=>card.addEventListener(t,sync)); }

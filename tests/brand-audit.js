@@ -145,7 +145,10 @@ const probe = () => {
     ['dashboard-marketer', async () => { await page.selectOption('#role-sel', 'marketer'); await page.click('.nav button[data-view="dashboard"]'); await page.click('#db-card .db-hd .tile[data-dbc]'); }],
     ['journey-list-advanced', async () => { await page.keyboard.press('Escape'); await page.selectOption('#role-sel', 'admin'); await page.click('.nav button[data-view="journeys"]'); await page.click('#jl-adv'); await page.click('[data-jmore="JRN-07"]'); }],
     ['journey-create', async () => { await page.click('#jl-new'); await page.click('[data-trig="schedule"]'); }],
-    ['journey-report', async () => { await page.selectOption('#role-sel', 'admin'); await page.click('.nav button[data-view="journeys"]'); await page.click('#jl-table [data-jopen="JRN-20"]'); await page.click('#btn-report', { timeout: 5000 }); }],
+    ['campaign-test-send', async () => { await page.keyboard.press('Escape'); await page.click('.nav button[data-view="campaigns"]'); await page.evaluate(() => campOpen('433')); await page.click('#camp-testsend'); await page.waitForTimeout(2000); }],
+    ['journey-test-send', async () => { await page.keyboard.press('Escape'); await page.click('.nav button[data-view="journeys"]'); await page.evaluate(() => jOpen('JRN-12')); await page.click('#btn-jtestsend'); await page.waitForTimeout(2000); }],
+    ['journey-test-send-no-app', async () => { await page.evaluate(() => { const s = document.getElementById('ts-cust'); s.value = tsRecipients().find((c) => c.row.APP_INSTALLED !== 'Y').id; s.dispatchEvent(new Event('change')); }); await page.waitForTimeout(2000); }],
+    ['journey-report', async () => { await page.keyboard.press('Escape'); await page.selectOption('#role-sel', 'admin'); await page.click('.nav button[data-view="journeys"]'); await page.click('#jl-table [data-jopen="JRN-20"]'); await page.click('#btn-report', { timeout: 5000 }); }],
   ];
   for (const [name, go] of deep) {
     try { await go(); } catch (e) { console.log('skip', name, e.message.slice(0, 50)); continue; }
