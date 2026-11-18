@@ -42,6 +42,8 @@ const stub = (calls, status = 200) => async (url, opt) => { calls.push({ url: St
 
     const bare = await sender.sendAll(pkg, { DEMO_SEND_KEY: 'k' }, stub([]));
     check(bare.filter((r) => r.status === 'skipped').length === 3 && bare.find((r) => r.channel === 'web').status === 'sent', 'channels without keys are skipped, the website still works');
+    const part = await sender.sendAll(pkg, Object.assign({}, ENV, { TWILIO_FROM: '', DEMO_SMS_TO: ' ' }), stub([]));
+    check(/missing in this deployment: TWILIO_FROM, DEMO_SMS_TO$/.test(part.find((r) => r.channel === 'sms').detail), 'a channel that is not set up names the variables it lacks, and only those');
     const down = await sender.sendAll(pkg, ENV, stub([], 500));
     check(down.filter((r) => r.status === 'failed').length === 3, 'a provider error is reported as failed');
 

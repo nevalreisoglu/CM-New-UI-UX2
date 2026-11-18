@@ -11,6 +11,8 @@ const maskMail = (a) => String(a).replace(/^(.).*(@.*)$/, '$1•••$2');
 const maskPhone = (p) => String(p).replace(/^(\+?\d{2,3}).*(\d{2})$/, '$1 ••• •• $2');
 const sameKey = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(String(b)); return x.length === y.length && crypto.timingSafeEqual(x, y); };
 
+/* which variables this deployment does not have — names only, never a value */
+const missing = (env, names) => { const m = names.filter((n) => !String(env[n] || '').trim()); return m.length ? `missing in this deployment: ${m.join(', ')}` : ''; };
 const readJson = async (r) => { try { return (r && typeof r.json === 'function' && (await r.json())) || {}; } catch (e) { return {}; } };
 /* the Twilio error codes a first set-up runs into, in plain words; the code itself is always shown */
 const TWILIO_CODES = {
@@ -24,7 +26,7 @@ const twilioWhy = (code) => (code ? ` (Twilio ${code}${TWILIO_CODES[code] ? ': '
 
 const CHANNELS = {
   async email(m, env, fetchImpl) {
-    if (!env.RESEND_API_KEY || !env.DEMO_EMAIL_TO) return { status: 'skipped', detail: 'e-mail is not set up' };
+    const miss = missing(env, ['RESEND_API_KEY', 'DEMO_EMAIL_TO']); if (miss) return { status: 'skipped', detail: `e-mail is not set up — ${miss}` };
     const r = await fetchImpl('https://api.resend.com/emails', {
       method: 'POST', headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },
       body: JSON.stringify({
@@ -37,7 +39,7 @@ const CHANNELS = {
     return r.ok ? { status: 'sent', detail: `to ${maskMail(env.DEMO_EMAIL_TO)}` } : { status: 'failed', detail: `e-mail service answered ${r.status}` };
   },
   async sms(m, env, fetchImpl) {
-    if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_FROM || !env.DEMO_SMS_TO) return { status: 'skipped', detail: 'SMS is not set up' };
+    const miss = missing(env, ['TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_FROM', 'DEMO_SMS_TO']); if (miss) return { status: 'skipped', detail: `SMS is not set up — ${miss}` };
     const base = `https://api.twilio.com/2010-04-01/Accounts/${encodeURIComponent(env.TWILIO_ACCOUNT_SID)}/Messages`;
     const auth = { authorization: 'Basic ' + Buffer.from(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`).toString('base64') };
     const r = await fetchImpl(`${base}.json`, {
@@ -58,7 +60,7 @@ const CHANNELS = {
     return { status: 'sent', detail: st === 'delivered' ? `${to} — delivered` : `${to} — accepted, delivery not confirmed yet` };
   },
   async push(m, env, fetchImpl) {
-    if (!env.NTFY_TOPIC) return { status: 'skipped', detail: 'push is not set up' };
+    const miss = missing(env, ['NTFY_TOPIC']); if (miss) return { status: 'skipped', detail: `push is not set up — ${miss}` };
     const r = await fetchImpl(env.NTFY_SERVER || 'https://ntfy.sh', {
       method: 'POST', headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ topic: env.NTFY_TOPIC, title: cut(m.title, MAX.title), message: cut(m.text, MAX.text), click: /^https:\/\//.test(m.click || '') ? m.click : undefined, tags: ['iphone'] }),
