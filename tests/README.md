@@ -33,6 +33,7 @@ version that matches.
 | `journey.spec.js` | The builder canvas and palette, and the v41 simulation strips in both Journey Builder and Journey Monitor — marked demo-only, never styled as primary actions, sharing one clock. |
 | `manual.spec.js` | The **User manual** button in the top bar: the dialog opens, closes three ways, renders the markdown as headings/lists/tables, the contents list jumps, and the embedded copy still matches `docs/user-manual.md`. |
 | `demo-data.spec.js` | No real person is named in the file; every e-mail address is on example.com; sample customers have masked ids and +90 5XX numbers; the top-bar user comes from `DEMO_USERS`. |
+| `testsend.spec.js` | Send test: a campaign fills the surfaces of its channels and its offer shows on the website; an Information campaign shows nothing there; a channel card highlights its surface; a journey sends every delivery step and its offers; the cascade follows the recipient and a recipient without the app gets no push. |
 | `screenshots.spec.js` | Writes reference screenshots of the main screens to `screenshots/`. |
 
 Node scripts (run with `node <name>.js`; an empty error list is the pass condition, screenshots go to `shots/`):
